@@ -1,3 +1,9 @@
 {
-  "tabWidth": 2
+  "tabWidth": 2,
+  "printWidth": 80,
+  "singleQuote": false,
+  "trailingComma": "es5",
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "proseWrap": "always"
 }
