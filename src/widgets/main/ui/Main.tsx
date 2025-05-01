@@ -1,11 +1,12 @@
-import type { AdsSectionType } from "@/app/(root)/page";
+// import type { AdsSectionType } from "@/app/(root)/page";
 import { Container, Icon } from "@/shared/ui";
 import { CategorySection } from "./CategorySection";
-import { CityButton } from "@/features/city-button/ui/CityButton";
+// import { CityButton } from "@/features/city-button/ui/CityButton";
 import Link from "next/link";
 
 import ApartmentIcon from "@/shared/assets/apartment-icon.svg";
 import HouseIcon from "@/shared/assets/house-icon.svg";
+import { AdsSectionType } from "@/app/(root)/page";
 
 interface HeroProps {
   data: AdsSectionType[];

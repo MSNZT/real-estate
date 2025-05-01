@@ -91,7 +91,12 @@ export const CityButton = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{city}</Button>
+        <Button
+          className="cursor-pointer border-gray-400 hover:border-primary shadow-none"
+          variant="outline"
+        >
+          {city}
+        </Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-2 w-full h-full md:top-[40%] md:max-w-[500px] md:max-h-[560px] lg:max-w-[700px] px-0">
         <DialogTitle className="sr-only">Выбор города</DialogTitle>
