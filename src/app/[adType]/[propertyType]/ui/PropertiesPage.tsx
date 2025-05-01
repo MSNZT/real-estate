@@ -27,7 +27,7 @@ export default function PropertiesPage({
           <MapPopupButton />
         </div>
       </Container>
-      <AdList adType={adType} propertyType={propertyType} />
+      {/* <AdList adType={adType} propertyType={propertyType} /> */}
     </>
   );
 }

@@ -7,12 +7,12 @@ export default async function Page({ params }: PageProps) {
   const { adType, propertyType } = await params;
   checkParams(adType, propertyType);
 
-  // await getAllAds({
-  //   adType,
-  //   propertyType,
-  //   page: 1,
-  //   limit: 8,
-  // });
+  await getAllAds({
+    adType,
+    propertyType,
+    page: 1,
+    limit: 8,
+  });
 
   return <PropertiesPage adType={adType} propertyType={propertyType} />;
 }

@@ -18,8 +18,8 @@ export const MapPopupButton = () => {
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-h-[581px] h-full p-0 rounded-xl max-w-[900px] overflow-y-hidden">
-        <DialogTitle />
-        <DialogDescription />
+        <DialogTitle className="visually-hidden" />
+        <DialogDescription className="visually-hidden" />
         <YMaps query={{ apikey: "551d826c-1a13-4de5-9eba-b5ac8eecaa4b" }}>
           <YMapComponent />
         </YMaps>
