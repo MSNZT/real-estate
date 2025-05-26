@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { useMediaQuery } from "react-responsive";
+import {AvatarButton} from "@/features/avatar-button
 import {
   Heart,
   Home,
@@ -36,7 +37,7 @@ export const Navbar = () => {
         if (isAuth)
           return (
             <li key={option.href}>
-              <UserMenu />
+              <AvatarButton />
             </li>
           );
       }
