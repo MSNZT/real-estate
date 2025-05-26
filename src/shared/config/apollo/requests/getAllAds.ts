@@ -8,6 +8,7 @@ export const GET_ALL_ADS = gql`
         description
         adType
         propertyType
+        title
         mainPhoto
         photos
         location {
@@ -20,13 +21,9 @@ export const GET_ALL_ADS = gql`
           id
           name
         }
-        propertyDetails {
-          fields
-        }
         deal {
           price
           fields
-          durationRent
         }
         createdAt
         updatedAt

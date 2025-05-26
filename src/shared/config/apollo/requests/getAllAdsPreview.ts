@@ -8,6 +8,7 @@ export const GET_ALL_ADS_PREVIEW = gql`
         description
         adType
         propertyType
+        title
         location {
           city
           street
@@ -25,7 +26,6 @@ export const GET_ALL_ADS_PREVIEW = gql`
         deal {
           price
           fields
-          durationRent
         }
         createdAt
         updatedAt

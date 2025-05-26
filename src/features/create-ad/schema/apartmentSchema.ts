@@ -14,8 +14,8 @@ export const apartmentSchema = z.object({
   }),
   yearBuilt: z
     .number({ message: BASE_MESSAGE })
-    .min(1950, { message: "Минимальный год постройки 1950" })
-    .max(currentYear, { message: `Минимальный год постройки ${currentYear}` }),
+    .min(1800, { message: "Минимальный год постройки 1746" })
+    .max(currentYear, { message: `Максимальный год постройки ${currentYear}` }),
   parkingType: z.string({ message: BASE_MESSAGE }),
   totalArea: z.number({ message: BASE_MESSAGE }),
   kitchenArea: z.number({ message: BASE_MESSAGE }),

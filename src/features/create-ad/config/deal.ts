@@ -1,4 +1,5 @@
-import { AdTypeEnum, type FieldSection, type FormField } from "../types/types";
+import { AdTypes } from "@/shared/config/apollo/generated";
+import { type FieldSection, type FormField } from "../types/types";
 
 export const bargain = {
   type: "radio",
@@ -75,32 +76,27 @@ export const agentFee = {
   ],
 } satisfies FormField;
 
-export function getDeal(adType: AdTypeEnum): FieldSection {
+export function getDeal(adType: AdTypes): FieldSection {
   let deal: FormField[] = [];
 
   switch (adType) {
-    case AdTypeEnum.LONG_RENT: {
-      deal = [
-        { ...bargain },
-        { ...deposit },
-        { ...utilitiesFee },
-        { ...agentFee },
-      ];
+    case AdTypes.RentLong: {
+      deal = [{ ...deposit }, { ...utilitiesFee }, { ...agentFee }];
       break;
     }
-    case AdTypeEnum.SHORT_RENT: {
+    case AdTypes.RentShort: {
       deal = [{ ...deposit }];
       break;
     }
-    case AdTypeEnum.SELL: {
+    case AdTypes.Sell: {
       deal = [{ ...bargain }];
       break;
     }
   }
 
-  const placeholder: Record<AdTypeEnum, string> = {
-    long_rent: "₽ / в месяц",
-    short_rent: "₽ / за сутки",
+  const placeholder: Record<AdTypes, string> = {
+    rent_long: "₽ / в месяц",
+    rent_short: "₽ / за сутки",
     sell: "₽",
   };
 

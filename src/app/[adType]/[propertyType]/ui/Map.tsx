@@ -11,7 +11,7 @@ import { useMapAds } from "./useMapAds";
 import { Ad } from "@/shared/config/apollo/generated/types";
 import { useFeatures } from "./useFeatures";
 
-import { useLocationData } from "@/entities/user/model/store/useLocationData";
+import { useLocationData } from "@/entities/user/store/useLocationData";
 import { BalloonMapAds } from "./BalloonMapAds";
 
 export const YMapComponent = () => {

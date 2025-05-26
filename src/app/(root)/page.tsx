@@ -40,17 +40,17 @@ export default async function Page({
 }) {
   const { viewport } = (await searchParams) as { viewport: string };
 
-  const rentApartment = await getAllAdsPreview({
+  const rentShortApartment = await getAllAdsPreview({
     page: 1,
     limit: 8,
-    adType: "rent",
+    adType: "rent_short",
     propertyType: "apartment",
   });
 
-  const rentHouse = await getAllAdsPreview({
+  const rentShortHouse = await getAllAdsPreview({
     page: 1,
     limit: 8,
-    adType: "rent",
+    adType: "rent_short",
     propertyType: "house",
   });
 
@@ -71,12 +71,12 @@ export default async function Page({
   const adsPreview = [
     {
       title: "Снять квартиру",
-      data: rentApartment?.getAllAds.ads || [],
+      data: rentShortApartment?.getAllAds.ads || [],
       href: "/rent/apartment",
     },
     {
       title: "Снять дом",
-      data: rentHouse?.getAllAds.ads || [],
+      data: rentShortHouse?.getAllAds.ads || [],
       href: "/rent/house",
     },
     {

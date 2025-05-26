@@ -3,32 +3,23 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { tokenService } from "@/shared/services/token.service";
-import { useAuthData } from "../model/store/useAuthData";
-import { useRouter, useSearchParams } from "next/navigation";
-import { authService } from "@/shared/services/auth.service";
+import { useAuthData } from "../store/useAuthData";
+import { useSearchParams } from "next/navigation";
+import { useAuth } from "@/features/auth";
 
 export const useAuthFromParams = () => {
   const { setAuthData } = useAuthData();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const {
+    getMe: { mutate },
+  } = useAuth();
 
   useEffect(() => {
-    const accessToken = searchParams.get("accessToken");
+    const accessToken = searchParams.get("token");
 
     if (accessToken) {
-      router.replace("/");
-
-      authService
-        .accounts()
-        .then((data) => {
-          setAuthData({ isAuth: !!data, userData: data });
-          setTimeout(() => {
-            toast.success("Вы успешно авторизовались", { duration: 2000 });
-          }, 100);
-          tokenService.saveAccessToken(accessToken);
-        })
-        .catch(() => setAuthData({ isAuth: false }))
-        .finally(() => setAuthData({ isLoading: false }));
+      tokenService.saveAccessToken(accessToken);
+      mutate();
     }
-  }, [searchParams, router, setAuthData]);
+  }, [searchParams, setAuthData]);
 };

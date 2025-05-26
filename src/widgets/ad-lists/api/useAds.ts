@@ -1,5 +1,8 @@
-import { AdTypes, PropertyTypes } from "@/entities/ad";
-import { Query } from "@/shared/config/apollo/generated/types";
+import {
+  AdTypes,
+  PropertyTypes,
+  Query,
+} from "@/shared/config/apollo/generated";
 import { GET_ALL_ADS } from "@/shared/config/apollo/requests/getAllAds";
 import { useSuspenseQuery } from "@apollo/client";
 import { useCallback, useEffect, useRef, useTransition } from "react";

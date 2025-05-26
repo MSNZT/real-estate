@@ -1,14 +1,27 @@
-import { HttpLink } from "@apollo/client";
+import { ApolloLink, HttpLink } from "@apollo/client";
 import {
   ApolloClient,
   InMemoryCache,
 } from "@apollo/experimental-nextjs-app-support";
 import { Ad } from "./generated/types";
+import { setContext } from "@apollo/client/link/context";
+import { tokenService } from "@/shared/services/token.service";
 
 export function makeClient() {
   const httpLink = new HttpLink({
     uri: "http://localhost:5001/api/ads",
     fetchOptions: { cache: "no-store" },
+  });
+
+  const authLink = setContext((operation, prevContext) => {
+    const { headers } = prevContext;
+    const token = tokenService.getAccessToken();
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
   });
 
   return new ApolloClient({
@@ -37,6 +50,6 @@ export function makeClient() {
         },
       },
     }),
-    link: httpLink,
+    link: ApolloLink.from([authLink, httpLink]),
   });
 }

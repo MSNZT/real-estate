@@ -13,8 +13,6 @@ export const BookingFormConditions = ({
   totalPrice,
   price,
 }: BookingFormConditionsProps) => {
-  console.log(123, price);
-
   return (
     <div className="flex flex-col gap-1 mt-auto mb-4">
       <h3 className="font-semibold text-xl">Оплата</h3>

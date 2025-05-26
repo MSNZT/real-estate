@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
   //     },
   //   },
   // },
+  env: {
+    API_KEY_MAP: "16b12e3b-cfd7-4d5f-8a71-24689683addd",
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

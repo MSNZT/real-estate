@@ -1,65 +1,69 @@
-import {
-  AdTypeEnum,
-  PropertyTypeEnum,
-  type EstateConfigType,
-} from "../types/types";
+import { type EstateConfigType } from "../types/types";
 import { apartment } from "./apartment";
 import { contacts } from "./contacts";
 import { getDeal } from "./deal";
 import { house } from "./house";
 import { getFeatures } from "./features";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
+import { file } from "./file";
 
 export const estateConfig: EstateConfigType = {
-  [AdTypeEnum.SHORT_RENT]: {
+  [AdTypes.RentShort]: {
     apartment: {
       section: [
         ...apartment.section,
-        getDeal(AdTypeEnum.SHORT_RENT),
-        getFeatures(AdTypeEnum.SHORT_RENT, PropertyTypeEnum.APARTMENT),
+        getFeatures(AdTypes.RentShort, PropertyTypes.Apartment),
+        file,
+        getDeal(AdTypes.RentShort),
         contacts,
       ],
     },
     house: {
       section: [
         ...house.section,
-        getDeal(AdTypeEnum.SHORT_RENT),
-        getFeatures(AdTypeEnum.SHORT_RENT, PropertyTypeEnum.HOUSE),
+        getFeatures(AdTypes.RentShort, PropertyTypes.House),
+        file,
+        getDeal(AdTypes.RentShort),
         contacts,
       ],
     },
   },
-  [AdTypeEnum.LONG_RENT]: {
+  [AdTypes.RentLong]: {
     apartment: {
       section: [
         ...apartment.section,
-        getDeal(AdTypeEnum.LONG_RENT),
-        getFeatures(AdTypeEnum.SHORT_RENT, PropertyTypeEnum.APARTMENT),
+        getFeatures(AdTypes.RentLong, PropertyTypes.Apartment),
+        file,
+        getDeal(AdTypes.RentLong),
         contacts,
       ],
     },
     house: {
       section: [
         ...house.section,
-        getDeal(AdTypeEnum.LONG_RENT),
-        getFeatures(AdTypeEnum.SHORT_RENT, PropertyTypeEnum.HOUSE),
+        getFeatures(AdTypes.RentLong, PropertyTypes.House),
+        file,
+        getDeal(AdTypes.RentLong),
         contacts,
       ],
     },
   },
-  [AdTypeEnum.SELL]: {
+  [AdTypes.Sell]: {
     apartment: {
       section: [
         ...apartment.section,
-        getDeal(AdTypeEnum.SELL),
-        getFeatures(AdTypeEnum.SELL, PropertyTypeEnum.APARTMENT),
+        getFeatures(AdTypes.Sell, PropertyTypes.Apartment),
+        file,
+        getDeal(AdTypes.Sell),
         contacts,
       ],
     },
     house: {
       section: [
         ...house.section,
-        getDeal(AdTypeEnum.SELL),
-        getFeatures(AdTypeEnum.SELL, PropertyTypeEnum.HOUSE),
+        getFeatures(AdTypes.Sell, PropertyTypes.House),
+        file,
+        getDeal(AdTypes.Sell),
         contacts,
       ],
     },

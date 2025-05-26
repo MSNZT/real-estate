@@ -1,5 +1,4 @@
 import { AdCardPreview } from "@/entities/ad";
-import { getAdTitle } from "@/entities/ad/utils/getAdTitle";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
 import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
 import { Ad } from "@/shared/config/apollo/generated/types";
@@ -15,7 +14,6 @@ export const AdListsPreview = ({ data }: AdListsProps) => {
         <div className="min-w-[250px] sm:w-full snap-start" key={item.id}>
           <AdCardPreview
             item={item}
-            title={getAdTitle(item)}
             price={getPrettyPrice(item.deal.price)}
             period={getDealPeriod(item)}
           />

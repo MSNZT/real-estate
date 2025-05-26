@@ -1,7 +1,7 @@
 import { Ad, PropertyTypes } from "@/shared/config/apollo/generated/types";
 
-export function getAdTitle(data: Ad): string {
-  switch (data.propertyType) {
+export function getAdTitle(propertyType: PropertyTypes, data: Ad): string {
+  switch (propertyType) {
     case PropertyTypes.House: {
       const fields = data.propertyDetails.fields;
       return `Дом ${fields.plotArea} м² на участке ${fields.plotArea} соток`;

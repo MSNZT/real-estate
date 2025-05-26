@@ -27,7 +27,7 @@ export const CheckboxField = ({ dynamicField, error }: CheckboxFieldProps) => {
   return (
     <Controller
       render={({ field }) => (
-        <div className="flex items-center">
+        <div className="flex flex-col gap-2">
           <FieldLabel label={dynamicField.label} />
           <div className="flex items-center gap-2 flex-wrap max-w-[800px]">
             {dynamicField.options.map((option) => {
@@ -35,12 +35,12 @@ export const CheckboxField = ({ dynamicField, error }: CheckboxFieldProps) => {
                 <Button
                   onClick={() => onClickCheckbox(option.value, field)}
                   key={option.label}
+                  type="button"
                   className={cn(
-                    "flex justify-between items-center text-base hover:border-blue-500",
+                    "flex justify-between items-center text-base hover:bg-active hover:text-white hover:outline-transparent",
                     {
-                      "bg-blue-500 text-white": field.value.includes(
-                        option.value
-                      ),
+                      "bg-blue-400 text-white outline-transparent":
+                        field.value.includes(option.value),
                     }
                   )}
                   size="sm"
@@ -50,8 +50,8 @@ export const CheckboxField = ({ dynamicField, error }: CheckboxFieldProps) => {
                 </Button>
               );
             })}
-            {error && <p className="text-red-500 text-sm">{error.message}</p>}
           </div>
+          {error && <p className="text-red-500 text-sm">{error.message}</p>}
         </div>
       )}
       name={dynamicField.name}

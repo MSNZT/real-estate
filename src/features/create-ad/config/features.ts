@@ -1,10 +1,5 @@
-import {
-  AdTypeEnum,
-  FieldSection,
-  FormField,
-  PropertyTypeEnum,
-  type FormFieldSection,
-} from "../types/types";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
+import { FieldSection, FormField, type FormFieldSection } from "../types/types";
 
 const featuresBase = {
   section: [
@@ -38,24 +33,24 @@ const apartmentBaseFeatures = {
 };
 
 export function getFeatures(
-  adType: AdTypeEnum,
-  propertyType: PropertyTypeEnum
+  adType: AdTypes,
+  propertyType: PropertyTypes
 ): FieldSection {
   let features: FormField;
 
   switch (propertyType) {
-    case PropertyTypeEnum.APARTMENT: {
-      if (adType === AdTypeEnum.SELL) {
+    case PropertyTypes.Apartment: {
+      if (adType === AdTypes.Sell) {
         features = {
           type: "checkbox",
-          name: "amenities",
+          name: "features",
           options: [...apartmentBaseFeatures.options],
         };
         break;
       }
       features = {
         type: "checkbox",
-        name: "amenities",
+        name: "features",
         options: [
           ...apartmentBaseFeatures.options,
           { label: "Стиральная машинка", value: "washing-machine" },
@@ -67,10 +62,10 @@ export function getFeatures(
       };
       break;
     }
-    case PropertyTypeEnum.HOUSE: {
+    case PropertyTypes.House: {
       features = {
         type: "checkbox",
-        name: "amenities",
+        name: "features",
         options: [
           { label: "Канализация", value: "sewage" },
           { label: "Электросеть", value: "electric-network" },

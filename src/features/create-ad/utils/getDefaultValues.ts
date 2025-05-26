@@ -1,23 +1,33 @@
-import { AdTypeEnum, FormFieldSection, PropertyTypeEnum } from "../types/types";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
+import { FormFieldSection } from "../types/types";
+import { useAuthData } from "@/entities/user";
+import { useLocationData } from "@/entities/user/store/useLocationData";
 
 export const getDefaultValues = (
   config: FormFieldSection,
-  adType: AdTypeEnum,
-  propertyType: PropertyTypeEnum
+  adType: AdTypes,
+  propertyType: PropertyTypes,
+  city: string | null
 ) => {
-  //   const baseDefaultValues = {
-  //     description: "",
-  //     propertyDetails: {
-  //       fields: {},
-  //     },
-  //     deal: {
-  //       //   price: "",
-  //       fields: {},
-  //     },
-  //   };
+  const userData = useAuthData((state) => state.userData);
+  const location = useLocationData((state) => state.locationData);
+
   const defaultValues: Record<string, any> = {
-    amenities: [],
+    features: [],
+    photos: [],
+    adType,
+    propertyType,
+    location: {
+      ...location,
+    },
+    contact: {
+      name: userData?.name,
+      phone: userData?.phone,
+      email: userData?.email,
+    },
   };
+
+  // Доделать
 
   config.section.forEach((sec) => {
     sec.fields.forEach((field) => {
@@ -28,8 +38,6 @@ export const getDefaultValues = (
           if (index === keys.length - 1) {
             current[key] = "";
           } else {
-            // console.log(current[key]);
-
             current[key] = current[key] || {};
           }
           current = current[key];

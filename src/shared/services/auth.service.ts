@@ -1,7 +1,16 @@
-import { User } from "@/entities/user";
 import { $api, $apiWithAuth } from "../api/axios";
 import { tokenService } from "./token.service";
-import { LoginData, RegisterData } from "@/features/auth/types/auth";
+import {
+  AuthResponse,
+  EmailData,
+  ForgetPasswordResponse,
+  LoginData,
+  OAuthData,
+  PasswordCodeData,
+  RegisterData,
+  ResetPasswordData,
+  StatusResponse,
+} from "@/features/auth/types/auth";
 
 class AuthService {
   async login(loginData: LoginData) {
@@ -33,10 +42,39 @@ class AuthService {
       throw error;
     }
   }
-  async resetPassword() {}
 
-  async accounts(): Promise<User> {
-    const { data } = await $apiWithAuth.get("auth/accounts");
+  async forgetPassword(dto: EmailData) {
+    try {
+      const { data } = await $api.post<ForgetPasswordResponse>(
+        "auth/forget-password",
+        dto
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async forgetPasswordValidate(dto: PasswordCodeData) {
+    try {
+      const { data } = await $api.post<StatusResponse>(
+        "auth/forget-password/validate",
+        dto
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async changePassword(dto: ResetPasswordData) {
+    try {
+      const { data } = await $api.patch("auth/reset-password", dto);
+    } catch (error) {}
+  }
+
+  async getMe(): Promise<AuthResponse> {
+    const { data } = await $apiWithAuth.get<AuthResponse>("auth/me");
     return data;
   }
 
@@ -62,12 +100,44 @@ class AuthService {
     }
   }
 
+  async registerComplete(dto: OAuthData): Promise<AuthResponse> {
+    try {
+      const { data } = await $api.post<AuthResponse>(
+        "oauth/register",
+        {
+          phone: dto.phone,
+        },
+        {
+          params: {
+            token: dto.token,
+          },
+        }
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async oauthValidate(token: string): Promise<{ status: string }> {
+    try {
+      const { data } = await $api.get<{ status: string }>("oauth/validate", {
+        params: {
+          token,
+        },
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   loginWithGoogle() {
-    return "http://localhost:5001/api/auth/google/callback";
+    return "http://localhost:5001/api/oauth/google/callback";
   }
 
   loginWithYandex() {
-    return "http://localhost:5001/api/auth/yandex/callback";
+    return "http://localhost:5001/api/oauth/yandex/callback";
   }
 }
 

@@ -11,7 +11,7 @@ export const house = {
           type: "number",
         },
         {
-          name: "propertyDetails.fields.floor",
+          name: "propertyDetails.fields.totalFloor",
           label: "Количество этажей",
           type: "number",
         },

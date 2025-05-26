@@ -29,9 +29,11 @@ export const BookingDayContent = memo(
       >
         <div>{day}</div>
 
-        {hoveredDate?.getTime() === date.getTime() && isInMinRange && (
-          <div className="date-tooltip">Минимум от {minNights} ночей</div>
-        )}
+        {/* {hoveredDate?.getTime() === date.getTime() && isInMinRange && (
+          <div className="date-tooltip">
+            Минимум от {minNights} ночей
+          </div>
+        )} */}
       </div>
     );
   }

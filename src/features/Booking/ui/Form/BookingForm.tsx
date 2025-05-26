@@ -61,29 +61,31 @@ export const BookingForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <BookingFormLeft
-        dates={dates}
-        countDays={countDays}
-        totalPrice={totalPrice}
-        prepayment={prepayment}
-        remainder={remainder}
-        isLoading={isLoading}
-        price={price}
-      >
-        <Input
-          {...register("guestName", { required: false })}
-          type="text"
-          className="h-[44px] bg-gray-200 border-0 focus-visible:ring-0 w-full"
-          placeholder="Имя"
-        />
-        <Input
-          {...register("guestPhone", { required: false })}
-          type="text"
-          className="h-[44px] bg-gray-200 border-0 focus-visible:ring-0  w-full"
-          placeholder="Номер телефона"
-        />
-      </BookingFormLeft>
-      <BookingFormRight />
+      <div className="lg:flex h-full lg:rounded-xl overflow-hidden">
+        <BookingFormLeft
+          dates={dates}
+          countDays={countDays}
+          totalPrice={totalPrice}
+          prepayment={prepayment}
+          remainder={remainder}
+          isLoading={isLoading}
+          price={price}
+        >
+          <Input
+            {...register("guestName", { required: false })}
+            type="text"
+            className="h-[44px] bg-gray-200 border-0 focus-visible:ring-0 w-full"
+            placeholder="Имя"
+          />
+          <Input
+            {...register("guestPhone", { required: false })}
+            type="text"
+            className="h-[44px] bg-gray-200 border-0 focus-visible:ring-0  w-full"
+            placeholder="Номер телефона"
+          />
+        </BookingFormLeft>
+        <BookingFormRight />
+      </div>
     </form>
   );
 };

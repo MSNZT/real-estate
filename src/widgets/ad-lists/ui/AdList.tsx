@@ -1,11 +1,12 @@
 "use client";
 import { useInView } from "react-intersection-observer";
-import { AdCardPreview, AdTypes, PropertyTypes } from "@/entities/ad";
+import { AdCardPreview } from "@/entities/ad";
 import { getAdTitle } from "@/entities/ad/utils/getAdTitle";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
 import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
 import { Container } from "@/shared/ui";
 import { useAds } from "../api/useAds";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 
 interface AdListProps {
   adType: AdTypes;
@@ -25,7 +26,6 @@ export const AdList = ({ adType, propertyType }: AdListProps) => {
           <AdCardPreview
             key={item.id}
             item={item}
-            title={getAdTitle(item)}
             price={getPrettyPrice(item.deal.price)}
             period={getDealPeriod(item)}
           />

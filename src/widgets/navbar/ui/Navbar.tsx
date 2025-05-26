@@ -53,7 +53,7 @@ export const Navbar = () => {
 
   return (
     <nav className="fixed md:hidden inset-x-0 bottom-0 p-3 border-t border-gray-200 bg-white">
-      <ul className="flex items-center justify-evenly text-xs">{renderMenu}</ul>
+      <ul className="flex items-center justify-around text-xs">{renderMenu}</ul>
     </nav>
   );
 };

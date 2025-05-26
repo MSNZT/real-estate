@@ -1,5 +1,5 @@
 "use client";
-import { AdTypes, PropertyTypes } from "@/entities/ad";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 import {
   Select,
   SelectContent,

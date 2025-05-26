@@ -7,17 +7,11 @@ import { AdCardImage } from "./segments/AdCardImage";
 
 interface AdCardPreviewProps {
   item: Ad;
-  title: string;
   price: string;
   period: string;
 }
 
-export const AdCardPreview = ({
-  item,
-  title,
-  price,
-  period,
-}: AdCardPreviewProps) => {
+export const AdCardPreview = ({ item, price, period }: AdCardPreviewProps) => {
   return (
     <div className="flex flex-col shrink-0 w-full">
       <Link href={`/ads/${item.id}`}>
@@ -25,7 +19,7 @@ export const AdCardPreview = ({
       </Link>
       <div>
         <Link href={`/ads/${item.id}`}>
-          <AdCardTitle title={title} />
+          <AdCardTitle title={item.title} />
         </Link>
         <AdCardLocation location={item.location} />
       </div>

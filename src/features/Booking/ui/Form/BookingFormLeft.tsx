@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@/shared/ui";
+import { Button } from "@/shared/ui";
 import { DialogDescription, DialogTitle } from "@/shared/ui/dialog";
 import { BookingFormConditions } from "./BookingFormConditions";
 import { BookingFormRules } from "./BookingFormRules";
@@ -10,11 +10,11 @@ import { LoaderCircle } from "lucide-react";
 import { ReactNode } from "react";
 
 interface BookingFormLeftProps {
-  countDays: number | undefined;
-  totalPrice: string | undefined;
-  prepayment: string | undefined;
+  countDays?: number;
+  totalPrice?: string;
+  prepayment?: string;
   price: number;
-  remainder: string | undefined;
+  remainder?: string;
   isLoading: boolean;
   dates: DateRangeType;
   children: ReactNode;
@@ -52,11 +52,14 @@ export const BookingFormLeft = ({
         totalPrice={totalPrice}
         price={price}
       />
-      <Button disabled={isLoading} className="flex items-center justify-center">
+      <Button
+        disabled={isLoading}
+        className="flex items-center justify-center bg-primary"
+      >
         {isLoading ? (
           <LoaderCircle className="animate-spin" />
         ) : (
-          "Забронировать"
+          <span className="text-white">Забронировать</span>
         )}
       </Button>
     </div>

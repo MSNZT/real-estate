@@ -23,8 +23,8 @@ export const NumberField = ({ dynamicField, error }: NumberFieldProps) => {
               type={dynamicField.type}
               placeholder={dynamicField.placeholder}
               disabled={dynamicField.disabled}
-              className={cn({
-                "max-w-[200px] w-full": dynamicField.label,
+              className={cn("border-gray-300", {
+                "max-w-[200px] w-full ": dynamicField.label,
                 "border-red-500": error,
               })}
             />

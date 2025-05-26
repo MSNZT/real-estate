@@ -4,22 +4,11 @@ import { houseSchema } from "../schema/houseSchema";
 import { apartmentSchema } from "../schema/apartmentSchema";
 import { baseSchema } from "../schema/baseSchema";
 import { getDealSchema } from "../schema/dealSchema";
-
-export enum AdTypeEnum {
-  SELL = "sell",
-  SHORT_RENT = "short_rent",
-  LONG_RENT = "long_rent",
-}
-
-export enum PropertyTypeEnum {
-  APARTMENT = "apartment",
-  HOUSE = "house",
-  // GARAGE = "garage",
-}
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 
 export type EstateConfigType = {
-  [key in AdTypeEnum]: {
-    [key in PropertyTypeEnum]: FormFieldSection;
+  [key in AdTypes]: {
+    [key in PropertyTypes]: FormFieldSection;
   };
 };
 
@@ -40,7 +29,7 @@ export type FormItemOption = {
 
 export type FormField =
   | {
-      type: "string";
+      type: "text";
       label?: string;
       name: string;
       placeholder?: string;
@@ -73,6 +62,11 @@ export type FormField =
       options: FormItemOption[];
     }
   | {
+      type: "file";
+      name: string;
+      limit: number;
+    }
+  | {
       type: "nested";
       label: string;
       nestedFields: FormField[];
@@ -86,13 +80,13 @@ type HouseSchemaType = z.infer<typeof houseSchema>;
 type ApartmentSchemaType = z.infer<typeof apartmentSchema>;
 type BaseSchemaType = z.infer<typeof baseSchema>;
 
-type DealSchemaType<T extends AdTypeEnum> = z.infer<
+type DealSchemaType<T extends AdTypes> = z.infer<
   ReturnType<typeof getDealSchema> & { adType: T }
 >;
 
-type DealSchemaSell = DealSchemaType<AdTypeEnum.SELL>;
-type DealSchemaShortRent = DealSchemaType<AdTypeEnum.SHORT_RENT>;
-type DealSchemaLongRent = DealSchemaType<AdTypeEnum.LONG_RENT>;
+type DealSchemaSell = DealSchemaType<AdTypes.Sell>;
+type DealSchemaShortRent = DealSchemaType<AdTypes.RentShort>;
+type DealSchemaLongRent = DealSchemaType<AdTypes.RentLong>;
 
 export type AdFormData = BaseSchemaType & {
   propertyDetails: {

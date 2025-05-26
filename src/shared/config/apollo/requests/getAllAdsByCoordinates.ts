@@ -8,6 +8,7 @@ export const GET_ALL_ADS_BY_COORDINATES = gql`
         description
         adType
         propertyType
+        title
         location {
           city
           street
@@ -24,7 +25,6 @@ export const GET_ALL_ADS_BY_COORDINATES = gql`
         deal {
           price
           fields
-          durationRent
         }
         createdAt
         updatedAt

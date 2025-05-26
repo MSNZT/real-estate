@@ -22,9 +22,11 @@ export type Ad = {
   __typename?: 'Ad';
   adType: AdTypes;
   booking: Array<BookingModel>;
+  contact: AdContact;
   createdAt: Scalars['DateTime']['output'];
   deal: Deal;
   description: Scalars['String']['output'];
+  features: Array<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   location: Location;
   mainPhoto: Scalars['String']['output'];
@@ -32,7 +34,17 @@ export type Ad = {
   photos: Array<Scalars['String']['output']>;
   propertyDetails: PropertyDetails;
   propertyType: PropertyTypes;
+  title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+  views?: Maybe<Scalars['Float']['output']>;
+};
+
+export type AdContact = {
+  __typename?: 'AdContact';
+  communication: Scalars['String']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  phone?: Maybe<Scalars['String']['output']>;
 };
 
 export type AdFilterInput = {
@@ -47,7 +59,8 @@ export type AdFilterInput = {
 };
 
 export enum AdTypes {
-  Rent = 'rent',
+  RentLong = 'rent_long',
+  RentShort = 'rent_short',
   Sell = 'sell'
 }
 
@@ -63,8 +76,16 @@ export type BookingModel = {
   startDate: Scalars['DateTime']['output'];
 };
 
+export type ContactInput = {
+  communication: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+};
+
 export type CreateAdInput = {
   adType: Scalars['String']['input'];
+  contact: ContactInput;
   deal: DealInput;
   description: Scalars['String']['input'];
   features: Array<Scalars['String']['input']>;
@@ -73,12 +94,12 @@ export type CreateAdInput = {
   photos: Array<Scalars['String']['input']>;
   propertyDetails: PropertyDetailsInput;
   propertyType: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type Deal = {
   __typename?: 'Deal';
   createdAt: Scalars['DateTime']['output'];
-  durationRent?: Maybe<DurationRentTypes>;
   fields: Scalars['JSON']['output'];
   id: Scalars['String']['output'];
   price: Scalars['Int']['output'];
@@ -91,15 +112,9 @@ export type DealFilter = {
 };
 
 export type DealInput = {
-  durationRent?: InputMaybe<Scalars['String']['input']>;
   fields: Scalars['JSONObject']['input'];
   price: Scalars['Price']['input'];
 };
-
-export enum DurationRentTypes {
-  Long = 'long',
-  Short = 'short'
-}
 
 export type Location = {
   __typename?: 'Location';
@@ -197,7 +212,6 @@ export type UpdateAdInput = {
 };
 
 export type UpdateDealInput = {
-  durationRent?: InputMaybe<Scalars['String']['input']>;
   fields?: InputMaybe<Scalars['JSONObject']['input']>;
   price?: InputMaybe<Scalars['Price']['input']>;
 };

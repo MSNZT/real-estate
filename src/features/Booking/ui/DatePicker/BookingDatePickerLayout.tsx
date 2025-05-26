@@ -31,7 +31,7 @@ export const BookingDatePickerLayout = ({
   className,
 }: BookingDatePickerLayout) => {
   const [datesRange, setDatesRange] = useState<DateRangeType>([null, null]);
-  const modalCalendarRef = useRef(null);
+  const modalCalendarRef = useRef<HTMLDivElement | null>(null);
 
   useClickOutSide(modalCalendarRef, handleClose);
 
@@ -51,7 +51,7 @@ export const BookingDatePickerLayout = ({
   if (isMobile) {
     return (
       <Drawer open={isOpen} onOpenChange={handleClose}>
-        <DrawerContent className="h-[95%]">
+        <DrawerContent className="h-[95%] bg-white rounded-2xl">
           <DrawerHeader>
             <div className="flex justify-between items-center">
               <DrawerClose asChild>
@@ -91,7 +91,7 @@ export const BookingDatePickerLayout = ({
                     }}
                     className="w-full justify-center"
                   >
-                    Применить
+                    <span className="text-white">Применить</span>
                   </Button>
                 </div>
               )
@@ -104,7 +104,7 @@ export const BookingDatePickerLayout = ({
 
   return (
     isOpen && (
-      <div className={className}>
+      <div ref={modalCalendarRef} className={className + " aloha"}>
         <BookingDatePicker
           adId={adId}
           isMobile={isMobile}
@@ -115,9 +115,9 @@ export const BookingDatePickerLayout = ({
             <div className="flex items-center gap-2">
               <Button
                 onClick={handleDateReset}
-                className="w-full justify-center"
+                className="w-full justify-center bg-black hover:bg-black/80"
               >
-                Очистить
+                <span className="text-white">Очистить</span>
               </Button>
               {startDate && endDate && (
                 <Button
@@ -127,7 +127,7 @@ export const BookingDatePickerLayout = ({
                   }}
                   className="w-full justify-center"
                 >
-                  Применить
+                  <span className="text-white">Применить</span>
                 </Button>
               )}
             </div>

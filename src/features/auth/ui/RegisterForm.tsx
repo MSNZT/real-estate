@@ -2,60 +2,70 @@
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { FieldInput, Separator } from "@/shared/ui";
-import { registerSchema } from "../dto/registerSchema";
-import { OAuthButtons } from "./OAuthButtons";
+import { Button, FieldInput, FieldInputPassword } from "@/shared/ui";
 import type { RegisterData } from "../types/auth";
-import type { ReactNode } from "react";
+import { useAuth } from "../api/useAuth";
+import { registerSchema } from "../schema/schema";
+import { PhoneInputField } from "./PhoneInputField";
+import toast from "react-hot-toast";
 
-interface RegisterFormProps {
-  error?: string;
-  onSubmit: (data: RegisterData) => void;
-  submitButton: ReactNode;
-}
-
-export const RegisterForm = ({
-  onSubmit,
-  error,
-  submitButton,
-}: RegisterFormProps) => {
+export const RegisterForm = () => {
   const methods = useForm({
     resolver: zodResolver(registerSchema),
+    mode: "onChange",
   });
+
+  const {
+    formState: { isDirty, isValid },
+  } = methods;
+
+  const { register } = useAuth();
+  const { isPending, mutateAsync, error } = register;
+
+  async function handleRegister(data: RegisterData) {
+    try {
+      const registerData = {
+        ...data,
+        phone: data.phone.replace(/\D/g, ""),
+      };
+      await mutateAsync(registerData);
+      toast.success("Вы успешно зарегистрировались", { duration: 2000 });
+    } catch (error) {
+      toast.error("Возникла ошибка при регистрации", { duration: 2000 });
+    }
+  }
+
+  const submitDisabled = !isDirty || !isValid || isPending;
+
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={methods.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6"
+        onSubmit={methods.handleSubmit(handleRegister)}
+        className="flex flex-col gap-4"
       >
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <FieldInput name="name" label="Имя" type="text" />
           <FieldInput name="email" label="E-mail" type="email" />
-          <FieldInput name="password" label="Пароль" type="password" />
-          <FieldInput
-            name="confirmPassword"
-            label="Повторите пароль"
-            type="password"
-          />
+          <PhoneInputField name="phone" label="Телефон" />
+          <FieldInputPassword name="password" label="Пароль" />
+          <FieldInputPassword name="confirmPassword" label="Повторите пароль" />
         </div>
         <div className="flex items-center gap-1">
           <p>Есть аккаунт?</p>
-          <Link
-            href="/auth/login"
-            className="text-sm text-blue-600 font-semibold"
-          >
-            Войти
+          <Link href="/auth/login">
+            <span className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+              Войти
+            </span>
           </Link>
         </div>
-        {submitButton}
-        <div className="relative sm:mb-4">
-          <span className="absolute -top-[12px] left-1/2 -translate-x-1/2 bg-white text-slate-500 px-4">
-            или
-          </span>
-          <Separator />
-        </div>
-        <OAuthButtons />
+        <Button
+          disabled={submitDisabled}
+          type="submit"
+          className="justify-center mb-5"
+        >
+          <span className="text-white">Зарегистрироваться</span>
+        </Button>
       </form>
     </FormProvider>
   );

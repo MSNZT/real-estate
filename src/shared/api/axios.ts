@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { tokenService } from "../services/token.service";
 import { authService } from "../services/auth.service";
-import { unknown } from "zod";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   _retry: boolean;
@@ -21,6 +20,7 @@ export const $apiWithAuth = axios.create({
 
 $apiWithAuth.interceptors.request.use((config) => {
   const accessToken = tokenService.getAccessToken();
+
   if (config.headers && accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -32,8 +32,6 @@ $apiWithAuth.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    console.log(error);
-
     const originalRequest = error.config as CustomAxiosRequestConfig;
     if (error.response?.status === 401 && !originalRequest?._retry) {
       originalRequest._retry = true;

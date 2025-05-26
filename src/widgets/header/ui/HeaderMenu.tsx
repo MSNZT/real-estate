@@ -18,7 +18,7 @@ export const HeaderMenu = () => {
       </Link>
       <Link
         href="/create-ad"
-        className="flex items-center gap-4 bg-primary hover:bg-primary-hover transition-colors duration-300 px-4 py-2 rounded-md
+        className="flex items-center gap-4 bg-primary hover:bg-primary-dark transition-colors duration-300 px-4 py-2 rounded-md
               text-sm"
       >
         <span className="text-white">Разместить объявление</span>

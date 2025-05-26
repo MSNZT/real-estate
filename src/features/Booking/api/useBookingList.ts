@@ -9,7 +9,7 @@ type BookingResponse = {
 export const useBookingList = (adId: string, open?: boolean) => {
   const { data } = useQuery<{ data: BookingResponse[] }>({
     queryKey: ["bookingList"],
-    queryFn: () => $api.get(`booking/get/${adId}`),
+    queryFn: () => $api.get(`booking/details/${adId}`),
     enabled: adId !== undefined,
   });
 

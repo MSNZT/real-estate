@@ -1,7 +1,6 @@
 "use client";
 import { Button, Container } from "@/shared/ui";
 import { useState } from "react";
-import { AdTypeEnum, PropertyTypeEnum } from "../types/types";
 import {
   AD_TYPES,
   ALLOWED_PROPERTY_TYPES,
@@ -10,12 +9,11 @@ import {
 import { cn } from "@/shared/lib/utils";
 import { AdForm } from "./AdForm";
 import { estateConfig } from "../config/ad-config";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 
 export const CreateAd = () => {
-  const [adType, setAdType] = useState<AdTypeEnum | null>(null);
-  const [propertyType, setPropertyType] = useState<PropertyTypeEnum | null>(
-    null
-  );
+  const [adType, setAdType] = useState<AdTypes | null>(null);
+  const [propertyType, setPropertyType] = useState<PropertyTypes | null>(null);
 
   const getAllowedPropertyTypes = () => {
     return PROPERTY_TYPES.filter((property) =>
@@ -29,31 +27,34 @@ export const CreateAd = () => {
         <h2 className="text-2xl md:text-3xl font-semibold mb-4">
           Новое объявление
         </h2>
-        <section className="flex max-w-[700px] gap-5 flex-wrap mb-5">
-          <h3 className="text-2xl font-semibold mb-4 visually-hidden">
+        <section className="mb-5">
+          <h3 className="text-xl md:text-2xl font-semibold mb-4 visually-hidden">
             Выберите тип объявления:
           </h3>
-          {AD_TYPES.map((item) => (
-            <Button
-              key={item.value}
-              variant="clear"
-              size="clear"
-              className={cn(
-                "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-blue-400 hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95",
-                {
-                  "bg-blue-400 text-white": item.value === adType,
-                }
-              )}
-              onClick={() => setAdType(item.value)}
-            >
-              {item.label}
-            </Button>
-          ))}
+          <div className="flex flex-wrap gap-5">
+            {AD_TYPES.map((item) => (
+              <Button
+                key={item.value}
+                variant="clear"
+                size="clear"
+                type="button"
+                className={cn(
+                  "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-active hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95 cursor-pointer",
+                  {
+                    "bg-active text-white": item.value === adType,
+                  }
+                )}
+                onClick={() => setAdType(item.value)}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </div>
         </section>
 
         {adType && (
           <section>
-            <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold mb-4">
               Выберите тип недвижимости:
             </h3>
             <div className="flex max-w-[700px] gap-5 flex-wrap">
@@ -64,9 +65,9 @@ export const CreateAd = () => {
                     variant="clear"
                     size="clear"
                     className={cn(
-                      "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-blue-400 hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95",
+                      "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-active hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95 cursor-pointer",
                       {
-                        "bg-blue-400 text-white": item.value === propertyType,
+                        "bg-active text-white": item.value === propertyType,
                       }
                     )}
                     onClick={() => setPropertyType(item.value)}

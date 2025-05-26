@@ -1,12 +1,10 @@
 "use client";
-import { useMediaQuery } from "react-responsive";
-
 import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
-import { Button, Input, Separator } from "@/shared/ui";
+import { Button, Separator } from "@/shared/ui";
 import { getDateValue } from "@/shared/utils/getDateValue";
 import { useCalculatePrice } from "../api/useCalculatePrice";
 import { useBookingWidget } from "../hooks/useBookingWidget";
-import { BookingFormPopup } from "./Form/BookingFormPopup";
+import { BookingFormConfirmPopup } from "./Form/BookingFormConfirmPopup";
 import { BookingDatePickerLayout } from "./DatePicker/BookingDatePickerLayout";
 import { useAuthData } from "@/entities/user";
 import { useRouter } from "next/navigation";
@@ -30,15 +28,15 @@ export const BookingWidget = ({ adId, price }: BookingWidgetProps) => {
   const { data } = useCalculatePrice(price, countDays);
   const isAuth = useAuthData((state) => state.isAuth);
   const router = useRouter();
-  const { isMedia: isDesktop, isMounted } = useClientMediaQuery({
+  const isDesktop = useClientMediaQuery({
     minWidth: "1024px",
   });
-
-  if (!isMounted) return <div className="basis-1/3"></div>;
 
   const totalPrice = getPrettyPrice(data?.totalPrice);
   const prepayment = getPrettyPrice(data?.prepayment);
   const remainder = getPrettyPrice(data?.remainder);
+
+  const selectedDates = getDateValue({ from: dates?.[0], to: dates?.[1] });
 
   const renderButtonBookingPopup = () => {
     if (!dates) return null;
@@ -50,7 +48,7 @@ export const BookingWidget = ({ adId, price }: BookingWidgetProps) => {
             : () => handleOpenBookingPopup(true)
         }
         size="clear"
-        className="flex flex-col gap-0 p-2 bg-sky-700 rounded-xl mt-2 h-12 justify-center w-full hover:bg-sky-800"
+        className="flex flex-col gap-0 p-2 bg-primary text-white rounded-lg mt-2 h-12 justify-center w-full hover:bg-primary-dark"
       >
         <p>Забронировать на {getDateValue({ from: dates[0], to: dates[1] })}</p>
       </Button>
@@ -63,28 +61,45 @@ export const BookingWidget = ({ adId, price }: BookingWidgetProps) => {
         <Button
           onClick={handleOpenCalendar}
           size="clear"
-          className="flex flex-col gap-0 p-2 bg-sky-700 rounded-xl mt-2 w-full hover:bg-sky-800 max-w-[400px]"
+          className="flex flex-col gap-0 p-2 bg-primary rounded-lg  w-full hover:bg-primary-dark mb-2"
         >
-          <p>Выбрать даты</p>
+          <p className="text-white">Выбрать даты</p>
           <p className="text-xs text-gray-200">Чтобы уточнить стоимость</p>
         </Button>
       )
     );
   };
 
+  const renderDateSelectButton = () => {
+    return (
+      <Button
+        onClick={handleOpenCalendar}
+        className="w-full mb-3"
+        variant="outline"
+        size="default"
+      >
+        {selectedDates ? (
+          <>
+            <span>{selectedDates}</span>
+            <span className="text-sm text-gray-400">
+              - Кликните, чтобы изменить
+            </span>
+          </>
+        ) : (
+          <span className="text-gray-400">Выберите дату</span>
+        )}
+      </Button>
+    );
+  };
+
   if (isDesktop) {
     return (
-      <div className="basis-1/3">
+      <div>
         <p className="font-bold mb-1">Заселение и выезд</p>
+        {renderDateSelectButton()}
+        {renderCalendarButton()}
+
         <div className="relative">
-          <Input
-            value={getDateValue({ from: dates?.[0], to: dates?.[1] })}
-            // Нужно доделать
-            // onChange={() => {}}?
-            placeholder="Выберите дату"
-            readOnly
-            onClick={handleOpenCalendar}
-          />
           <BookingDatePickerLayout
             className="absolute top-10 right-0 w-[540px]"
             isMobile={!isDesktop}
@@ -96,10 +111,8 @@ export const BookingWidget = ({ adId, price }: BookingWidgetProps) => {
           />
         </div>
 
-        {renderCalendarButton()}
-
         {data && (
-          <div className="flex flex-col gap-3 mt-4">
+          <div className="flex flex-col gap-3">
             {renderButtonBookingPopup()}
             <div className="flex justify-between">
               <p>
@@ -114,7 +127,7 @@ export const BookingWidget = ({ adId, price }: BookingWidgetProps) => {
               <p>Итого</p>
               <p>{totalPrice}</p>
             </div>
-            <BookingFormPopup
+            <BookingFormConfirmPopup
               adId={adId}
               price={price}
               dates={dates}
@@ -132,19 +145,18 @@ export const BookingWidget = ({ adId, price }: BookingWidgetProps) => {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col justify-center">
       <BookingDatePickerLayout
         isMobile={!isDesktop}
         adId={adId}
         isOpen={isOpenCalendar}
         handleApply={handleApplyCalendar}
-        handleOpen={handleOpenBookingPopup}
         handleClose={handleCloseCalendar}
       />
-
+      {renderDateSelectButton()}
       {renderCalendarButton()}
       {renderButtonBookingPopup()}
-      <BookingFormPopup
+      <BookingFormConfirmPopup
         adId={adId}
         dates={dates}
         isOpen={isOpenBookingPopup}

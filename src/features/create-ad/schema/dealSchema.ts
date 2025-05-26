@@ -1,5 +1,5 @@
+import { AdTypes } from "@/shared/config/apollo/generated";
 import { z } from "zod";
-import { AdTypeEnum } from "../types/types";
 
 const agentFee = z
   .number({ message: "Обязательно для заполнения" })
@@ -21,27 +21,27 @@ const price = z
     message: "Максимальная стоимость не может превышать 10 млрд рублей",
   });
 
-export function getDealSchema(adType: AdTypeEnum) {
+export function getDealSchema(adType: AdTypes) {
   let deal = z.object({
     price,
   });
 
   switch (adType) {
-    case AdTypeEnum.SELL: {
+    case AdTypes.Sell: {
       return deal.extend({
         fields: z.object({
           bargain,
         }),
       });
     }
-    case AdTypeEnum.SHORT_RENT: {
+    case AdTypes.RentShort: {
       return deal.extend({
         fields: z.object({
           deposit,
         }),
       });
     }
-    case AdTypeEnum.LONG_RENT: {
+    case AdTypes.RentLong: {
       return deal.extend({
         fields: z.object({
           agentFee,

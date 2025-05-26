@@ -7,7 +7,9 @@ export const GET_AD = gql`
       description
       mainPhoto
       photos
+      title
       adType
+      features
       propertyType
       location {
         city
@@ -24,10 +26,15 @@ export const GET_AD = gql`
       propertyDetails {
         fields
       }
+      contact {
+        name
+        email
+        phone
+        communication
+      }
       deal {
         fields
         price
-        durationRent
       }
       views
     }

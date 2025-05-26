@@ -1,5 +1,4 @@
 import { AdCardPreview } from "@/entities/ad";
-import { getAdTitle } from "@/entities/ad/utils/getAdTitle";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
 import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
 import { Ad } from "@/shared/config/apollo/generated/types";
@@ -35,7 +34,6 @@ export const BalloonMapAds = ({
         <AdCardPreview
           key={"ad" + ad.id}
           item={ad}
-          title={getAdTitle(ad)}
           price={getPrettyPrice(ad.deal.price)}
           period={getDealPeriod(ad)}
         />

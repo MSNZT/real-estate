@@ -7,10 +7,6 @@ export const useClientMediaQuery = (query: MediaQueryAllQueryable) => {
 
   useEffect(() => {
     setIsMounted(true);
-    isMedia;
   }, [isMedia]);
-  return {
-    isMedia,
-    isMounted,
-  };
+  return isMounted && isMedia;
 };

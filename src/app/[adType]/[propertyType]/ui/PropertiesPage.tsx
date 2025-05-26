@@ -3,8 +3,8 @@ import { NavListPage } from "./NavListPage";
 import { FiltersButton } from "@/features/filters-button";
 import { Container } from "@/shared/ui";
 import { SelectPropertyType } from "./SelectPropertyType";
-import { AdTypes, PropertyTypes } from "@/entities/ad";
 import { MapPopupButton } from "./MapPopupButton";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 
 interface PropertiesPageProps {
   adType: AdTypes;

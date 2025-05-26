@@ -1,4 +1,4 @@
-import { AdTypes, PropertyTypes } from "@/entities/ad";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 
 export type UrlPaths = {
   adType: AdTypes;

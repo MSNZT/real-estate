@@ -1,3 +1,4 @@
+export { Skeleton } from "./Skeleton";
 export { Icon } from "./Icon";
 export { Loader } from "./Loader";
 export { Separator } from "./Separator";
@@ -6,3 +7,5 @@ export { Input } from "./Input";
 export { FieldInput } from "./FieldInput";
 export { Button } from "./Button";
 export { Container } from "./Container";
+export { FieldInputPassword } from "./FieldInputPassword";
+export { PhoneInput } from "./PhoneInput";

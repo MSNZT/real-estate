@@ -1,15 +1,13 @@
-import { Ad, DurationRentTypes } from "@/shared/config/apollo/generated/types";
+import { Ad, AdTypes } from "@/shared/config/apollo/generated";
 
 export function getDealPeriod(ad: Ad) {
   let period = "";
 
-  console.log(ad);
-
-  switch (ad.deal.durationRent) {
-    case DurationRentTypes.Long: {
+  switch (ad.adType) {
+    case AdTypes.RentLong: {
       return (period += "в месяц");
     }
-    case DurationRentTypes.Short: {
+    case AdTypes.RentShort: {
       return (period += "за сутки");
     }
     default: {

@@ -2,7 +2,7 @@ import { useParams } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 // import { FilterFields } from "@/app/[adType]/[propertyType]/FilterFields";
 import { Button } from "@/shared/ui";
-import { AdTypes, PropertyTypes } from "@/entities/ad";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 // import { adFiltersVar } from "@/shared/lib/apollo/apolloClient";
 
 export const FiltersContent = ({ onClose }: { onClose: () => void }) => {

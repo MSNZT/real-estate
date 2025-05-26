@@ -1,7 +1,7 @@
 import { ReactNode, Ref } from "react";
 import DatePicker from "react-datepicker";
 import { ru } from "date-fns/locale";
-import { useBlockedDates } from "../../hooks/useBlockedDates";
+import { useDates } from "../../hooks/useDates";
 import { BookingDayContent } from "./BookingDayContent";
 import { DateRangeType } from "../../types/date.types";
 
@@ -14,7 +14,6 @@ interface BookingDatePickerProps {
   children: (startDate: Date | null, endDate: Date | null) => ReactNode;
   datesRange: DateRangeType;
   handleDateChange: (newDates: DateRangeType) => void;
-  ref?: Ref<DatePicker> | undefined;
 }
 
 export const BookingDatePicker = ({
@@ -23,10 +22,9 @@ export const BookingDatePicker = ({
   children,
   datesRange,
   handleDateChange,
-  ref,
 }: BookingDatePickerProps) => {
   const [startDate, endDate] = datesRange;
-  const { isDateDisabled } = useBlockedDates(adId, startDate, endDate);
+  const { isDateDisabled } = useDates(adId, startDate, endDate);
 
   return (
     <DatePicker
@@ -59,5 +57,6 @@ export const BookingDatePicker = ({
     >
       {children(startDate, endDate)}
     </DatePicker>
+    // </div>
   );
 };

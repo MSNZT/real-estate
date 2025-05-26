@@ -12,9 +12,9 @@ interface AvatarContentProps {
 
 export const AvatarContent = ({ items }: AvatarContentProps) => {
   return (
-    <DropdownMenuContent>
+    <DropdownMenuContent className="bg-white border-gray-200">
       {items.map((item) => (
-        <DropdownMenuItem key={item.text}>
+        <DropdownMenuItem key={item.text} className="hover:bg-blue-50">
           {item.href ? (
             <Link href={item.href}>
               <span>{item.text}</span>

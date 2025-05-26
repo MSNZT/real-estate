@@ -1,39 +1,37 @@
-import { AdTypeEnum, PropertyTypeEnum } from "../types/types";
+import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 
-type OptionType<T extends AdTypeEnum | PropertyTypeEnum> = {
+type OptionType<T extends AdTypes | PropertyTypes> = {
   value: T;
   label: string;
 };
 
-export const AD_TYPES: OptionType<AdTypeEnum>[] = [
-  { value: AdTypeEnum.SELL, label: "Продать" },
-  { value: AdTypeEnum.SHORT_RENT, label: "Сдать посуточно" },
-  { value: AdTypeEnum.LONG_RENT, label: "Сдать длительно" },
+export const AD_TYPES: OptionType<AdTypes>[] = [
+  { value: AdTypes.Sell, label: "Продать" },
+  { value: AdTypes.RentShort, label: "Сдать посуточно" },
+  { value: AdTypes.RentLong, label: "Сдать длительно" },
 ] as const;
 
-export const PROPERTY_TYPES: OptionType<PropertyTypeEnum>[] = [
-  { value: PropertyTypeEnum.APARTMENT, label: "Квартира" },
-  { value: PropertyTypeEnum.HOUSE, label: "Дом" },
-  // { value: PropertyTypeEnum.GARAGE, label: "Гараж" },
+export const PROPERTY_TYPES: OptionType<PropertyTypes>[] = [
+  { value: PropertyTypes.Apartment, label: "Квартира" },
+  { value: PropertyTypes.House, label: "Дом" },
+  // { value: PropertyTypes.GARAGE, label: "Гараж" },
 ] as const;
 
 export const ALLOWED_AD_TYPES = {};
 
-export const ALLOWED_PROPERTY_TYPES: Record<
-  AdTypeEnum,
-  Partial<PropertyTypeEnum>[]
-> = {
-  [AdTypeEnum.SELL]: [
-    PropertyTypeEnum.APARTMENT,
-    // PropertyTypeEnum.GARAGE,
-    PropertyTypeEnum.HOUSE,
-  ],
-  [AdTypeEnum.SHORT_RENT]: [PropertyTypeEnum.APARTMENT, PropertyTypeEnum.HOUSE],
-  [AdTypeEnum.LONG_RENT]: [
-    PropertyTypeEnum.APARTMENT,
-    // PropertyTypeEnum.GARAGE,
-    PropertyTypeEnum.HOUSE,
-  ],
-};
+export const ALLOWED_PROPERTY_TYPES: Record<AdTypes, Partial<PropertyTypes>[]> =
+  {
+    [AdTypes.Sell]: [
+      PropertyTypes.Apartment,
+      // PropertyTypes.GARAGE,
+      PropertyTypes.House,
+    ],
+    [AdTypes.RentShort]: [PropertyTypes.Apartment, PropertyTypes.House],
+    [AdTypes.RentLong]: [
+      PropertyTypes.Apartment,
+      // PropertyTypes.GARAGE,
+      PropertyTypes.House,
+    ],
+  };
 
 export const BASE_MESSAGE = "Обязательно для заполнения";

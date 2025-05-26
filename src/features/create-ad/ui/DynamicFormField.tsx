@@ -1,11 +1,12 @@
 import { AdFormData, FormField } from "../types/types";
 import { FieldErrors, useFormContext } from "react-hook-form";
 import { NumberField } from "./FormField/NumberField";
-import { StringField } from "./FormField/StringField";
+import { TextField } from "./FormField/TextField";
 import { TextAreaField } from "./FormField/TextAreaField";
 import { CheckboxField } from "./FormField/CheckboxField";
 import { RadioField } from "./FormField/RadioField";
 import { FieldLabel } from "./FormField/FieldLabel";
+import { FileUploadForm } from "./FileUploadForm";
 
 interface DynamicFormFieldProps {
   dynamicField: FormField;
@@ -26,7 +27,6 @@ export const DynamicFormField = ({ dynamicField }: DynamicFormFieldProps) => {
 
   const getNestedError = (errors: FieldErrors, path: string): FieldError =>
     path?.split(".").reduce((err: any, key) => {
-      console.log(err, key);
       return err?.[key];
     }, errors);
 
@@ -39,9 +39,9 @@ export const DynamicFormField = ({ dynamicField }: DynamicFormFieldProps) => {
         />
       );
     }
-    case "string": {
+    case "text": {
       return (
-        <StringField
+        <TextField
           dynamicField={dynamicField}
           error={getNestedError(errors, dynamicField.name)}
         />
@@ -66,6 +66,15 @@ export const DynamicFormField = ({ dynamicField }: DynamicFormFieldProps) => {
     case "radio": {
       return (
         <RadioField
+          dynamicField={dynamicField}
+          error={getNestedError(errors, dynamicField.name)}
+        />
+      );
+    }
+
+    case "file": {
+      return (
+        <FileUploadForm
           dynamicField={dynamicField}
           error={getNestedError(errors, dynamicField.name)}
         />

@@ -6,26 +6,26 @@ export const contacts = {
   fields: [
     {
       label: "Как обращаться",
-      type: "string",
+      type: "text",
       disabled: true,
-      name: "contacts.name",
+      name: "contact.name",
     },
     {
       label: "Эл. почта",
-      type: "string",
+      type: "text",
       disabled: true,
-      name: "contacts.email",
+      name: "contact.email",
     },
     {
       label: "Ваш телефон",
-      type: "string",
+      type: "text",
       disabled: true,
-      name: "contacts.phone",
+      name: "contact.phone",
     },
     {
       label: "Способ связи",
       type: "radio",
-      name: "contacts.communication",
+      name: "contact.communication",
       options: [
         { label: "Только звонки", value: "calls-only" },
         { label: "Звонки и сообщения", value: "calls-and-message" },

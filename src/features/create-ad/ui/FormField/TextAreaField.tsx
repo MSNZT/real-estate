@@ -22,7 +22,7 @@ export const TextAreaField = ({ dynamicField, error }: TextAreaFieldProps) => {
               maxLength={2000}
               placeholder={dynamicField.placeholder}
               className={cn(
-                "w-full border rounded-lg py-2 px-4 resize-none min-h-[100px] overflow-hidden",
+                "w-full border rounded-lg py-2 px-4 resize-none min-h-[100px] overflow-hidden border-gray-300 hover:border-black focus:border-black focus:outline-0",
                 {
                   "max-w-[200px] w-full": dynamicField.label,
                   "border-red-500": error,
