@@ -133,11 +133,11 @@ class AuthService {
   }
 
   loginWithGoogle() {
-    return `${NEXT_APP_API_URL}/api/oauth/google/callback`;
+    return `${NEXT_PUBLIC_API_URL}/oauth/google/callback`;
   }
 
   loginWithYandex() {
-    return `${NEXT_APP_API_URL}/api/oauth/yandex/callback`;
+    return `${NEXT_PUBLIC_API_URL}/oauth/yandex/callback`;
   }
 }
 
