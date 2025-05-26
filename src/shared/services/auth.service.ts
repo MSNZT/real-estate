@@ -133,11 +133,11 @@ class AuthService {
   }
 
   loginWithGoogle() {
-    return "http://localhost:5001/api/oauth/google/callback";
+    return `${NEXT_APP_API_URL}/api/oauth/google/callback`;
   }
 
   loginWithYandex() {
-    return "http://localhost:5001/api/oauth/yandex/callback";
+    return `${NEXT_APP_API_URL}/api/oauth/yandex/callback`;
   }
 }
 
