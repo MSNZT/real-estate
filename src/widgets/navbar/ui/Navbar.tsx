@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { useMediaQuery } from "react-responsive";
-import {AvatarButton} from "@/features/avatar-button
+import { AvatarButton } from "@/features/avatar-button"
 import {
   Heart,
   Home,
