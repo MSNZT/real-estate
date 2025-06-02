@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { $apiWithAuth } from "../api/axios";
+import { $apiWithAuth } from "../api/lib/axios";
 
 export class FileService {
   async uploadFiles(formData: FormData): Promise<string[]> {

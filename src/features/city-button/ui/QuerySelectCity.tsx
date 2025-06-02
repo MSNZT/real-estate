@@ -52,7 +52,7 @@ export const QuerySelectCity = ({ setAddress }: QuerySelectCityProps) => {
         onReset={handleResetQuery}
         handleMutate={handleChangeCity}
         placeholder="Укажите название города"
-        classNameWrapper="ml-4 mr-6 mb-3"
+        classNameWrapper="ml-4 mr-10 lg:mr-4 mb-3"
       />
       <SelectList
         handleSelected={(item) => handleClickSelected(item)}

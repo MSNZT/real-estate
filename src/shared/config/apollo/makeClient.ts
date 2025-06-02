@@ -9,7 +9,7 @@ import { tokenService } from "@/shared/services/token.service";
 
 export function makeClient() {
   const httpLink = new HttpLink({
-    uri: "http://localhost:5001/api/ads",
+    uri: "http://localhost:5001/api/graphql",
     fetchOptions: { cache: "no-store" },
   });
 

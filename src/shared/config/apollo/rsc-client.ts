@@ -22,7 +22,7 @@ export const { getClient } = registerApolloClient(() => {
       },
     }),
     link: new HttpLink({
-      uri: "http://localhost:5001/api/ads",
+      uri: "http://localhost:5001/api/graphql",
       fetchOptions: { cache: "no-store" },
     }),
   });

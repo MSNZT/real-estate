@@ -1,13 +1,26 @@
 "use client";
 import { DropdownMenu } from "@/shared/ui/DropdownMenu";
 import { AvatarTrigger } from "./AvatarTrigger";
-import { AvatarContent } from "./AvatarContent";
+import { Align, AvatarContent } from "./AvatarContent";
 import { useAuthData } from "@/entities/user";
 import { useAuth } from "@/features/auth";
 import { tokenService } from "@/shared/services/token.service";
 import { LogOut, Settings, User } from "lucide-react";
+import { ReactElement } from "react";
 
-export const AvatarButton = () => {
+interface AvatarButtonProps {
+  trigger: ReactElement;
+  sideOffset?: number;
+  alignOffset?: number;
+  align?: Align;
+}
+
+export const AvatarButton = ({
+  trigger,
+  sideOffset = 0,
+  alignOffset = 0,
+  align = "start",
+}: AvatarButtonProps) => {
   const { setAuthData } = useAuthData();
   const { logout } = useAuth();
 
@@ -19,8 +32,11 @@ export const AvatarButton = () => {
 
   return (
     <DropdownMenu>
-      <AvatarTrigger />
+      <AvatarTrigger trigger={trigger} />
       <AvatarContent
+        sideOffset={sideOffset}
+        alignOffset={alignOffset}
+        align={align}
         items={[
           {
             href: "/profile",

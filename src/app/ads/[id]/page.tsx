@@ -14,6 +14,8 @@ async function getAdById(id: string) {
         id,
       },
     });
+    console.log(data);
+
     return data;
   } catch (error) {
     console.log("Ошибка при запросе объявления по id", error);

@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useMemo } from "react";
-import { useMediaQuery } from "react-responsive";
-import { AvatarButton } from "@/features/avatar-button"
+import { AvatarButton } from "@/features/avatar-button";
 import {
   Heart,
   Home,
@@ -33,16 +32,29 @@ export const Navbar = () => {
   const { isAuth, isLoading } = useAuthData();
   const renderMenu = useMemo(() => {
     return menuOptions.map((option) => {
-      if (option.href === "/auth/login") {
+      if (option.text === "Профиль") {
         if (isAuth)
           return (
-            <li key={option.href}>
-              <AvatarButton />
+            <li key={option.text}>
+              <AvatarButton
+                sideOffset={14}
+                alignOffset={-60}
+                trigger={
+                  <Button
+                    variant="clear"
+                    size="clear"
+                    className="flex-col gap-0 items-center justify-center"
+                  >
+                    {option.Icon}
+                    <span className="font-normal text-xs">{option.text}</span>
+                  </Button>
+                }
+              />
             </li>
           );
       }
       return (
-        <li key={option.href}>
+        <li key={option.text}>
           <Link className="flex flex-col items-center" href={option.href}>
             {option.Icon}
             <span>{option.text}</span>

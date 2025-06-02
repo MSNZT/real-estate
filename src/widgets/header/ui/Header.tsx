@@ -1,3 +1,4 @@
+"use client";
 import { Container } from "@/shared/ui";
 import { HeaderLogo } from "./HeaderLogo";
 import { HeaderContent } from "./HeaderContent";

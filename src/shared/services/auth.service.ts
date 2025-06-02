@@ -1,11 +1,11 @@
-import { $api, $apiWithAuth } from "../api/axios";
+import { AUTH_ENDPOINTS } from "../api/endpoints";
+import { $api, $apiWithAuth } from "../api/lib/axios";
 import { tokenService } from "./token.service";
 import {
   AuthResponse,
   EmailData,
   ForgetPasswordResponse,
   LoginData,
-  OAuthData,
   PasswordCodeData,
   RegisterData,
   ResetPasswordData,
@@ -15,7 +15,7 @@ import {
 class AuthService {
   async login(loginData: LoginData) {
     try {
-      const { data } = await $api.post("/auth/login", loginData);
+      const { data } = await $api.post(AUTH_ENDPOINTS.login, loginData);
 
       if (data.accessToken) {
         tokenService.saveAccessToken(data.accessToken);
@@ -28,7 +28,7 @@ class AuthService {
   }
   async register(regData: RegisterData) {
     try {
-      const { data } = await $api.post("/auth/register", regData);
+      const { data } = await $api.post(AUTH_ENDPOINTS.register, regData);
       return data;
     } catch (error) {
       throw error;
@@ -36,7 +36,7 @@ class AuthService {
   }
   async logout() {
     try {
-      const { data } = await $api.post("auth/logout");
+      const { data } = await $api.post(AUTH_ENDPOINTS.logout);
       return data;
     } catch (error) {
       throw error;
@@ -46,7 +46,7 @@ class AuthService {
   async forgetPassword(dto: EmailData) {
     try {
       const { data } = await $api.post<ForgetPasswordResponse>(
-        "auth/forget-password",
+        AUTH_ENDPOINTS.forgetPassword,
         dto
       );
       return data;
@@ -58,7 +58,7 @@ class AuthService {
   async forgetPasswordValidate(dto: PasswordCodeData) {
     try {
       const { data } = await $api.post<StatusResponse>(
-        "auth/forget-password/validate",
+        AUTH_ENDPOINTS.forgetPasswordValidate,
         dto
       );
       return data;
@@ -69,75 +69,29 @@ class AuthService {
 
   async changePassword(dto: ResetPasswordData) {
     try {
-      const { data } = await $api.patch("auth/reset-password", dto);
-    } catch (error) {}
+      await $api.post(AUTH_ENDPOINTS.resetPassword, dto);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getMe(): Promise<AuthResponse> {
-    const { data } = await $apiWithAuth.get<AuthResponse>("auth/me");
+    const { data } = await $apiWithAuth.get<AuthResponse>(AUTH_ENDPOINTS.me);
     return data;
-  }
-
-  async getRefreshToken() {
-    const { data } = await $apiWithAuth.get<{ accessToken: string }>(
-      "/auth/refresh-token"
-    );
-
-    if (data) return data;
   }
 
   async refreshAuthToken() {
     try {
-      const token = await authService.getRefreshToken();
-      if (token?.accessToken) {
-        tokenService.saveAccessToken(token.accessToken);
-        return token.accessToken;
+      const { data } = await $api.get<{ token: string }>(
+        AUTH_ENDPOINTS.refresh
+      );
+      if (data?.token) {
+        tokenService.saveAccessToken(data.token);
       }
     } catch (error) {
       console.error("Failed to refresh token:", error);
-      this.logout();
       throw error;
     }
-  }
-
-  async registerComplete(dto: OAuthData): Promise<AuthResponse> {
-    try {
-      const { data } = await $api.post<AuthResponse>(
-        "oauth/register",
-        {
-          phone: dto.phone,
-        },
-        {
-          params: {
-            token: dto.token,
-          },
-        }
-      );
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async oauthValidate(token: string): Promise<{ status: string }> {
-    try {
-      const { data } = await $api.get<{ status: string }>("oauth/validate", {
-        params: {
-          token,
-        },
-      });
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  loginWithGoogle() {
-    return `${process.env.NEXT_PUBLIC_API_URL}/oauth/google/callback`;
-  }
-
-  loginWithYandex() {
-    return `${process.env.NEXT_PUBLIC_API_URL}/oauth/yandex/callback`;
   }
 }
 

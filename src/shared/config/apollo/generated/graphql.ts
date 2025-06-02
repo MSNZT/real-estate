@@ -121,20 +121,30 @@ export type DealInput = {
   price: Scalars['Price']['input'];
 };
 
+export type FavoriteAd = {
+  __typename?: 'FavoriteAd';
+  ad: Ad;
+  adId: Scalars['ID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  userId: Scalars['ID']['output'];
+};
+
 export type Location = {
   __typename?: 'Location';
+  address: Scalars['String']['output'];
   city: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   latitude: Scalars['Float']['output'];
   longitude: Scalars['Float']['output'];
-  street: Scalars['String']['output'];
 };
 
 export type LocationDto = {
+  address: Scalars['String']['input'];
   city: Scalars['String']['input'];
   latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
-  street: Scalars['String']['input'];
 };
 
 export type LocationFilter = {
@@ -145,12 +155,18 @@ export type LocationFilter = {
 export type Mutation = {
   __typename?: 'Mutation';
   createAd: Ad;
+  toggleFavoriteAd: ToggleFavoriteResponse;
   updateAd: Ad;
 };
 
 
 export type MutationCreateAdArgs = {
   createAdInput: CreateAdInput;
+};
+
+
+export type MutationToggleFavoriteAdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -193,6 +209,7 @@ export type Query = {
   __typename?: 'Query';
   getAdById?: Maybe<Ad>;
   getAllAds: AdsResponse;
+  getFavoriteAds: Array<FavoriteAd>;
 };
 
 
@@ -203,6 +220,11 @@ export type QueryGetAdByIdArgs = {
 
 export type QueryGetAllAdsArgs = {
   filters?: InputMaybe<AdFilterInput>;
+};
+
+export type ToggleFavoriteResponse = {
+  __typename?: 'ToggleFavoriteResponse';
+  status: Scalars['String']['output'];
 };
 
 export type UpdateAdInput = {

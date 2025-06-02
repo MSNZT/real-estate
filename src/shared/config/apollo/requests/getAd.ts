@@ -13,7 +13,7 @@ export const GET_AD = gql`
       propertyType
       location {
         city
-        street
+        address
         latitude
         longitude
       }

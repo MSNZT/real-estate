@@ -36,7 +36,7 @@ export const Product = ({ product }: ProductProps) => {
 
   return (
     <Container className="relative mt-5 mb-[80px]">
-      <AdUserMenu title={product.title} />
+      <AdUserMenu id={product.id} title={product.title} />
       <div className="flex flex-col lg:flex-row lg:gap-y-3 lg:gap-x-8 w-full mt-5">
         <ImageGallery photos={product.photos} mainPhoto={product.mainPhoto} />
         <div className="flex flex-col gap-3 max-w-[400px] w-full lg:shrink-0">

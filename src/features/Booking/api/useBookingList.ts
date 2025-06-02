@@ -1,4 +1,4 @@
-import { $api } from "@/shared/api/axios";
+import { $api } from "@/shared/api/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
 type BookingResponse = {

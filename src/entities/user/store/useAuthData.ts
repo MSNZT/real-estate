@@ -4,6 +4,7 @@ import { User } from "../model/user";
 type AuthState = {
   isAuth: boolean;
   isLoading: boolean;
+  isInitialized: boolean;
   userData: User | null;
 };
 
@@ -14,9 +15,12 @@ type AuthStateActions = {
 
 type AuthStateStore = AuthState & AuthStateActions;
 
+// const hasToken = !!tokenService.getAccessToken();
+
 const initialState = {
   isAuth: false,
   isLoading: false,
+  isInitialized: false,
   userData: null,
 } satisfies AuthState;
 

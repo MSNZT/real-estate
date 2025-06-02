@@ -8,8 +8,10 @@ import { useAuth } from "../api/useAuth";
 import { loginSchema } from "../schema/schema";
 import toast from "react-hot-toast";
 import { Mail } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function LoginForm() {
+  const queryClient = useQueryClient();
   const methods = useForm({
     resolver: zodResolver(loginSchema),
   });
@@ -20,6 +22,7 @@ export function LoginForm() {
   async function handleLogin(data: LoginData) {
     try {
       await mutateAsync(data);
+      queryClient.setQueryData(["auth"], data);
       toast.success("Вы успешно авторизовались", { duration: 2000 });
     } catch (error) {}
   }

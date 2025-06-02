@@ -16,6 +16,7 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useAuthData, User } from "@/entities/user";
 import { tokenService } from "@/shared/services/token.service";
+import { oauthService } from "@/shared/services/oauth.service";
 
 type AxiosErrorResponse = AxiosError & {
   response: {
@@ -91,7 +92,6 @@ export const useAuth = () => {
     mutationFn: () => authService.getMe(),
     onSuccess: (data) => {
       setAuthData({ isAuth: !!data, userData: data.user });
-      router.push("/");
     },
   });
 
@@ -100,7 +100,7 @@ export const useAuth = () => {
     AxiosErrorResponse,
     string
   >({
-    mutationFn: (token) => authService.oauthValidate(token),
+    mutationFn: (token) => oauthService.validate(token),
     onSuccess: (response) => {
       if (typeof response === "boolean" && !response) {
         router.push("/");
@@ -114,7 +114,7 @@ export const useAuth = () => {
     OAuthData
   >({
     mutationFn: ({ phone, token }) =>
-      authService.registerComplete({ phone, token }),
+      oauthService.registerComplete({ phone, token }),
     onSuccess: (data) => {
       console.log(data);
       setAuthData({ isAuth: !!data, isLoading: false, userData: data.user });

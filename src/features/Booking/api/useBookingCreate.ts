@@ -1,4 +1,4 @@
-import { $apiWithAuth } from "@/shared/api/axios";
+import { $apiWithAuth } from "@/shared/api/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 
 export type BookingCreateDto = {
