@@ -32,7 +32,7 @@ export const AdCardPreview = ({
       </Link>
       <div>
         <div className="flex items-center justify-between">
-          <Link href={`/ads/${item.id}`}>
+          <Link href={`/offer/${item.id}`}>
             <AdCardTitle title={item.title} />
           </Link>
           {showFavorite && (
