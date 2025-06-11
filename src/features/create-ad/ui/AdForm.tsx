@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createDynamicSchema } from "../schema/baseSchema";
 import { getDefaultValues } from "../utils/getDefaultValues";
-import { getAdTitle } from "@/entities/ad/utils/getAdTitle";
+import { generateAdTitle } from "@/entities/ad/utils/generateAdTitle";
 import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 import { AddressBlock } from "./AddressBlock";
 import { useLocationData } from "@/entities/user/store/useLocationData";
@@ -25,7 +25,7 @@ export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
       toast.success("Объявление успешно создано");
     },
   });
-  const city = useLocationData((state) => state.city);
+  const city = useLocationData((state) => state.locationData.city);
   const methods = useForm<AdFormData>({
     resolver: zodResolver(createDynamicSchema(propertyType, adType)),
     defaultValues: getDefaultValues(formConfig, adType, propertyType, city),
@@ -37,7 +37,7 @@ export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
   function onSubmit(data: AdFormData) {
     console.log(data);
 
-    const title = getAdTitle(propertyType, data);
+    const title = generateAdTitle(propertyType, data);
     const objData = {
       ...data,
       mainPhoto: data.photos[0],

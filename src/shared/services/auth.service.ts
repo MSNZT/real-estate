@@ -1,3 +1,4 @@
+import { User } from "@/entities/user";
 import { AUTH_ENDPOINTS } from "../api/endpoints";
 import { $api, $apiWithAuth } from "../api/lib/axios";
 import { tokenService } from "./token.service";
@@ -75,8 +76,8 @@ class AuthService {
     }
   }
 
-  async getMe(): Promise<AuthResponse> {
-    const { data } = await $apiWithAuth.get<AuthResponse>(AUTH_ENDPOINTS.me);
+  async getMe(): Promise<User> {
+    const { data } = await $apiWithAuth.get<User>(AUTH_ENDPOINTS.me);
     return data;
   }
 

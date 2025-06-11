@@ -11,7 +11,7 @@ export const GET_ALL_ADS_PREVIEW = gql`
         title
         location {
           city
-          street
+          address
           latitude
           longitude
         }

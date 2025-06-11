@@ -10,7 +10,7 @@ import {
   GeolocationControl,
 } from "@pbe/react-yandex-maps";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { RefObject, useRef, useState } from "react";
 import { formatAddress } from "../utils/formatAddress";
 
 type CoordArgsType = {
@@ -20,8 +20,10 @@ type CoordArgsType = {
 
 export const MapComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [coords, setCoords] = useState<number[]>([]);
   const { locationData, setData } = useLocationData();
   const center = [locationData.latitude, locationData.longitude];
+  const mapRef = useRef<ymaps.Map | null>(null);
   const { mutate } = useMutation<any, Error, CoordArgsType>({
     mutationFn: ({ latitude, longitude }) =>
       locationService.getAddressByCoords(latitude, longitude),
@@ -47,17 +49,20 @@ export const MapComponent = () => {
       house,
     } = suggestions[0].data;
 
+    const geoCoords = [Number(geo_lat), Number(geo_lon)];
+
     const settlement = city ? city : settlement_with_type;
     const address = formatAddress(street_with_type, house);
+    // mapRef.current?.setCenter(geoCoords);
+    setCoords(geoCoords);
+    // const locationData = {
+    //   city: settlement,
+    //   address: address || null,
+    //   latitude: Number(geo_lat),
+    //   longitude: Number(geo_lon),
+    // };
 
-    const locationData = {
-      city: settlement,
-      address: address || null,
-      latitude: Number(geo_lat),
-      longitude: Number(geo_lon),
-    };
-
-    setData(locationData);
+    // setData(locationData);
   }
 
   return (
@@ -74,17 +79,18 @@ export const MapComponent = () => {
             overflow: "hidden",
             boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.2)",
           }}
-          state={{ center, zoom: 14 }}
+          defaultState={{ zoom: 14, center }}
           onLoad={handleMapLoad}
           onClick={handleMapClick}
+          instanceRef={(map) => (mapRef.current = map)}
         >
           <Placemark
-            geometry={center}
+            geometry={coords}
             options={{
               iconLayout: "default#image",
               iconImageHref: "/pin.svg",
               iconImageSize: [40, 40],
-              iconImageOffset: [-15, -40],
+              // iconImageOffset: [-15, -40],
             }}
             properties={{
               hintContent: "Кастомный маркер",

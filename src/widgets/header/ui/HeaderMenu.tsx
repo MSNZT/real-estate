@@ -11,7 +11,7 @@ export const HeaderMenu = () => {
         <Heart />
       </Link>
       <Link
-        href="/messages"
+        href="/chat"
         className="flex items-center gap-4 hover:bg-blue-50 transition-colors duration-300 px-2 py-2 rounded-md text-sm"
       >
         <MessageSquare />

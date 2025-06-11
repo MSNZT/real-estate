@@ -24,7 +24,7 @@ const menuOptions = [
   { text: "Главная", href: "/", Icon: <Home /> },
   { text: "Избранное", href: "/favorites", Icon: <Heart /> },
   { text: "Объявления", href: "/create-ad", Icon: <PlusCircle /> },
-  { text: "Сообщения", href: "/messages", Icon: <MessageSquare /> },
+  { text: "Сообщения", href: "/chat", Icon: <MessageSquare /> },
   { text: "Профиль", href: "/auth/login", Icon: <User /> },
 ];
 

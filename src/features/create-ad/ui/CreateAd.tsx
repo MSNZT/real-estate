@@ -22,11 +22,9 @@ export const CreateAd = () => {
   };
 
   return (
-    <Container className="my-10">
+    <Container className="mt-4 md:mt-6">
       <div className="md:ml-20 max-w-[900px] mb-10">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-          Новое объявление
-        </h2>
+        <h2 className="text-2xl font-semibold mb-4">Новое объявление</h2>
         <section className="mb-5">
           <h3 className="text-xl md:text-2xl font-semibold mb-4 visually-hidden">
             Выберите тип объявления:
@@ -54,7 +52,7 @@ export const CreateAd = () => {
 
         {adType && (
           <section>
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold mb-4">
+            <h3 className="text-xl md:text-2xl font-semibold mb-4">
               Выберите тип недвижимости:
             </h3>
             <div className="flex max-w-[700px] gap-5 flex-wrap">

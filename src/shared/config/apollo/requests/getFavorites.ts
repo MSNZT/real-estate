@@ -1,7 +1,11 @@
 import { gql, TypedDocumentNode } from "@apollo/client";
-import { Query } from "../generated";
+import { FavoriteAd } from "../generated";
 
-export const GET_FAVORITES: TypedDocumentNode<Query, any> = gql`
+type GetFavoritesResponse = {
+  getFavoriteAds: FavoriteAd[];
+};
+
+export const GET_FAVORITES: TypedDocumentNode<GetFavoritesResponse, any> = gql`
   query GetFavorites {
     getFavoriteAds {
       ad {

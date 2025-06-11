@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AdsSectionType } from "@/app/(root)/page";
+import { AdsSectionType } from "@/app/(root)/[city]/page";
 import { AdListsPreview } from "@/widgets/ad-lists";
 import { ChevronRight } from "lucide-react";
 

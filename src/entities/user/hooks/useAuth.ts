@@ -19,22 +19,20 @@ export const useAuth = () => {
     queryFn: () => authService.getMe(),
     enabled: hasToken,
     retry: false,
-    // initialData: () => {
-    //   // Попробуем получить данные из кэша при инициализации
-    //   return queryClient.getQueryData(["auth"]) || null;
-    // },
+    staleTime: 1000 * 60 * 5,
   });
 
-  console.log("test", {
-    isMounted: !isMounted,
-    hasToken: hasToken,
-    isLoading: isLoading,
-  });
+  // console.log("test", {
+  //   isMounted: !isMounted,
+  //   hasToken: hasToken,
+  //   isLoading: isLoading,
+  // });
   return {
     user,
-    isLoading: !isMounted || (hasToken && isLoading),
+    isLoading: hasToken && isLoading,
     isAuth: hasToken && isSuccess,
     isError,
     isSuccess,
+    isMounted,
   };
 };

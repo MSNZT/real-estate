@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export type LocationState = {
   locationData: {
-    city: string | null;
+    city: string;
     latitude: number;
     longitude: number;
     address: string | null;

@@ -155,6 +155,7 @@ export type LocationFilter = {
 export type Mutation = {
   __typename?: 'Mutation';
   createAd: Ad;
+  syncFavorites: SyncFavorites;
   toggleFavoriteAd: ToggleFavoriteResponse;
   updateAd: Ad;
 };
@@ -162,6 +163,11 @@ export type Mutation = {
 
 export type MutationCreateAdArgs = {
   createAdInput: CreateAdInput;
+};
+
+
+export type MutationSyncFavoritesArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -208,6 +214,7 @@ export enum PropertyTypes {
 export type Query = {
   __typename?: 'Query';
   getAdById?: Maybe<Ad>;
+  getAdsByIds: Array<Ad>;
   getAllAds: AdsResponse;
   getFavoriteAds: Array<FavoriteAd>;
 };
@@ -218,13 +225,23 @@ export type QueryGetAdByIdArgs = {
 };
 
 
+export type QueryGetAdsByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
+};
+
+
 export type QueryGetAllAdsArgs = {
   filters?: InputMaybe<AdFilterInput>;
 };
 
+export type SyncFavorites = {
+  __typename?: 'SyncFavorites';
+  status: Scalars['Boolean']['output'];
+};
+
 export type ToggleFavoriteResponse = {
   __typename?: 'ToggleFavoriteResponse';
-  status: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type UpdateAdInput = {

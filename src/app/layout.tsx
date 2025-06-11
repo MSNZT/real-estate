@@ -5,6 +5,7 @@ import { Header } from "@/widgets/header";
 import { Providers } from "./providers/Providers";
 import { Navbar } from "@/widgets/navbar/ui/Navbar";
 import "./globals.css";
+import { CityButton } from "@/features/city-button";
 
 const nunito = Nunito({
   subsets: ["cyrillic"],
@@ -33,7 +34,6 @@ export default async function RootLayout({
       <body className={nunito.className}>
         <Toaster />
         <Providers>
-          <Header />
           {children}
           <Navbar />
         </Providers>

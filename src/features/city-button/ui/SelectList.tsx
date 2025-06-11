@@ -1,5 +1,6 @@
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui";
+import { Check } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type SelectItem = {
@@ -9,11 +10,13 @@ type SelectItem = {
 interface SelectListProps<T extends SelectItem> {
   data: T[] | undefined;
   handleSelected: (item: T) => void;
+  checked: (item: T) => boolean;
 }
 
 export const SelectList = <T extends SelectItem>({
   data,
   handleSelected,
+  checked,
 }: SelectListProps<T>) => {
   const [currentSelectIndex, setCurrentSelectIndex] = useState<number | null>(
     null
@@ -60,26 +63,27 @@ export const SelectList = <T extends SelectItem>({
       document.addEventListener("keydown", handlePressKeydown);
       return () => document.removeEventListener("keydown", handlePressKeydown);
     }
-  }, [data]);
+  }, [data, handlePressKeydown]);
 
   return (
     <ul className="flex flex-col gap-2 " role="listbox">
       {data?.map((item, i) => (
         <li
           key={item.value}
-          className={cn("group hover:bg-blue-300 w-full px-4", {
-            "bg-blue-300 text-white": currentSelectIndex === i,
+          className={cn("group hover:bg-blue-100 w-full px-4", {
+            "bg-blue-100": currentSelectIndex === i,
           })}
         >
           <Button
             onClick={() => handleSelected(item)}
-            className="py-2 w-full"
+            className="py-2 w-full items-center"
             variant="clear"
             size="clear"
           >
-            <p className="group-hover:text-white text-base truncate">
-              {item.value}
-            </p>
+            <span className="text-base truncate">{item.value}</span>
+            {checked(item) && (
+              <Check size={18} className="text-blue-400 ml-auto mr-2" />
+            )}
           </Button>
         </li>
       ))}

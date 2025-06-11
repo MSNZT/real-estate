@@ -13,7 +13,7 @@ export const GET_ALL_ADS = gql`
         photos
         location {
           city
-          street
+          address
           latitude
           longitude
         }
