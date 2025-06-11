@@ -9,7 +9,7 @@ import { tokenService } from "@/shared/services/token.service";
 
 export function makeClient() {
   const httpLink = new HttpLink({
-    uri: `${proccess.env.NEXT_PUBLIC_API_URL}/graphql`,
+    uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     fetchOptions: { cache: "no-store" },
   });
 
