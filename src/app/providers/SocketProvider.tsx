@@ -17,6 +17,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
+    const api = process.env.NEXT_PUBLIC_API_URL.split("/api");
+    console.log("Api", api)
     socketRef.current = io(`${process.env.NEXT_PUBLIC_API_URL.split("/api")[0]/chat`, {
       query: {
         userId: user?.id,
