@@ -17,7 +17,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:5001/chat", {
+    socketRef.current = io(`${process.env.NEXT_PUBLIC_API_URL.split("/api")[0]/chat`, {
       query: {
         userId: user?.id,
       },
