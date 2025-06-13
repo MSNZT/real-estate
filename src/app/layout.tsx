@@ -6,6 +6,7 @@ import { Providers } from "./providers/Providers";
 import { Navbar } from "@/widgets/navbar/ui/Navbar";
 import "./globals.css";
 import { CityButton } from "@/features/city-button";
+import { cookies } from "next/headers";
 
 const nunito = Nunito({
   subsets: ["cyrillic"],
@@ -29,11 +30,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const hasRefresh = !!(await cookies()).get("refreshToken");
+
+  console.log(hasRefresh, "tokkendmsnmfmsdf");
+
   return (
     <html lang="ru">
       <body className={nunito.className}>
         <Toaster />
-        <Providers>
+        <Providers hasRefresh={hasRefresh}>
           {children}
           <Navbar />
         </Providers>

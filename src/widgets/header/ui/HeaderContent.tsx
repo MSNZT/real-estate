@@ -4,19 +4,13 @@ import { useAuth } from "@/entities/user/hooks/useAuth";
 import { AuthArea } from "./AuthArea";
 
 export const HeaderContent = () => {
-  const { user, isLoading, isAuth, isMounted } = useAuth();
-
-  console.log(isLoading);
+  const { isLoading, isAuth, isGuest, user } = useAuth();
+  console.log(isLoading, isAuth, isGuest, user);
 
   return (
     <div className="hidden md:flex items-center gap-4">
       <HeaderMenu />
-      <AuthArea
-        isLoading={isLoading}
-        isAuth={isAuth}
-        user={user}
-        isMounted={isMounted}
-      />
+      <AuthArea isLoading={isLoading} isAuth={isAuth} isGuest={isGuest} />
     </div>
   );
 };

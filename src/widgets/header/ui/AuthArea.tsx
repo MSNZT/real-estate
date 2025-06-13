@@ -2,21 +2,18 @@
 
 import { User } from "@/entities/user";
 import { AvatarButton } from "@/features/avatar-button";
-import { tokenService } from "@/shared/services/token.service";
 import { Button, Loader } from "@/shared/ui";
 import { User as UserIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
 interface AuthArea {
   isLoading: boolean;
   isAuth: boolean;
-  user: User;
-  isMounted: boolean;
+  isGuest: boolean;
 }
 
-export const AuthArea = ({ isLoading, isAuth, user, isMounted }: AuthArea) => {
-  if (isLoading && !isAuth) {
+export const AuthArea = ({ isLoading, isAuth, isGuest }: AuthArea) => {
+  if (isLoading) {
     return (
       <div className="flex justify-center">
         <Loader />
@@ -24,7 +21,7 @@ export const AuthArea = ({ isLoading, isAuth, user, isMounted }: AuthArea) => {
     );
   }
 
-  if (isAuth && user) {
+  if (isAuth) {
     return (
       <AvatarButton
         alignOffset={-80}
@@ -42,13 +39,17 @@ export const AuthArea = ({ isLoading, isAuth, user, isMounted }: AuthArea) => {
     );
   }
 
-  return (
-    <Link
-      href="/auth/login"
-      className="flex items-center gap-2 bg-slate-400 hover:bg-slate-600 transition-colors duration-300 px-4 py-2 rounded-md text-white text-sm"
-    >
-      <UserIcon />
-      <span>Войти</span>
-    </Link>
-  );
+  if (isGuest) {
+    return (
+      <Link
+        href="/auth/login"
+        className="flex items-center gap-2 bg-slate-400 hover:bg-slate-600 transition-colors duration-300 px-4 py-2 rounded-md text-white text-sm"
+      >
+        <UserIcon />
+        <span>Войти</span>
+      </Link>
+    );
+  }
+
+  return null;
 };

@@ -1,11 +1,36 @@
 "use client";
 
 import { useAuthFromParams, useCheckAuth } from "@/entities/user";
-import { ReactNode } from "react";
+import { createContext, ReactNode, use, useMemo } from "react";
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+type AuthContextType = {
+  hasRefresh: boolean;
+};
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({
+  children,
+  hasRefresh,
+}: {
+  children: ReactNode;
+  hasRefresh: boolean;
+}) => {
   useCheckAuth();
   useAuthFromParams();
 
-  return children;
+  console.log("provider", hasRefresh);
+
+  const value = useMemo(() => ({ hasRefresh }), [hasRefresh]);
+
+  console.log("provider Value", value);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export function useAuthContext() {
+  const ctx = use(AuthContext);
+  if (!ctx)
+    throw new Error("useAuthContext должен быть обёрнут в AuthProvider");
+  return ctx;
+}

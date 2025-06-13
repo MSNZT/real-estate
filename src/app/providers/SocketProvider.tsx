@@ -13,30 +13,31 @@ const SocketContext = createContext<SocketContextProps | null>(null);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const socketRef = useRef<Socket>(null);
-  const { user, isLoading } = useAuth();
+  const { isAuth, isLoading, user, isGuest } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    const api = process.env.NEXT_PUBLIC_API_URL.split("/api")[0];
-    console.log("Api", api)
-    socketRef.current = io(`${api}/chat`, {
-      query: {
-        userId: user?.id,
-      },
-    });
+    if (isAuth) {
+      const api = process.env.NEXT_PUBLIC_API_URL!.split("/api")[0];
+      console.log("Api", api);
+      socketRef.current = io(`${api}/chat`, {
+        query: {
+          userId: user?.id,
+        },
+      });
+      socketRef.current.emit("getOnlineStatus");
 
-    socketRef.current.emit("getOnlineStatus");
-
-    return () => {
-      socketRef.current?.disconnect();
-    };
-  }, []);
+      return () => {
+        socketRef.current?.disconnect();
+      };
+    }
+  }, [isAuth]);
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (isGuest) {
       router.push("/");
     }
-  }, [isLoading, user, router]);
+  }, [router, isGuest]);
 
   if (isLoading) {
     return (

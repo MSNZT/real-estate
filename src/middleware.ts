@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
 
+const privateRoutes = ["/chat"];
+
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
   const { device } = userAgent(request);
@@ -11,6 +13,8 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect("http://localhost:3000");
     }
   }
+
+  console.log("request", request.nextUrl.pathname);
 
   const viewport = device.type === "mobile" ? "mobile" : "desktop";
   url.searchParams.set("viewport", viewport);

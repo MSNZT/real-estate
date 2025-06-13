@@ -19,7 +19,3 @@ export default function Page() {
     </>
   );
 }
-
-// <main className="hidden md:flex flex-col flex-1 min-w-0">
-//   {children}
-// </main>

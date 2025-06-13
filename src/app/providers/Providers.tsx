@@ -5,15 +5,23 @@ import { QueryProvider } from "./QueryProvider";
 import { AuthProvider } from "./AuthProvider";
 import { FavoritesProvider } from "@/features/favorites";
 
-export const Providers = ({ children }: { children: ReactNode }) => {
+export const Providers = ({
+  children,
+  hasRefresh,
+}: {
+  children: ReactNode;
+  hasRefresh: boolean;
+}) => {
+  console.log(hasRefresh);
+
   return (
     <ApolloWrapper>
       <QueryProvider>
-        <FavoritesProvider>
-          <Suspense fallback="">
-            <AuthProvider>{children}</AuthProvider>
-          </Suspense>
-        </FavoritesProvider>
+        <Suspense fallback="">
+          <AuthProvider hasRefresh={hasRefresh}>
+            <FavoritesProvider>{children}</FavoritesProvider>
+          </AuthProvider>
+        </Suspense>
       </QueryProvider>
     </ApolloWrapper>
   );
