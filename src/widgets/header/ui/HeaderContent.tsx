@@ -1,6 +1,6 @@
 "use client";
 import { HeaderMenu } from "./HeaderMenu";
-import { useAuth } from "@/entities/user/hooks/useAuth";
+import { useAuth } from "@/entities/user";
 import { AuthArea } from "./AuthArea";
 
 export const HeaderContent = () => {

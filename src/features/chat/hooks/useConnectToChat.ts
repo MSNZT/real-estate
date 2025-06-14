@@ -1,18 +1,18 @@
 import { useSocket } from "@/app/providers/SocketProvider";
 import { useEffect, useState } from "react";
 
-export const useJoinToChat = (
+export const useConnectToChat = (
   chatId: string,
   onNewMessage: (msg: any) => void
 ) => {
   const { socket } = useSocket();
-  const [isJoined, setIsJoined] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     if (!chatId || !socket) return;
     socket.emit("join", { channelId: chatId });
 
-    setIsJoined(true);
+    setIsConnected(true);
     socket.on("newMessage", onNewMessage);
 
     return () => {
@@ -21,12 +21,12 @@ export const useJoinToChat = (
   }, [chatId, socket, onNewMessage]);
 
   const sendMessage = (msg: any) => {
-    if (!isJoined) return;
+    if (!isConnected) return;
     socket?.emit("sendMessage", { channelId: chatId, ...msg });
   };
 
   return {
-    isJoined,
+    isConnected,
     sendMessage,
   };
 };

@@ -5,10 +5,10 @@ import { useBookingCreate } from "../../api/useBookingCreate";
 import { BookingFormLeft } from "./BookingFormLeft";
 import { BookingFormRight } from "./BookingFormRight";
 import { DateRangeType } from "../../types/date.types";
-import { useAuthData } from "@/entities/user";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { Input } from "@/shared/ui";
+import { useAuth } from "@/entities/user";
 
 interface BookingFormProps {
   adId: string;
@@ -30,8 +30,7 @@ export const BookingForm = ({
   price,
 }: BookingFormProps) => {
   const { isLoading, mutate } = useBookingCreate();
-  const userData = useAuthData((state) => state.userData);
-  console.log(userData);
+  const { user } = useAuth();
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -42,7 +41,7 @@ export const BookingForm = ({
 
   const onSubmit = useCallback(
     (contacts: { guestName?: string; guestPhone?: string }) => {
-      if (dates !== undefined && dates[0] && dates[1]) {
+      if (dates !== undefined && dates[0] && dates[1] && user) {
         const [start, end] = dates;
         const { guestName, guestPhone } = contacts;
 
@@ -50,8 +49,8 @@ export const BookingForm = ({
           adId,
           startDate: start,
           endDate: end,
-          guestName: guestName || userData?.email,
-          guestPhone,
+          guestName: guestName || user?.email,
+          guestPhone: guestPhone || user.phone,
           guestCounts: 2, // Нужно доделать
         });
       }

@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <>
       <ChatSidebar />
-      <main className="hidden md:block h-[calc(100vh-70px-20px)] flex-1">
+      <main className="hidden md:block h-[calc(100dvh-70px)] flex-1">
         <div className="flex flex-col items-center justify-center h-full text-gray-400 select-none">
           <span className="text-6xl mb-6">💬</span>
           <h2 className="text-xl font-semibold mb-2">

@@ -32,8 +32,6 @@ export default async function RootLayout({
 }>) {
   const hasRefresh = !!(await cookies()).get("refreshToken");
 
-  console.log(hasRefresh, "tokkendmsnmfmsdf");
-
   return (
     <html lang="ru">
       <body className={nunito.className}>

@@ -1,6 +1,6 @@
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
-import { useAuth } from "../api/useAuth";
+import { useAuthMutations } from "../api/useAuthMutations";
 import { Button, FieldInput, Loader } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { codeSchema } from "../schema/schema";
@@ -17,7 +17,7 @@ export const ForgetPasswordCodeForm = ({
   handleNextStep,
   email,
 }: ForgetPasswordCodeFormProps) => {
-  const { forgetPasswordCodeValidate } = useAuth();
+  const { forgetPasswordCodeValidate } = useAuthMutations();
   const { mutateAsync, data, isPending, error } = forgetPasswordCodeValidate;
 
   console.log("code", error);

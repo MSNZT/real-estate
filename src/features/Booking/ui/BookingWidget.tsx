@@ -6,9 +6,9 @@ import { useCalculatePrice } from "../api/useCalculatePrice";
 import { useBookingWidget } from "../hooks/useBookingWidget";
 import { BookingFormConfirmPopup } from "./Form/BookingFormConfirmPopup";
 import { BookingDatePickerLayout } from "./DatePicker/BookingDatePickerLayout";
-import { useAuthData } from "@/entities/user";
 import { useRouter } from "next/navigation";
 import { useClientMediaQuery } from "@/shared/lib/useClientMediaQuery";
+import { useAuth } from "@/entities/user";
 
 interface BookingWidgetProps {
   adId: string;
@@ -26,7 +26,7 @@ export const BookingWidget = ({ adId, price }: BookingWidgetProps) => {
     handleOpenCalendar,
   } = useBookingWidget();
   const { data } = useCalculatePrice(price, countDays);
-  const isAuth = useAuthData((state) => state.isAuth);
+  const { isAuth } = useAuth();
   const router = useRouter();
   const isDesktop = useClientMediaQuery({
     minWidth: "1024px",

@@ -1,6 +1,6 @@
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
-import { useAuth } from "../api/useAuth";
+import { useAuthMutations } from "../api/useAuthMutations";
 import { Button, FieldInputPassword, Loader } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { changePasswordSchema } from "../schema/schema";
@@ -14,7 +14,7 @@ interface NewPasswordFormProps {
 }
 
 export const NewPasswordForm = ({ code, email }: NewPasswordFormProps) => {
-  const { changePassword } = useAuth();
+  const { changePassword } = useAuthMutations();
   const { mutateAsync, isPending } = changePassword;
   const router = useRouter();
 

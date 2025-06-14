@@ -1,13 +1,13 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { tokenService } from "../../services/token.service";
 import { authService } from "../../services/auth.service";
+import { API_URL } from "@/shared/config/environment";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   _retry: boolean;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-let refreshTokenPromise: Promise<void> | null = null;
+const BASE_URL = API_URL;
 
 export const $api = axios.create({
   baseURL: BASE_URL,
@@ -34,21 +34,21 @@ $apiWithAuth.interceptors.response.use(
   },
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
-    console.log(error);
 
     if (error.response?.status === 401 && !originalRequest?._retry) {
+      console.log("refresh", error);
       originalRequest._retry = true;
 
-      console.log("kek");
-
-      try {
-        await authService.refreshAuthToken();
-        return $apiWithAuth(originalRequest);
-      } catch (error) {
-        console.log(error);
-        await authService.logout();
-        tokenService.removeAccessToken();
-        return Promise.reject(error);
+      if (tokenService.getAccessToken()) {
+        try {
+          await authService.refreshAuthToken();
+          return $apiWithAuth(originalRequest);
+        } catch (error) {
+          console.log(error);
+          await authService.logout();
+          tokenService.removeAccessToken();
+          return Promise.reject(error);
+        }
       }
     }
     return Promise.reject(error);

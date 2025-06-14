@@ -14,6 +14,7 @@ import { Map, Placemark, YMaps } from "@pbe/react-yandex-maps";
 import { FeaturesBlock } from "./FeaturesBlock";
 import { useInView } from "react-intersection-observer";
 import { useState } from "react";
+import { API_KEY_MAP } from "@/shared/config/environment";
 
 interface ProductProps {
   product: Ad;
@@ -65,7 +66,7 @@ export const Product = ({ product }: ProductProps) => {
             {mapIsLoading && (
               <Skeleton className="w-full h-[300px] rounded-2xl bg-gray-200" />
             )}
-            <YMaps query={{ apikey: process.env.API_KEY_MAP }}>
+            <YMaps query={{ apikey: API_KEY_MAP }}>
               <Map
                 style={{
                   width: "100%",

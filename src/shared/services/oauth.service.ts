@@ -1,6 +1,7 @@
 import { AuthResponse, OAuthData } from "@/features/auth/types/auth";
 import { $api } from "../api/lib/axios";
 import { OAUTH_ENDPOINTS } from "../api/endpoints";
+import { API_URL } from "../config/environment";
 
 class OAuthService {
   async registerComplete(dto: OAuthData): Promise<AuthResponse> {
@@ -39,11 +40,11 @@ class OAuthService {
   }
 
   loginWithGoogle() {
-    return `${process.env.NEXT_PUBLIC_API_URL}${OAUTH_ENDPOINTS.loginGoogle}`;
+    return `${API_URL}${OAUTH_ENDPOINTS.loginGoogle}`;
   }
 
   loginWithYandex() {
-    return `${process.env.NEXT_PUBLIC_API_URL}${OAUTH_ENDPOINTS.loginYandex}`;
+    return `${API_URL}${OAUTH_ENDPOINTS.loginYandex}`;
   }
 }
 

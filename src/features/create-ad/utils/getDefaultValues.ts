@@ -1,7 +1,7 @@
 import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 import { FormFieldSection } from "../types/types";
-import { useAuthData } from "@/entities/user";
 import { useLocationData } from "@/entities/user/store/useLocationData";
+import { useAuth } from "@/entities/user";
 
 export const getDefaultValues = (
   config: FormFieldSection,
@@ -9,7 +9,7 @@ export const getDefaultValues = (
   propertyType: PropertyTypes,
   city: string | null
 ) => {
-  const userData = useAuthData((state) => state.userData);
+  const { user } = useAuth();
   const location = useLocationData((state) => state.locationData);
 
   const defaultValues: Record<string, any> = {
@@ -21,13 +21,11 @@ export const getDefaultValues = (
       ...location,
     },
     contact: {
-      name: userData?.name,
-      phone: userData?.phone,
-      email: userData?.email,
+      name: user?.name,
+      phone: user?.phone,
+      email: user?.email,
     },
   };
-
-  // Доделать
 
   config.section.forEach((sec) => {
     sec.fields.forEach((field) => {

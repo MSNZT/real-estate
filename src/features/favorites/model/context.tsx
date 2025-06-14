@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/entities/user/hooks/useAuth";
+import { useAuth } from "@/entities/user";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { getFavorites } from "../api/getFavorites";
 import { toggleFavorite } from "../api/toggleFavorite";

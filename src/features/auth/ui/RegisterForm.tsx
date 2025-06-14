@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button, FieldInput, FieldInputPassword } from "@/shared/ui";
 import type { RegisterData } from "../types/auth";
-import { useAuth } from "../api/useAuth";
+import { useAuthMutations } from "../api/useAuthMutations";
 import { registerSchema } from "../schema/schema";
 import { PhoneInputField } from "./PhoneInputField";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ export const RegisterForm = () => {
     formState: { isDirty, isValid },
   } = methods;
 
-  const { register } = useAuth();
+  const { register } = useAuthMutations();
   const { isPending, mutateAsync, error } = register;
 
   async function handleRegister(data: RegisterData) {

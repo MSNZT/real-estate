@@ -17,11 +17,11 @@ export const Providers = ({
   return (
     <ApolloWrapper>
       <QueryProvider>
-        <Suspense fallback="">
-          <AuthProvider hasRefresh={hasRefresh}>
+        <AuthProvider hasRefresh={hasRefresh}>
+          <Suspense fallback={null}>
             <FavoritesProvider>{children}</FavoritesProvider>
-          </AuthProvider>
-        </Suspense>
+          </Suspense>
+        </AuthProvider>
       </QueryProvider>
     </ApolloWrapper>
   );

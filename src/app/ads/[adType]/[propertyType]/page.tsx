@@ -6,7 +6,6 @@ import { PageProps } from "./types/propertyPage";
 export default async function Page({ params }: PageProps) {
   const { adType, propertyType } = await params;
   checkParams(adType, propertyType);
-  console.log(adType, propertyType);
 
   await getAllAds({
     adType,

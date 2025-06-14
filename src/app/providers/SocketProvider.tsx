@@ -1,9 +1,17 @@
 "use client";
-import { useAuth } from "@/entities/user/hooks/useAuth";
-import { Container, Loader } from "@/shared/ui";
+import {
+  createContext,
+  ReactNode,
+  use,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
-import { createContext, ReactNode, use, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
+import { useAuth } from "@/entities/user";
+import { API_URL } from "@/shared/config/environment";
+import { Container, Loader } from "@/shared/ui";
 
 type SocketContextProps = {
   socket: Socket | null;
@@ -12,23 +20,22 @@ type SocketContextProps = {
 const SocketContext = createContext<SocketContextProps | null>(null);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
-  const socketRef = useRef<Socket>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const { isAuth, isLoading, user, isGuest } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (isAuth) {
-      const api = process.env.NEXT_PUBLIC_API_URL!.split("/api")[0];
-      console.log("Api", api);
-      socketRef.current = io(`${api}/chat`, {
+      const socketSession = io(`${API_URL}/chat`, {
         query: {
           userId: user?.id,
         },
       });
-      socketRef.current.emit("getOnlineStatus");
+      setSocket(socketSession);
 
       return () => {
-        socketRef.current?.disconnect();
+        socketSession.disconnect();
+        setSocket(null);
       };
     }
   }, [isAuth]);
@@ -47,11 +54,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     );
   }
 
-  return (
-    <SocketContext value={{ socket: socketRef.current }}>
-      {children}
-    </SocketContext>
-  );
+  return <SocketContext value={{ socket }}>{children}</SocketContext>;
 };
 
 export const useSocket = () => {

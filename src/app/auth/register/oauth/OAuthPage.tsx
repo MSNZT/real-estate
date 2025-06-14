@@ -1,5 +1,9 @@
 "use client";
-import { AuthLayout, RegisterOAuthForm, useAuth } from "@/features/auth";
+import {
+  AuthLayout,
+  RegisterOAuthForm,
+  useAuthMutations,
+} from "@/features/auth";
 import { Container, Loader } from "@/shared/ui";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -13,7 +17,7 @@ export const OAuthPage = () => {
 
   const {
     oauthValidate: { mutate, data, error },
-  } = useAuth();
+  } = useAuthMutations();
 
   useEffect(() => {
     const token = params.get("token");
@@ -29,7 +33,6 @@ export const OAuthPage = () => {
     if (data?.status === "success") {
       setIsLoading(false);
     }
-    console.log(error);
 
     if (error?.statusCode === 401) {
       toast.error("Время авторизации истекло, войдите через сервис снова.", {

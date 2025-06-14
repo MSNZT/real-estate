@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/entities/user/hooks/useAuth";
+import { useAuth } from "@/entities/user";
 import { SYNC_FAVORITES } from "@/shared/config/apollo/requests/syncFavorites";
 import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";

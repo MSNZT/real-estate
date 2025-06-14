@@ -1,6 +1,6 @@
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
-import { useAuth } from "../api/useAuth";
+import { useAuthMutations } from "../api/useAuthMutations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { phoneSchema } from "../schema/schema";
 import { PhoneData } from "../types/auth";
@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 export const RegisterOAuthForm = ({ token }: { token: string }) => {
   const methods = useForm<PhoneData>({ resolver: zodResolver(phoneSchema) });
-  const { registerOAuthComplete } = useAuth();
+  const { registerOAuthComplete } = useAuthMutations();
   const { mutateAsync, isPending, error } = registerOAuthComplete;
 
   async function onSubmit(data: PhoneData) {

@@ -1,6 +1,6 @@
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
-import { useAuth } from "../api/useAuth";
+import { useAuthMutations } from "../api/useAuthMutations";
 import { Button, FieldInput, Loader } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { emailSchema } from "../schema/schema";
@@ -16,7 +16,7 @@ export const ForgetPasswordForm = ({
   handleChangeEmail,
   handleNextStep,
 }: ForgetPasswordFormProps) => {
-  const { forgetPassword } = useAuth();
+  const { forgetPassword } = useAuthMutations();
   const { mutateAsync, data, isPending } = forgetPassword;
 
   const methods = useForm<EmailData>({

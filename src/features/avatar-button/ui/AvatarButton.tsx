@@ -2,9 +2,7 @@
 import { DropdownMenu } from "@/shared/ui/DropdownMenu";
 import { AvatarTrigger } from "./AvatarTrigger";
 import { Align, AvatarContent } from "./AvatarContent";
-import { useAuthData } from "@/entities/user";
-import { useAuth } from "@/features/auth";
-import { tokenService } from "@/shared/services/token.service";
+import { useAuthMutations } from "@/features/auth";
 import { LogOut, Settings, User } from "lucide-react";
 import { ReactElement } from "react";
 
@@ -21,13 +19,10 @@ export const AvatarButton = ({
   alignOffset = 0,
   align = "start",
 }: AvatarButtonProps) => {
-  const { setAuthData } = useAuthData();
-  const { logout } = useAuth();
+  const { logout } = useAuthMutations();
 
   async function handleLogout() {
     await logout.mutateAsync();
-    tokenService.removeAccessToken();
-    setAuthData({ isAuth: false, userData: null });
   }
 
   return (

@@ -4,10 +4,9 @@ import { Button, FieldInput, FieldInputPassword } from "@/shared/ui";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { LoginData } from "../types/auth";
-import { useAuth } from "../api/useAuth";
+import { useAuthMutations } from "../api/useAuthMutations";
 import { loginSchema } from "../schema/schema";
 import toast from "react-hot-toast";
-import { Mail } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function LoginForm() {
@@ -16,7 +15,7 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const { login } = useAuth();
+  const { login } = useAuthMutations();
   const { mutateAsync, isPending, error } = login;
 
   async function handleLogin(data: LoginData) {

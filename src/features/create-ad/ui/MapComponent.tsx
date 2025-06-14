@@ -12,6 +12,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { RefObject, useRef, useState } from "react";
 import { formatAddress } from "../utils/formatAddress";
+import { API_KEY_MAP } from "@/shared/config/environment";
 
 type CoordArgsType = {
   latitude: number;
@@ -70,7 +71,7 @@ export const MapComponent = () => {
       {isLoading && (
         <Skeleton className="w-full h-[300px] rounded-2xl shadow bg-gray-200" />
       )}
-      <YMaps query={{ apikey: process.env.API_KEY_MAP }}>
+      <YMaps query={{ apikey: API_KEY_MAP }}>
         <Map
           style={{
             width: "100%",

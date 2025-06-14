@@ -26,8 +26,6 @@ export async function fetchCityName(city: string) {
 
     const data = await response.json();
 
-    // console.log("ЗАПРОС НА ГОРОД", data);
-
     return data;
   } catch {}
 }
@@ -48,7 +46,6 @@ export default async function CityLayout({
 
   const { data } = response.suggestions[0];
   const city = data.city ? data.city : data.settlement_with_type;
-  console.log("PARAMMMA", city);
 
   return (
     <>

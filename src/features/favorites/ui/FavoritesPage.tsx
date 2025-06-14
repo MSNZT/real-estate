@@ -1,9 +1,9 @@
 "use client";
 
 import { GET_FAVORITES } from "@/shared/config/apollo/requests/getFavorites";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Button, Container, Loader } from "@/shared/ui";
-import { useAuth } from "@/entities/user/hooks/useAuth";
+import { useAuth } from "@/entities/user";
 import { AdCardPreview } from "@/entities/ad";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
 import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
@@ -16,8 +16,6 @@ export const FavoritesPage = () => {
   const { isAuth, isLoading: isAuthLoading } = useAuth();
   useSyncLocalFavorites();
   const { handleToggleFavorite, hasInFavorites } = useFavorites();
-
-  // console.log(favorites);
 
   const {
     loading: favoritesLoading,

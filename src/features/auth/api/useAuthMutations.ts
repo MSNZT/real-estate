@@ -1,6 +1,8 @@
 "use client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { authService } from "@/shared/services/auth.service";
-import { useMutation } from "@tanstack/react-query";
 import {
   AuthResponse,
   EmailData,
@@ -12,11 +14,10 @@ import {
   ResetPasswordData,
   StatusResponse,
 } from "../types/auth";
-import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
-import { useAuthData, User } from "@/entities/user";
 import { tokenService } from "@/shared/services/token.service";
 import { oauthService } from "@/shared/services/oauth.service";
+import { use } from "react";
+import { useAuthContext } from "@/app/providers/AuthProvider";
 
 type AxiosErrorResponse = AxiosError & {
   response: {
@@ -27,31 +28,36 @@ type AxiosErrorResponse = AxiosError & {
   };
 };
 
-export const useAuth = () => {
-  const { setAuthData, clearAuthData } = useAuthData();
+export const useAuthMutations = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
+  const { setHasRefresh } = useAuthContext();
 
   const login = useMutation<AuthResponse, AxiosErrorResponse, LoginData>({
     mutationFn: (data) => authService.login(data),
     onSuccess: (data) => {
-      setAuthData({ isAuth: !!data, isLoading: false, userData: data.user });
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       tokenService.saveAccessToken(data.token);
       router.push("/");
-    },
-    onError: () => {
-      clearAuthData();
     },
   });
 
   const register = useMutation<AuthResponse, AxiosErrorResponse, RegisterData>({
     mutationFn: (data) => authService.register(data),
     onSuccess: (data) => {
-      setAuthData({ isAuth: !!data, isLoading: false, userData: data.user });
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       tokenService.saveAccessToken(data.token);
       router.push("/");
     },
-    onError: () => {
-      clearAuthData();
+  });
+
+  const logout = useMutation<boolean, AxiosErrorResponse>({
+    mutationFn: () => authService.logout(),
+    onSuccess: () => {
+      tokenService.removeAccessToken();
+      queryClient.setQueryData(["auth", "me"], null);
+      setHasRefresh(false);
+      router.push("/");
     },
   });
 
@@ -79,22 +85,6 @@ export const useAuth = () => {
     mutationFn: (data) => authService.changePassword(data),
   });
 
-  const logout = useMutation<boolean, AxiosErrorResponse>({
-    mutationFn: () => authService.logout(),
-    onSuccess: () => {
-      clearAuthData();
-      tokenService.removeAccessToken();
-      router.push("/");
-    },
-  });
-
-  const getMe = useMutation<AuthResponse, AxiosErrorResponse>({
-    mutationFn: () => authService.getMe(),
-    onSuccess: (data) => {
-      setAuthData({ isAuth: !!data, userData: data.user });
-    },
-  });
-
   const oauthValidate = useMutation<
     { status: string },
     AxiosErrorResponse,
@@ -116,13 +106,9 @@ export const useAuth = () => {
     mutationFn: ({ phone, token }) =>
       oauthService.registerComplete({ phone, token }),
     onSuccess: (data) => {
-      console.log(data);
-      setAuthData({ isAuth: !!data, isLoading: false, userData: data.user });
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       tokenService.saveAccessToken(data.token);
       router.push("/");
-    },
-    onError: () => {
-      clearAuthData();
     },
   });
 
@@ -144,7 +130,6 @@ export const useAuth = () => {
       ...registerOAuthComplete,
       error: registerOAuthComplete.error?.response.data.message,
     },
-    getMe,
     forgetPassword,
     forgetPasswordCodeValidate: {
       ...forgetPasswordCodeValidate,

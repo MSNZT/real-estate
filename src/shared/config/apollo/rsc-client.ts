@@ -1,6 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support";
 import { Ad } from "./generated/types";
+import { API_URL } from "../environment";
 
 export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
@@ -22,7 +23,7 @@ export const { getClient } = registerApolloClient(() => {
       },
     }),
     link: new HttpLink({
-      uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+      uri: `${API_URL}/graphql`,
       fetchOptions: { cache: "no-store" },
     }),
   });

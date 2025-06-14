@@ -6,9 +6,9 @@ import { Container } from "@/shared/ui";
 export default function ChatLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Header />
+      <Header className="hidden md:block" />
       <SocketProvider>
-        <Container className="px-0 md:px-5 flex h-[calc(100vh-70px-20px)] bg-white">
+        <Container className="px-0 md:px-5 flex h-[calc(100dvh-65px)] md:h-[calc(100dvh-70px)] bg-white">
           {children}
         </Container>
       </SocketProvider>

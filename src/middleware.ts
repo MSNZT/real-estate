@@ -1,25 +1,17 @@
-import { NextRequest, NextResponse, userAgent } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-const privateRoutes = ["/chat"];
+const protectedPaths = ["/auth"];
 
 export function middleware(request: NextRequest) {
-  const url = request.nextUrl;
-  const { device } = userAgent(request);
+  const token = request.cookies.get("refreshToken")?.value;
+  const pathname = request.nextUrl.pathname;
+  const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
 
-  if (request.nextUrl.pathname.startsWith("/auth")) {
-    const refreshToken = request.cookies.get("refreshToken")?.value;
-
-    if (refreshToken) {
-      return NextResponse.redirect("http://localhost:3000");
-    }
+  if (isProtected && token) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  console.log("request", request.nextUrl.pathname);
-
-  const viewport = device.type === "mobile" ? "mobile" : "desktop";
-  url.searchParams.set("viewport", viewport);
-
-  return NextResponse.rewrite(url);
+  return NextResponse.next();
 }
 
 export const config = {

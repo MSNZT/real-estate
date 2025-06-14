@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { $apiWithAuth } from "@/shared/api/lib/axios";
-import { useAuth } from "@/entities/user/hooks/useAuth";
+import { useAuth } from "@/entities/user";
 import { ChatList } from "./chat-list";
 import { ChatWindow } from "./chat-window";
 import { AxiosError, AxiosResponse } from "axios";

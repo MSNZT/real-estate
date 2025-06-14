@@ -8,6 +8,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/shared/lib/utils";
 import { useOnline } from "@/shared/hooks/use-online";
 import { useOnlineStore } from "@/shared/hooks/use-online-store";
+import { useEffect } from "react";
+import { useSocket } from "@/app/providers/SocketProvider";
 
 export const ChatList = () => {
   const pathname = usePathname();
@@ -19,6 +21,11 @@ export const ChatList = () => {
   const companiosIds = chatList?.map((chat) => chat.companion.id) || [];
   useOnline(companiosIds);
   const onlineMap = useOnlineStore((state) => state.onlineMap);
+  const { socket } = useSocket();
+  useEffect(() => {
+    if (!socket) return;
+    socket?.on("newMessage", (data) => console.log(data));
+  }, [socket]);
 
   return (
     <ul className="flex flex-col gap-3 overflow-y-auto">

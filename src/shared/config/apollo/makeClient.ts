@@ -6,10 +6,11 @@ import {
 import { Ad } from "./generated/types";
 import { setContext } from "@apollo/client/link/context";
 import { tokenService } from "@/shared/services/token.service";
+import { API_URL } from "../environment";
 
 export function makeClient() {
   const httpLink = new HttpLink({
-    uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+    uri: `${API_URL}/graphql`,
     fetchOptions: { cache: "no-store" },
   });
 
