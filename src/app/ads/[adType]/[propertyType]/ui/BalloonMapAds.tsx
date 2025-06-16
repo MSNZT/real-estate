@@ -1,8 +1,8 @@
 import { AdCardPreview } from "@/entities/ad";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
-import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
 import { Ad } from "@/shared/config/apollo/generated/types";
 import { cn } from "@/shared/lib/utils";
+import { getPrettyPrice } from "@/shared/utils/getPrettyPrice";
 import { ArrowRight } from "lucide-react";
 
 interface BalloonMapAdsProps {

@@ -13,7 +13,7 @@ export const Modal = ({ isLayout = true, className, children }: ModalProps) => {
     return (
       <Portal>
         <div className={cn("fixed inset-0 bg-black/10", className)}>
-          <div>{children}</div>
+          {children}
         </div>
       </Portal>
     );

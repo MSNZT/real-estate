@@ -5,7 +5,7 @@ import { DepositItem } from "./deal-block/DepositItem";
 import { AgentFeeItem } from "./deal-block/AgentFeeItem";
 import { UtilitiesFeeItem } from "./deal-block/UtilitiesFeeItem";
 import { Separator } from "@/shared/ui";
-import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
+import { getPrettyPrice } from "@/shared/utils/getPrettyPrice";
 
 interface DealBlockProps {
   deal: Deal;

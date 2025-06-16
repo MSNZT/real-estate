@@ -6,11 +6,11 @@ import { Button, Container, Loader } from "@/shared/ui";
 import { useAuth } from "@/entities/user";
 import { AdCardPreview } from "@/entities/ad";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
-import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
 import { useSyncLocalFavorites } from "../hooks/useSyncLocalFavorites";
 // import { TOGGLE_FAVORITES } from "@/shared/config/apollo/requests/toggleFavorite";
 // import { useFavorite } from "../hooks/useFavorite";
 import { useFavorites } from "../model/useFavorites";
+import { getPrettyPrice } from "@/shared/utils/getPrettyPrice";
 
 export const FavoritesPage = () => {
   const { isAuth, isLoading: isAuthLoading } = useAuth();

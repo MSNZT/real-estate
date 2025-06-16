@@ -7,13 +7,13 @@ type BookingResponse = {
 };
 
 export const useBookingList = (adId: string, open?: boolean) => {
-  const { data } = useQuery<{ data: BookingResponse[] }>({
-    queryKey: ["bookingList"],
-    queryFn: () => $api.get(`booking/details/${adId}`),
-    enabled: adId !== undefined,
+  const { data: response } = useQuery<{ data: BookingResponse[] }>({
+    queryKey: ["occupied-dates", adId],
+    queryFn: () => $api.get(`bookings/occupied-dates/${adId}`),
+    enabled: !!adId,
   });
 
   return {
-    data: data?.data,
+    data: response?.data,
   };
 };

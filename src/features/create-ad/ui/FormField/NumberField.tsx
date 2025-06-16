@@ -25,11 +25,11 @@ export const NumberField = ({ dynamicField, error }: NumberFieldProps) => {
               disabled={dynamicField.disabled}
               className={cn("border-gray-300", {
                 "max-w-[200px] w-full ": dynamicField.label,
-                "border-red-500": error,
+                "border-destructive": error,
               })}
             />
             {error && (
-              <span className="text-red-500 text-sm">{error.message}</span>
+              <span className="text-destructive text-sm">{error.message}</span>
             )}
           </div>
         </div>

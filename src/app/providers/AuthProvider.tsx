@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuthFromParams } from "@/entities/user";
 import {
   createContext,
   Dispatch,
@@ -26,13 +25,7 @@ export const AuthProvider = ({
   hasRefresh: boolean;
 }) => {
   const [hasRefresh, setHasRefresh] = useState(initialRefresh);
-  // useAuthFromParams();
-
-  console.log("provider", hasRefresh);
-
   const value = useMemo(() => ({ hasRefresh, setHasRefresh }), [hasRefresh]);
-
-  console.log("provider Value", value);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

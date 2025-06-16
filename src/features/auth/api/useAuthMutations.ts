@@ -1,5 +1,5 @@
 "use client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { authService } from "@/shared/services/auth.service";
@@ -16,8 +16,9 @@ import {
 } from "../types/auth";
 import { tokenService } from "@/shared/services/token.service";
 import { oauthService } from "@/shared/services/oauth.service";
-import { use } from "react";
 import { useAuthContext } from "@/app/providers/AuthProvider";
+import toast from "react-hot-toast";
+import { User } from "@/entities/user";
 
 type AxiosErrorResponse = AxiosError & {
   response: {
@@ -38,7 +39,6 @@ export const useAuthMutations = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       tokenService.saveAccessToken(data.token);
-      router.push("/");
     },
   });
 
@@ -47,8 +47,13 @@ export const useAuthMutations = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       tokenService.saveAccessToken(data.token);
-      router.push("/");
     },
+  });
+
+  const getMe = useQuery<User, AxiosErrorResponse>({
+    queryKey: ["auth", "me"],
+    queryFn: () => authService.getMe(),
+    enabled: false,
   });
 
   const logout = useMutation<boolean, AxiosErrorResponse>({
@@ -110,6 +115,15 @@ export const useAuthMutations = () => {
       tokenService.saveAccessToken(data.token);
       router.push("/");
     },
+    onError: (data) => {
+      if (data.response.data.statusCode === 401) {
+        toast.error("Время авторизации истекло, войдите через сервис снова.", {
+          duration: 3000,
+        });
+        router.push("/auth/login");
+      }
+      return data;
+    },
   });
 
   return {
@@ -136,5 +150,6 @@ export const useAuthMutations = () => {
       error: forgetPasswordCodeValidate.error?.response.data,
     },
     changePassword,
+    getMe,
   };
 };

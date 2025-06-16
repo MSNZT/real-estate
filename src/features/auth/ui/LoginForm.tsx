@@ -8,21 +8,23 @@ import { useAuthMutations } from "../api/useAuthMutations";
 import { loginSchema } from "../schema/schema";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRedirectTo } from "./useRedirectTo";
 
 export function LoginForm() {
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: zodResolver(loginSchema),
   });
-
   const { login } = useAuthMutations();
   const { mutateAsync, isPending, error } = login;
+  const { handleRedirect } = useRedirectTo();
 
   async function handleLogin(data: LoginData) {
     try {
       await mutateAsync(data);
       queryClient.setQueryData(["auth"], data);
       toast.success("Вы успешно авторизовались", { duration: 2000 });
+      handleRedirect();
     } catch (error) {}
   }
 

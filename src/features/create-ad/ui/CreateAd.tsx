@@ -37,9 +37,9 @@ export const CreateAd = () => {
                 size="clear"
                 type="button"
                 className={cn(
-                  "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-active hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95 cursor-pointer",
+                  "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-primary hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95 cursor-pointer",
                   {
-                    "bg-active text-white": item.value === adType,
+                    "bg-primary text-white": item.value === adType,
                   }
                 )}
                 onClick={() => setAdType(item.value)}
@@ -63,9 +63,9 @@ export const CreateAd = () => {
                     variant="clear"
                     size="clear"
                     className={cn(
-                      "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-active hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95 cursor-pointer",
+                      "w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-200 hover:bg-primary hover:text-white duration-300 rounded-xl flex justify-center items-center text-base transition-all active:scale-95 cursor-pointer",
                       {
-                        "bg-active text-white": item.value === propertyType,
+                        "bg-primary text-white": item.value === propertyType,
                       }
                     )}
                     onClick={() => setPropertyType(item.value)}

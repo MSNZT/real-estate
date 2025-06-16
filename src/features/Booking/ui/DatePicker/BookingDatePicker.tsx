@@ -1,4 +1,4 @@
-import { ReactNode, Ref } from "react";
+import { ReactNode } from "react";
 import DatePicker from "react-datepicker";
 import { ru } from "date-fns/locale";
 import { useDates } from "../../hooks/useDates";

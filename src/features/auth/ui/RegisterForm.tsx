@@ -8,6 +8,7 @@ import { useAuthMutations } from "../api/useAuthMutations";
 import { registerSchema } from "../schema/schema";
 import { PhoneInputField } from "./PhoneInputField";
 import toast from "react-hot-toast";
+import { useRedirectTo } from "./useRedirectTo";
 
 export const RegisterForm = () => {
   const methods = useForm({
@@ -21,6 +22,7 @@ export const RegisterForm = () => {
 
   const { register } = useAuthMutations();
   const { isPending, mutateAsync, error } = register;
+  const { handleRedirect } = useRedirectTo();
 
   async function handleRegister(data: RegisterData) {
     try {
@@ -30,6 +32,7 @@ export const RegisterForm = () => {
       };
       await mutateAsync(registerData);
       toast.success("Вы успешно зарегистрировались", { duration: 2000 });
+      handleRedirect();
     } catch (error) {
       toast.error("Возникла ошибка при регистрации", { duration: 2000 });
     }

@@ -21,7 +21,7 @@ export const FavoritesContext =
 const FAVORITES_STORAGE_KEY = "favorites";
 
 export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
-  const [favorites, setFavorites] = useState<string[] | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const { isAuth } = useAuth();
   const { fetchFavorites } = getFavorites();
   const { toggleAdFavorite } = toggleFavorite();
@@ -46,16 +46,21 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
     return favorites.includes(adId);
   };
 
-  const handleToggleFavorite = (adId: string) => {
+  const handleToggleFavorite = async (adId: string) => {
     if (!favorites) return;
 
     if (isAuth) {
-      const data = toggleAdFavorite({
+      const { data } = await toggleAdFavorite({
         variables: {
           id: adId,
         },
       });
       console.log("toggle", data);
+      setFavorites((prev) =>
+        data.toggleFavoriteAd.status === "added"
+          ? [...prev, data.toggleFavoriteAd.id]
+          : prev.filter((favorite) => favorite === data?.toggleAdFavorite?.id)
+      );
     } else {
       const favoritesLS = JSON.parse(
         localStorage.getItem(FAVORITES_STORAGE_KEY) ?? "[]"

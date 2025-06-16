@@ -8,6 +8,8 @@ export const AdUserMenu = ({ title, id }: { title: string; id: string }) => {
   const { handleToggleFavorite, hasInFavorites } = useFavorites();
   const isMounted = useIsMounted();
 
+  console.log(hasInFavorites(id));
+
   const handleClickShareButton = useCallback(() => {
     navigator.share({
       url: window.location.href,

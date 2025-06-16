@@ -127,11 +127,11 @@ export const FileUpload = ({
           <Button
             type="button"
             onClick={handleClickButton}
-            className="mr-4 text-white bg-active"
+            className="mr-4 text-white bg-primary hover:bg-chart-2"
           >
             Выберите фотографии
           </Button>
-          <span className="hidden lg:block">или перетащите в область</span>
+          <span className="hidden lg:inline">или перетащите в область</span>
         </div>
       </div>
       {error && <p className="text-red-500">{error}</p>}

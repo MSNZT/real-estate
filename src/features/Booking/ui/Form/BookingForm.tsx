@@ -34,8 +34,8 @@ export const BookingForm = ({
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      guestName: "",
-      guestPhone: "",
+      guestName: user?.name,
+      guestPhone: user?.phone,
     },
   });
 

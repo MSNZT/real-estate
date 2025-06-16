@@ -3,10 +3,10 @@ import { useInView } from "react-intersection-observer";
 import { AdCardPreview } from "@/entities/ad";
 import { generateAdTitle } from "@/entities/ad/utils/generateAdTitle";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
-import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
 import { Container } from "@/shared/ui";
 import { useAds } from "../api/useAds";
 import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
+import { getPrettyPrice } from "@/shared/utils/getPrettyPrice";
 
 interface AdListProps {
   adType: AdTypes;

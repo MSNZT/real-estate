@@ -2,11 +2,19 @@ import { intervalToDuration } from "date-fns";
 import { useCallback, useState } from "react";
 import { DateRangeType } from "../types/date.types";
 
-export const useBookingWidget = () => {
+export const useBookingDates = () => {
   const [dates, setDates] = useState<DateRangeType | undefined>();
   const [countDays, setCountDays] = useState<number>();
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
-  const [isOpenBookingPopup, setIsOpenBookingPopup] = useState(false);
+  const [isOpenConfirm, setIsOpenConfirm] = useState(false);
+
+  function handleOpenConfirm() {
+    setIsOpenConfirm(true);
+  }
+
+  function handleCloseConfirm() {
+    setIsOpenConfirm(false);
+  }
 
   function handleOpenCalendar() {
     setIsOpenCalendar(true);
@@ -34,10 +42,11 @@ export const useBookingWidget = () => {
     dates,
     countDays,
     isOpenCalendar,
-    isOpenBookingPopup,
+    isOpenConfirm,
     handleOpenCalendar,
     handleCloseCalendar,
     handleApplyCalendar,
-    handleOpenBookingPopup: setIsOpenBookingPopup,
+    handleOpenConfirm,
+    handleCloseConfirm,
   };
 };

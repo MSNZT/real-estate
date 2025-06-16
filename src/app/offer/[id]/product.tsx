@@ -2,8 +2,7 @@
 import { Container, Loader, Skeleton } from "@/shared/ui";
 import { AdTypes, type Ad } from "@/shared/config/apollo/generated";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
-import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
-import { BookingWidget } from "@/features/Booking";
+import { BookingWidget } from "@/features/booking";
 import { ImageGallery } from "./ImageGallery";
 import { AdTitle } from "./AdTitle";
 import { ContactBlock } from "./ContactBlock";
@@ -15,6 +14,8 @@ import { FeaturesBlock } from "./FeaturesBlock";
 import { useInView } from "react-intersection-observer";
 import { useState } from "react";
 import { API_KEY_MAP } from "@/shared/config/environment";
+import { Booking } from "@/widgets/booking";
+import { getPrettyPrice } from "@/shared/utils/getPrettyPrice";
 
 interface ProductProps {
   product: Ad;
@@ -48,7 +49,8 @@ export const Product = ({ product }: ProductProps) => {
           <AdTitle title={product.title} price={price} period={period} />
           <DealBlock deal={product.deal} adType={product.adType} />
           {product.adType === AdTypes.RentShort && (
-            <BookingWidget price={product.deal.price} adId={product.id} />
+            // <BookingWidget price={product.deal.price} adId={product.id} />
+            <Booking adId={product.id} price={product.deal.price} />
           )}
 
           <ContactBlock ownerId={product.owner.id} contact={product.contact} />

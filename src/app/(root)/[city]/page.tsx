@@ -1,12 +1,6 @@
-import {
-  Ad,
-  Query,
-  QueryGetAllAdsArgs,
-} from "@/shared/config/apollo/generated/types";
-import { GET_ALL_ADS_PREVIEW } from "@/shared/config/apollo/requests/getAllAdsPreview";
-import { getClient } from "@/shared/config/apollo/rsc-client";
+import { Query } from "@/shared/config/apollo/generated/types";
 import { Hero } from "@/widgets/main/ui/Main";
-import { fetchCityName } from "./layout";
+import { getAdsPreviewData } from "./data/data";
 
 export type AdsSectionType = {
   title: string;
@@ -16,24 +10,7 @@ export type AdsSectionType = {
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export const revalidate = 60;
-export const dynamic = "force-dynamic"; // ДОДЕЛАТЬ
-
-async function getAllAdsPreview(
-  filters: QueryGetAllAdsArgs["filters"]
-): Promise<Query | undefined> {
-  const client = getClient();
-
-  try {
-    const { data } = await client.query<Query, QueryGetAllAdsArgs>({
-      query: GET_ALL_ADS_PREVIEW,
-      variables: {
-        filters,
-      },
-    });
-    return data;
-  } catch (error) {}
-}
+export const revalidate = 600;
 
 export default async function Page({
   searchParams,
@@ -44,9 +21,10 @@ export default async function Page({
 }) {
   const { viewport } = (await searchParams) as { viewport: string };
   const { city: cityParams } = await params;
+  const response = await getAdsPreviewData();
   // const response = await fetchCityName(cityParams);
 
-  let city = "Санкт Перебург ";
+  let city = "Санкт Перебург";
 
   // if (response.suggestions.length) {
   //   const { data } = response.suggestions[0];
@@ -57,72 +35,5 @@ export default async function Page({
   //   city = "Москва";
   // }
 
-  // console.log("page", city);
-
-  const rentShortApartment = await getAllAdsPreview({
-    page: 1,
-    limit: 8,
-    adType: "rent_short",
-    propertyType: "apartment",
-    // location: {
-    //   city,
-    // },
-  });
-
-  const rentShortHouse = await getAllAdsPreview({
-    page: 1,
-    limit: 8,
-    adType: "rent_short",
-    propertyType: "house",
-    // location: {
-    //   city,
-    // },
-  });
-
-  const sellApartment = await getAllAdsPreview({
-    page: 1,
-    limit: 8,
-    adType: "sell",
-    propertyType: "apartment",
-    // location: {
-    //   city,
-    // },
-  });
-
-  const sellHouse = await getAllAdsPreview({
-    page: 1,
-    limit: 8,
-    adType: "sell",
-    propertyType: "house",
-    // location: {
-    //   city,
-    // },
-  });
-
-  // console.log(rentShortApartment);
-
-  const adsPreview = [
-    {
-      title: "Снять квартиру",
-      data: rentShortApartment?.getAllAds.ads || [],
-      href: "/rent/apartment",
-    },
-    {
-      title: "Снять дом",
-      data: rentShortHouse?.getAllAds.ads || [],
-      href: "/rent/house",
-    },
-    {
-      title: "Купить квартиру",
-      data: sellApartment?.getAllAds.ads || [],
-      href: "/sell/apartment",
-    },
-    {
-      title: "Купить дом",
-      data: sellHouse?.getAllAds.ads || [],
-      href: "/sell/house",
-    },
-  ] satisfies AdsSectionType[];
-
-  return <Hero data={adsPreview} />;
+  return <Hero data={response} />;
 }

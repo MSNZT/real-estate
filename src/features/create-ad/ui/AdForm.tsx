@@ -63,7 +63,7 @@ export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
           ))}
         </div>
         <Button
-          className="bg-primary hover:bg-primary-dark text-white"
+          className="bg-primary hover:bg-chart-2 text-white"
           type="submit"
         >
           Создать объявление

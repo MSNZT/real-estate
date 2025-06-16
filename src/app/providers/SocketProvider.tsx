@@ -1,12 +1,5 @@
 "use client";
-import {
-  createContext,
-  ReactNode,
-  use,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { createContext, ReactNode, use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "@/entities/user";

@@ -37,9 +37,9 @@ export const CheckboxField = ({ dynamicField, error }: CheckboxFieldProps) => {
                   key={option.label}
                   type="button"
                   className={cn(
-                    "flex justify-between items-center text-base hover:bg-active hover:text-white hover:outline-transparent",
+                    "flex justify-between items-center text-base hover:bg-chart-1 hover:text-white hover:outline-transparent",
                     {
-                      "bg-blue-400 text-white outline-transparent":
+                      "bg-chart-1 text-white outline-transparent":
                         field.value.includes(option.value),
                     }
                   )}

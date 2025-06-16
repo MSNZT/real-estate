@@ -1,3 +1,4 @@
+"use client";
 import { Container, Icon } from "@/shared/ui";
 import { CategorySection } from "./CategorySection";
 // import { CityButton } from "@/features/city-button/ui/CityButton";
@@ -6,12 +7,15 @@ import Link from "next/link";
 import ApartmentIcon from "@/shared/assets/apartment-icon.svg";
 import HouseIcon from "@/shared/assets/house-icon.svg";
 import { AdsSectionType } from "@/app/(root)/[city]/page";
+import { useAuthFromParams } from "@/entities/user";
 
 interface HeroProps {
   data: AdsSectionType[];
 }
 
 export function Hero({ data }: HeroProps) {
+  useAuthFromParams();
+
   return (
     <main>
       <Container className="mb-20 px-0 sm:px-5">
@@ -26,7 +30,7 @@ export function Hero({ data }: HeroProps) {
               <li>
                 <Link
                   className="group flex flex-col gap-2 items-center"
-                  href="/sell/apartment"
+                  href="/ads/sell/apartment"
                 >
                   <div className="flex justify-center items-center bg-gray-200 rounded-2xl w-16 h-16  sm:w-20 sm:h-20 md:w-24 md:h-24">
                     <Icon
@@ -40,7 +44,7 @@ export function Hero({ data }: HeroProps) {
               <li>
                 <Link
                   className="group flex flex-col gap-2 items-center"
-                  href="/rent/house"
+                  href="/ads/rent/house"
                 >
                   <div className="flex justify-center items-center bg-gray-200 rounded-2xl w-16 h-16  sm:w-20 sm:h-20 md:w-24 md:h-24">
                     <Icon

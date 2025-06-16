@@ -1,21 +1,29 @@
 import { Separator } from "@/shared/ui";
 import { ReactNode } from "react";
 import { SocialButtons } from "./SocialButtons";
+import { cn } from "@/shared/lib/utils";
 
 interface AuthLayoutProps {
   children: ReactNode;
   title: string;
   isSocial?: boolean;
+  className?: string;
 }
 
 export const AuthLayout = ({
   children,
   title,
   isSocial = true,
+  className,
 }: AuthLayoutProps) => {
   return (
-    <div className="flex-1 flex justify-center gap-3 items-center mt-20 sm:mt-40">
-      <div className="bg-white rounded-lg sm:shadow-md max-w-[500px] p-4 w-full">
+    <div
+      className={cn(
+        "flex-1 flex justify-center gap-3 items-center mt-20 sm:mt-40",
+        className
+      )}
+    >
+      <div className="bg-white sm:shadow-md max-w-[500px] p-4 w-full">
         <h1 className="font-bold text-center text-2xl mb-6">{title}</h1>
         {children}
         {isSocial && (

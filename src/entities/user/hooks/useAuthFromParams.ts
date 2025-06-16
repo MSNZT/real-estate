@@ -2,22 +2,34 @@
 
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { tokenService } from "@/shared/services/token.service";
-import { useSearchParams } from "next/navigation";
 import { useAuthMutations } from "@/features/auth";
 
 export const useAuthFromParams = () => {
-  const searchParams = useSearchParams();
-  const {
-    getMe: { mutate },
-  } = useAuthMutations();
+  const queryClient = useQueryClient();
+  const params = useSearchParams();
+  const { getMe, logout } = useAuthMutations();
+  const router = useRouter();
 
   useEffect(() => {
-    const accessToken = searchParams.get("token");
-
-    if (accessToken) {
-      tokenService.saveAccessToken(accessToken);
-      mutate();
+    const token = params.get("token");
+    if (token) {
+      tokenService.saveAccessToken(token);
+      getMe
+        .refetch()
+        .then(() => {
+          queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+          tokenService.saveAccessToken(token);
+          router.replace("/moscow");
+          toast.success("Вы успешно авторизовались", {
+            duration: 3000,
+          });
+        })
+        .catch(() => {
+          logout.mutate();
+        });
     }
-  }, [searchParams]);
+  }, []);
 };

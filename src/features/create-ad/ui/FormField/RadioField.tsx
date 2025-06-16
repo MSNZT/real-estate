@@ -23,9 +23,9 @@ export const RadioField = ({ dynamicField, error }: RadioFieldProps) => {
                     onClick={() => field.onChange(option.value)}
                     key={option.label}
                     className={cn(
-                      "flex justify-between items-center text-base hover:bg-active hover:text-white hover:outline-transparent",
+                      "flex justify-between items-center text-base hover:bg-chart-1 hover:text-white hover:outline-transparent",
                       {
-                        "bg-active text-white outline-transparent":
+                        "bg-chart-1 text-white outline-transparent":
                           field.value === option.value,
                       }
                     )}

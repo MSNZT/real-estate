@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 export const useBookingOrders = () => {
   const { data, isLoading } = useQuery({
     queryKey: [],
-    queryFn: () => $apiWithAuth.get("booking/orders"),
+    queryFn: () => $apiWithAuth.get("bookings/orders"),
   });
   return {
     data,

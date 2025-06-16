@@ -12,8 +12,6 @@ export const Providers = ({
   children: ReactNode;
   hasRefresh: boolean;
 }) => {
-  console.log(hasRefresh);
-
   return (
     <ApolloWrapper>
       <QueryProvider>

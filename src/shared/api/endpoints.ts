@@ -1,5 +1,6 @@
 const AUTH_BASE = "/auth";
 const OAUTH_BASE = "/oauth";
+const BOOKING_BASE = "/bookings";
 
 export const AUTH_ENDPOINTS = {
   login: `${AUTH_BASE}/login`,
@@ -17,4 +18,8 @@ export const OAUTH_ENDPOINTS = {
   validate: `${OAUTH_BASE}/validate`,
   loginGoogle: `${OAUTH_BASE}/google`,
   loginYandex: `${OAUTH_BASE}/yandex`,
+};
+
+export const BOOKING_ENDPOINTS = {
+  calculatePrice: `${BOOKING_BASE}/calculate`,
 };

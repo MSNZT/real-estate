@@ -1,7 +1,7 @@
 import { AdCardPreview } from "@/entities/ad";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
-import { getPrettyPrice } from "@/entities/ad/utils/getPrettyPrice";
 import { Ad } from "@/shared/config/apollo/generated/types";
+import { getPrettyPrice } from "@/shared/utils/getPrettyPrice";
 
 interface AdListsProps {
   data: Ad[];
