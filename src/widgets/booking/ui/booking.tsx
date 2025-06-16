@@ -5,7 +5,7 @@ import { useAuth } from "@/entities/user";
 import { useBookingDates } from "@/features/booking/hooks/useBookingDates";
 import { BookingDatePickerLayout } from "@/features/booking/ui/DatePicker/BookingDatePickerLayout";
 import { BookingFormConfirmPopup } from "@/features/booking/ui/Form/BookingFormConfirmPopup";
-import { useAuthRequiredPopup } from "../useAuthRequiredPopup";
+import { useAuthRequiredPopup } from "../hooks/useAuthRequiredPopup";
 import { useState } from "react";
 import { useBookingPrice } from "@/features/booking";
 import { usePathname } from "next/navigation";
@@ -52,7 +52,7 @@ export const Booking = ({ adId, price }: { adId: string; price: number }) => {
   }
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col justify-center relative">
       {requiredAuthPopup}
       <BookingDatePickerLayout
         adId={adId}

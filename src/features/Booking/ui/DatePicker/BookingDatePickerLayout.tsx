@@ -12,9 +12,9 @@ import { Button } from "@/shared/ui";
 import { DateRangeType } from "../../types/date.types";
 import { DialogDescription, DialogTitle } from "@/shared/ui/dialog";
 import { useClickOutSide } from "@/shared/lib/useClickOutside";
+import { useClientMediaQuery } from "@/shared/lib/useClientMediaQuery";
 
 interface BookingDatePickerLayout {
-  isMobile: boolean;
   adId: string;
   handleApply: (startDate: Date | null, endDate: Date | null) => void;
   handleClose: () => void;
@@ -23,7 +23,6 @@ interface BookingDatePickerLayout {
 }
 
 export const BookingDatePickerLayout = ({
-  isMobile,
   adId,
   handleApply,
   handleClose,
@@ -32,6 +31,7 @@ export const BookingDatePickerLayout = ({
 }: BookingDatePickerLayout) => {
   const [datesRange, setDatesRange] = useState<DateRangeType>([null, null]);
   const modalCalendarRef = useRef<HTMLDivElement | null>(null);
+  const isDesktop = useClientMediaQuery({ minWidth: "1024px" });
 
   useClickOutSide(modalCalendarRef, handleClose);
 
@@ -48,7 +48,7 @@ export const BookingDatePickerLayout = ({
     setDatesRange([null, null]);
   }, []);
 
-  if (isMobile) {
+  if (!isDesktop) {
     return (
       <Drawer open={isOpen} onOpenChange={handleClose}>
         <DrawerContent className="h-[95%] bg-white rounded-2xl">
@@ -76,7 +76,7 @@ export const BookingDatePickerLayout = ({
           <DialogDescription className="visually-hidden" />
           <BookingDatePicker
             adId={adId}
-            isMobile={isMobile}
+            isMobile={!isDesktop}
             datesRange={datesRange}
             handleDateChange={handleDateChange}
           >
@@ -104,10 +104,10 @@ export const BookingDatePickerLayout = ({
 
   return (
     isOpen && (
-      <div ref={modalCalendarRef} className={className + " aloha"}>
+      <div ref={modalCalendarRef} className="absolute right-0 top-[70px]">
         <BookingDatePicker
           adId={adId}
-          isMobile={isMobile}
+          isMobile={!isDesktop}
           datesRange={datesRange}
           handleDateChange={handleDateChange}
         >

@@ -9,6 +9,7 @@ export const useBookingPrice = (
   const totalPrice = getPrettyPrice(data?.totalPrice);
   const prepayment = getPrettyPrice(data?.prepayment);
   const remainder = getPrettyPrice(data?.remainder);
+
   return {
     totalPrice,
     prepayment,

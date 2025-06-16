@@ -57,6 +57,5 @@ export const BookingDatePicker = ({
     >
       {children(startDate, endDate)}
     </DatePicker>
-    // </div>
   );
 };

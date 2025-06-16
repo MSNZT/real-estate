@@ -8,10 +8,11 @@ class BookingService {
     countDays: number
   ): Promise<BookingCalculateResponse> {
     try {
-      return await $api.post(BOOKING_ENDPOINTS.calculatePrice, {
+      const { data } = await $api.post(BOOKING_ENDPOINTS.calculatePrice, {
         price,
         countDays,
       });
+      return data;
     } catch (error) {
       throw error;
     }
