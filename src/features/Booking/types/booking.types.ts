@@ -18,3 +18,8 @@ export type BookingCreateDto = {
   guestName: string;
   guestPhone: string;
 };
+
+export type OccupiedDate = {
+  startDate: string;
+  endDate: string;
+};

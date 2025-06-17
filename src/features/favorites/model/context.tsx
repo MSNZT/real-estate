@@ -33,7 +33,6 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
         setFavorites(response || []);
       });
     } else {
-      console.log("kek");
       const favoritesLS = JSON.parse(
         localStorage.getItem(FAVORITES_STORAGE_KEY) ?? "[]"
       ) as string[];

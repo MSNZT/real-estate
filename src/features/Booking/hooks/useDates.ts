@@ -1,6 +1,7 @@
-import { addDays, isWithinInterval, startOfDay } from "date-fns";
+import { addDays, isAfter, isWithinInterval, startOfDay } from "date-fns";
 import { useCallback, useMemo } from "react";
 import { useBookingList } from "../api/useBookingList";
+import { OccupiedDate } from "../types/booking.types";
 
 export const useDates = (
   adId: string,
@@ -8,58 +9,58 @@ export const useDates = (
   endDate: Date | null
 ) => {
   const { data } = useBookingList(adId);
-  const blockedDates = useMemo(
-    () =>
-      data?.map(({ startDate, endDate }) => ({
-        start: new Date(startDate),
-        end: addDays(new Date(endDate), -1),
-      })) || [],
-    [data]
-  );
 
-  const sortedBlockedDates = useMemo(
-    () => [...blockedDates].sort((a, b) => a.start.getTime() - b.end.getTime()),
-    [blockedDates]
-  );
+  const normalizeBlockedDates = (data: OccupiedDate[]) => {
+    const blockedSet = new Set<number>();
 
-  const firstBlockedStartAfterStartDate =
-    startDate &&
-    sortedBlockedDates.find((date) => startDate < date.start)?.start;
+    for (const { startDate, endDate } of data) {
+      let current = startOfDay(new Date(startDate));
+      const end = startOfDay(new Date(endDate));
 
-  const isDateDisabled = useCallback(
-    (date: Date) => {
-      const normalizedDate = startOfDay(date);
-
-      const isBlocked = blockedDates.some(({ start, end }) => {
-        const normalizedStart = startOfDay(start);
-        const normalizedEnd = startOfDay(end);
-
-        return isWithinInterval(normalizedDate, {
-          start: normalizedStart,
-          end: normalizedEnd,
-        });
-      });
-
-      if (isBlocked) return false;
-
-      if (startDate && endDate) {
-        return true;
+      while (current < end) {
+        blockedSet.add(current.getTime());
+        current = addDays(current, 1);
       }
+    }
 
-      if (
-        startDate &&
-        firstBlockedStartAfterStartDate &&
-        normalizedDate > startOfDay(firstBlockedStartAfterStartDate)
-      ) {
-        return false;
+    return blockedSet;
+  };
+
+  const blockedDaysSet = useMemo(() => {
+    return data ? normalizeBlockedDates(data) : new Set<number>();
+  }, [data]);
+
+  const getIsDateEnabled = (
+    blockedDaysSet: Set<number>,
+    startDate: Date | null,
+    endDate: Date | null
+  ) => {
+    return (date: Date): boolean => {
+      const day = startOfDay(date).getTime();
+
+      if (blockedDaysSet.has(day)) return false;
+      if (startDate && endDate) return true;
+      if (startDate && !endDate) {
+        const start = startOfDay(startDate);
+
+        const blockedAfter: Date | undefined = [...blockedDaysSet]
+          .map((timeStamp) => new Date(timeStamp))
+          .filter((d) => isAfter(d, start))
+          .sort((a, b) => a.getTime() - b.getTime())[0];
+
+        if (blockedAfter && isAfter(date, blockedAfter)) {
+          return false;
+        }
       }
-
       return true;
-    },
-    [startDate, blockedDates]
-  );
+    };
+  };
+
+  const isDateEnabled = useMemo(() => {
+    return getIsDateEnabled(blockedDaysSet, startDate, endDate);
+  }, [blockedDaysSet, startDate?.getTime(), endDate?.getTime()]);
 
   return {
-    isDateDisabled,
+    isDateEnabled,
   };
 };

@@ -19,7 +19,6 @@ interface BookingDatePickerLayout {
   handleApply: (startDate: Date | null, endDate: Date | null) => void;
   handleClose: () => void;
   isOpen: boolean;
-  className?: string;
 }
 
 export const BookingDatePickerLayout = ({
@@ -27,7 +26,6 @@ export const BookingDatePickerLayout = ({
   handleApply,
   handleClose,
   isOpen,
-  className,
 }: BookingDatePickerLayout) => {
   const [datesRange, setDatesRange] = useState<DateRangeType>([null, null]);
   const modalCalendarRef = useRef<HTMLDivElement | null>(null);

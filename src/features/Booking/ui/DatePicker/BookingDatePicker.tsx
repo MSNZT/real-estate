@@ -24,7 +24,7 @@ export const BookingDatePicker = ({
   handleDateChange,
 }: BookingDatePickerProps) => {
   const [startDate, endDate] = datesRange;
-  const { isDateDisabled } = useDates(adId, startDate, endDate);
+  const { isDateEnabled } = useDates(adId, startDate, endDate);
 
   return (
     <DatePicker
@@ -34,16 +34,20 @@ export const BookingDatePicker = ({
       startDate={startDate}
       endDate={endDate}
       onChange={handleDateChange}
-      filterDate={isDateDisabled}
-      renderDayContents={(day, date) => (
-        <BookingDayContent
-          day={day}
-          date={date}
-          minNights={2}
-          endDate={endDate}
-          startDate={startDate}
-        />
-      )}
+      filterDate={isDateEnabled}
+      renderDayContents={
+        isMobile
+          ? undefined
+          : (day, date) => (
+              <BookingDayContent
+                day={day}
+                date={date}
+                minNights={2}
+                endDate={endDate}
+                startDate={startDate}
+              />
+            )
+      }
       renderCustomHeader={
         isMobile
           ? (props) => <DatePickerHeaderMobile monthDate={props.monthDate} />

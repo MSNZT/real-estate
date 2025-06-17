@@ -1,3 +1,4 @@
+import { cn } from "@/shared/lib/utils";
 import { addDays, isWithinInterval, startOfDay } from "date-fns";
 import { memo, useState } from "react";
 
@@ -11,29 +12,41 @@ interface BookingDayContentProps {
 
 export const BookingDayContent = memo(
   ({ date, day, minNights, startDate, endDate }: BookingDayContentProps) => {
-    const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-    const minEndDate = startDate && addDays(startDate, minNights);
-    const isInMinRange =
-      startDate &&
+    const [hovered, setHovered] = useState(false);
+    const normalizedDate = startOfDay(date);
+    const normalizedStartDate = startDate ? startOfDay(startDate) : null;
+    const minNightsEndDate =
+      normalizedStartDate && addDays(normalizedStartDate, minNights);
+
+    const showTooltip =
+      hovered &&
+      normalizedStartDate &&
+      (normalizedStartDate.getTime() === normalizedDate.getTime() ||
+        (normalizedDate.getTime() > normalizedStartDate.getTime() &&
+          minNightsEndDate &&
+          normalizedDate.getTime() < minNightsEndDate.getTime())) &&
+      !endDate;
+
+    const showMinNights =
       !endDate &&
-      isWithinInterval(date, {
-        start: startOfDay(startDate),
-        end: startOfDay(minEndDate),
-      });
+      normalizedStartDate &&
+      normalizedDate.getTime() > normalizedStartDate.getTime() &&
+      minNightsEndDate &&
+      normalizedDate.getTime() < minNightsEndDate?.getTime();
 
     return (
       <div
         className="day-container"
-        onMouseEnter={() => isInMinRange && setHoveredDate(date)}
-        onMouseLeave={() => setHoveredDate(null)}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <div>{day}</div>
+        <div className={cn(showMinNights && "hint")}>{day}</div>
 
-        {/* {hoveredDate?.getTime() === date.getTime() && isInMinRange && (
-          <div className="date-tooltip">
-            Минимум от {minNights} ночей
+        {showTooltip && (
+          <div className="day-tooltip">
+            <span>Минимум от {minNights} ночей</span>
           </div>
-        )} */}
+        )}
       </div>
     );
   }
