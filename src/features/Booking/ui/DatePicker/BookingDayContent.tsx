@@ -1,5 +1,4 @@
-import { cn } from "@/shared/lib/utils";
-import { addDays, isWithinInterval, startOfDay } from "date-fns";
+import { addDays, startOfDay } from "date-fns";
 import { memo, useState } from "react";
 
 interface BookingDayContentProps {
@@ -12,14 +11,15 @@ interface BookingDayContentProps {
 
 export const BookingDayContent = memo(
   ({ date, day, minNights, startDate, endDate }: BookingDayContentProps) => {
-    const [hovered, setHovered] = useState(false);
+    const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
     const normalizedDate = startOfDay(date);
     const normalizedStartDate = startDate ? startOfDay(startDate) : null;
     const minNightsEndDate =
       normalizedStartDate && addDays(normalizedStartDate, minNights);
 
     const showTooltip =
-      hovered &&
+      startDate &&
+      hoveredDate &&
       normalizedStartDate &&
       (normalizedStartDate.getTime() === normalizedDate.getTime() ||
         (normalizedDate.getTime() > normalizedStartDate.getTime() &&
@@ -27,26 +27,20 @@ export const BookingDayContent = memo(
           normalizedDate.getTime() < minNightsEndDate.getTime())) &&
       !endDate;
 
-    const showMinNights =
-      !endDate &&
-      normalizedStartDate &&
-      normalizedDate.getTime() > normalizedStartDate.getTime() &&
-      minNightsEndDate &&
-      normalizedDate.getTime() < minNightsEndDate?.getTime();
-
     return (
       <div
         className="day-container"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onMouseEnter={() => setHoveredDate(date)}
+        onMouseLeave={() => setHoveredDate(null)}
       >
-        <div className={cn(showMinNights && "hint")}>{day}</div>
-
-        {showTooltip && (
-          <div className="day-tooltip">
-            <span>Минимум от {minNights} ночей</span>
-          </div>
-        )}
+        <>
+          <div className="day">{day}</div>
+          {showTooltip && (
+            <div className="min-nights-tooltip">
+              <span>Минимум от {minNights} ночей</span>
+            </div>
+          )}
+        </>
       </div>
     );
   }
