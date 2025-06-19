@@ -1,3 +1,4 @@
+"use client";
 import { FavoritesPage } from "@/features/favorites";
 
 export default function Page() {

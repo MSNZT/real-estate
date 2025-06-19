@@ -14,7 +14,7 @@ import { useSocket } from "@/app/providers/SocketProvider";
 export const ChatList = () => {
   const pathname = usePathname();
   const id = pathname.split("/").at(-1);
-  const { isLoading, data: chatList } = useQuery({
+  const { isPending, data: chatList } = useQuery({
     queryKey: ["chat", "list"],
     queryFn: chatService.getChatList,
   });
@@ -29,7 +29,7 @@ export const ChatList = () => {
 
   return (
     <ul className="flex flex-col gap-3 overflow-y-auto">
-      {isLoading ? (
+      {isPending ? (
         <div className="px-4">
           <div className="flex gap-3 items-center p-2">
             <div>

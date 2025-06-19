@@ -30,13 +30,18 @@ export const AvatarContent = ({
       className="bg-white border-gray-200"
     >
       {items.map((item) => (
-        <DropdownMenuItem key={item.text} className="hover:bg-blue-50">
+        <DropdownMenuItem key={item.text} className="hover:bg-blue-50 p-0">
           {item.href ? (
-            <Link href={item.href}>
+            <Link href={item.href} className="w-full px-3 py-1.5">
               <span>{item.text}</span>
             </Link>
           ) : (
-            <Button variant="clear" size="clear" onClick={item.onClick}>
+            <Button
+              className="w-full px-3 py-1.5"
+              variant="clear"
+              size="clear"
+              onClick={item.onClick}
+            >
               <span>{item.text}</span>
             </Button>
           )}

@@ -1,28 +1,32 @@
-import { Heart, MessageSquare } from "lucide-react";
 import Link from "next/link";
+import { ReactNode, MouseEvent } from "react";
 
-export const HeaderMenu = () => {
+type MenuOption = {
+  href: string;
+  Svg: ReactNode;
+  onClick?: (e: MouseEvent) => void;
+};
+
+interface HeaderMenuProps {
+  options: MenuOption[];
+}
+
+export const HeaderMenu = ({ options }: HeaderMenuProps) => {
   return (
-    <menu className="flex items-center gap-2">
-      <Link
-        href="/favorites"
-        className="flex items-center gap-4 hover:bg-blue-50 transition-colors duration-300 px-2 py-2 rounded-md text-sm"
-      >
-        <Heart />
-      </Link>
-      <Link
-        href="/chat"
-        className="flex items-center gap-4 hover:bg-blue-50 transition-colors duration-300 px-2 py-2 rounded-md text-sm"
-      >
-        <MessageSquare />
-      </Link>
-      <Link
-        href="/create-ad"
-        className="flex items-center gap-4 bg-primary hover:bg-primary-dark transition-colors duration-300 px-4 py-2 rounded-md
-              text-sm"
-      >
-        <span className="text-white">Разместить объявление</span>
-      </Link>
+    <menu>
+      <ul className="flex items-center gap-2">
+        {options.map((option) => (
+          <li key={option.href}>
+            <Link
+              href={option.href}
+              onClick={option?.onClick ? option.onClick : undefined}
+              className="flex items-center gap-4 hover:bg-blue-50 transition-colors duration-300 px-2 py-2 rounded-md text-sm"
+            >
+              {option.Svg}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </menu>
   );
 };

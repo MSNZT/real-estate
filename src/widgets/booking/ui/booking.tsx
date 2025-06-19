@@ -5,15 +5,12 @@ import { useAuth } from "@/entities/user";
 import { useBookingDates } from "@/features/booking/hooks/useBookingDates";
 import { BookingDatePickerLayout } from "@/features/booking/ui/DatePicker/BookingDatePickerLayout";
 import { BookingFormConfirmPopup } from "@/features/booking/ui/Form/BookingFormConfirmPopup";
-import { useAuthRequiredPopup } from "../hooks/useAuthRequiredPopup";
-import { useState } from "react";
 import { useBookingPrice } from "@/features/booking";
 import { usePathname } from "next/navigation";
+import { useAuthRequiredPopup } from "@/shared/lib/useAuthRequiredPopup";
 
 export const Booking = ({ adId, price }: { adId: string; price: number }) => {
   const pathname = usePathname();
-
-  const [isOpenAuthRequired, setIsOpenAuthRequired] = useState(false);
   const {
     countDays,
     dates,
@@ -26,10 +23,8 @@ export const Booking = ({ adId, price }: { adId: string; price: number }) => {
     handleCloseConfirm,
   } = useBookingDates();
   const { isAuth } = useAuth();
-  const requiredAuthPopup = useAuthRequiredPopup({
-    isOpen: isOpenAuthRequired,
-    onClose: handleCloseAuthRequired,
-    redirect: pathname,
+  const { requiredAuthPopup, openAuthPopup } = useAuthRequiredPopup({
+    redirect: pathname.slice(1),
   });
 
   const { prepayment, remainder, totalPrice } = useBookingPrice(
@@ -41,14 +36,10 @@ export const Booking = ({ adId, price }: { adId: string; price: number }) => {
 
   function onOpenConfirm() {
     if (!isAuth) {
-      setIsOpenAuthRequired(true);
+      openAuthPopup();
       return;
     }
     handleOpenConfirm();
-  }
-
-  function handleCloseAuthRequired() {
-    setIsOpenAuthRequired(false);
   }
 
   return (

@@ -1,12 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { Nunito } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { Header } from "@/widgets/header";
 import { Providers } from "./providers/Providers";
 import { Navbar } from "@/widgets/navbar/ui/Navbar";
 import "./globals.css";
-import { CityButton } from "@/features/city-button";
-import { cookies } from "next/headers";
 
 const nunito = Nunito({
   subsets: ["cyrillic"],

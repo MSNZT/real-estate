@@ -4,6 +4,8 @@ import { Button } from "@/shared/ui";
 import { useMutation } from "@tanstack/react-query";
 import { $apiWithAuth } from "@/shared/api/lib/axios";
 import { useRouter } from "next/navigation";
+import { useAuthRequiredPopup } from "@/shared/lib/useAuthRequiredPopup";
+import { useAuth } from "@/entities/user";
 
 type CommunicationType = "calls-only" | "calls-and-message" | "message-only";
 
@@ -14,9 +16,11 @@ interface ContactBlockProps {
 
 export const ContactBlock = ({ contact, ownerId }: ContactBlockProps) => {
   const [showTel, setShowTel] = useState(false);
+  const { isAuth } = useAuth();
   const communication = contact.communication as CommunicationType;
   const router = useRouter();
-  const { mutate, isPending } = useMutation({
+  const { requiredAuthPopup, openAuthPopup } = useAuthRequiredPopup({});
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: () =>
       $apiWithAuth.post("/chat/join", {
         userId: ownerId,
@@ -26,13 +30,21 @@ export const ContactBlock = ({ contact, ownerId }: ContactBlockProps) => {
     },
   });
 
+  const handleClickSend = () => {
+    if (isAuth) {
+      mutateAsync();
+      return;
+    }
+    openAuthPopup();
+  };
+
   const renderMessageButton = useCallback(
     () => (
       <Button
         className="bg-gray-200 justify-center items-center h-10"
         variant="ghost"
         disabled={isPending}
-        onClick={mutate}
+        onClick={handleClickSend}
       >
         <span className="font-semibold text-base">Написать</span>
       </Button>
@@ -67,6 +79,7 @@ export const ContactBlock = ({ contact, ownerId }: ContactBlockProps) => {
 
   return (
     <div className="grid grid-cols-1 gap-4 mb-4">
+      {requiredAuthPopup}
       {communicationVariants[communication].map((variant, i) => (
         <Fragment key={i}>{variant}</Fragment>
       ))}

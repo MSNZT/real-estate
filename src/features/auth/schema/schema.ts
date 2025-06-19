@@ -34,7 +34,6 @@ export const phoneSchema = z.object({
 export const registerSchema = z
   .object({
     name: z.string({ message: "Укажите имя" }),
-
     confirmPassword: z
       .string({ message: "Укажите пароль" })
       .min(4, { message: "Минимальная длина пароля 6 символов" })

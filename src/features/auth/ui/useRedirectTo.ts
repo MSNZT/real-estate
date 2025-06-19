@@ -8,7 +8,7 @@ export const useRedirectTo = () => {
 
   function handleRedirect() {
     if (redirectUrl) {
-      router.push(redirectUrl);
+      router.push(`/${redirectUrl}`);
       return;
     }
     router.push("/");

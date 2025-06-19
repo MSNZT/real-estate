@@ -3,7 +3,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button, FieldInput, FieldInputPassword } from "@/shared/ui";
-import type { RegisterData } from "../types/auth";
+import type { RegisterFormValues } from "../types/auth";
 import { useAuthMutations } from "../api/useAuthMutations";
 import { registerSchema } from "../schema/schema";
 import { PhoneInputField } from "./PhoneInputField";
@@ -24,11 +24,12 @@ export const RegisterForm = () => {
   const { isPending, mutateAsync, error } = register;
   const { handleRedirect } = useRedirectTo();
 
-  async function handleRegister(data: RegisterData) {
+  async function handleRegister(dto: RegisterFormValues) {
     try {
+      const { confirmPassword, ...otherDto } = dto;
       const registerData = {
-        ...data,
-        phone: data.phone.replace(/\D/g, ""),
+        ...otherDto,
+        phone: dto.phone.replace(/\D/g, ""),
       };
       await mutateAsync(registerData);
       toast.success("Вы успешно зарегистрировались", { duration: 2000 });

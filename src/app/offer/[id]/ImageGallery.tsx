@@ -24,7 +24,7 @@ export const ImageGallery = ({ mainPhoto, photos }: ImageGalleryProps) => {
           {images.map((image, i) => (
             <img
               key={i}
-              className="max-w-[500px] h-[260px] md:h-[300px] rounded-lg object-cover snap-start"
+              className="max-w-[500px] w-full h-[260px] md:h-[300px] rounded-lg object-cover snap-start"
               src={image}
               alt={`Фото объявления № ${i + 1}`}
             />

@@ -10,7 +10,7 @@ import {
   LoginData,
   OAuthData,
   PasswordCodeData,
-  RegisterData,
+  RegisterFormValues,
   ResetPasswordData,
   StatusResponse,
 } from "../types/auth";
@@ -42,7 +42,11 @@ export const useAuthMutations = () => {
     },
   });
 
-  const register = useMutation<AuthResponse, AxiosErrorResponse, RegisterData>({
+  const register = useMutation<
+    AuthResponse,
+    AxiosErrorResponse,
+    Omit<RegisterFormValues, "confirmPassword">
+  >({
     mutationFn: (data) => authService.register(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
