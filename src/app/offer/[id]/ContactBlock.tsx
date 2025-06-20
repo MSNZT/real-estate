@@ -4,8 +4,8 @@ import { Button } from "@/shared/ui";
 import { useMutation } from "@tanstack/react-query";
 import { $apiWithAuth } from "@/shared/api/lib/axios";
 import { useRouter } from "next/navigation";
-import { useAuthRequiredPopup } from "@/shared/lib/useAuthRequiredPopup";
 import { useAuth } from "@/entities/user";
+import { useAuthRequired } from "@/app/providers/AuthRequiredProvider";
 
 type CommunicationType = "calls-only" | "calls-and-message" | "message-only";
 
@@ -19,7 +19,7 @@ export const ContactBlock = ({ contact, ownerId }: ContactBlockProps) => {
   const { isAuth } = useAuth();
   const communication = contact.communication as CommunicationType;
   const router = useRouter();
-  const { requiredAuthPopup, openAuthPopup } = useAuthRequiredPopup({});
+  const { handleOpenPopup } = useAuthRequired();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: () =>
       $apiWithAuth.post("/chat/join", {
@@ -35,7 +35,7 @@ export const ContactBlock = ({ contact, ownerId }: ContactBlockProps) => {
       mutateAsync();
       return;
     }
-    openAuthPopup();
+    handleOpenPopup();
   };
 
   const renderMessageButton = useCallback(
@@ -79,7 +79,6 @@ export const ContactBlock = ({ contact, ownerId }: ContactBlockProps) => {
 
   return (
     <div className="grid grid-cols-1 gap-4 mb-4">
-      {requiredAuthPopup}
       {communicationVariants[communication].map((variant, i) => (
         <Fragment key={i}>{variant}</Fragment>
       ))}

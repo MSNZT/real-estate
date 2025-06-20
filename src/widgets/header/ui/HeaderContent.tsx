@@ -4,16 +4,15 @@ import { useAuth } from "@/entities/user";
 import { AuthArea } from "./AuthArea";
 import { Heart, MessageSquare } from "lucide-react";
 import Link from "next/link";
-import { useAuthRequiredPopup } from "@/shared/lib/useAuthRequiredPopup";
+import { useAuthRequired } from "@/app/providers/AuthRequiredProvider";
 
 export const HeaderContent = () => {
   const { isLoading, isAuth, isGuest, user } = useAuth();
   console.log(isLoading, isAuth, isGuest, user);
-  const { openAuthPopup, requiredAuthPopup } = useAuthRequiredPopup({});
+  const { handleOpenPopup } = useAuthRequired();
 
   return (
     <div className="hidden md:flex items-center gap-4">
-      {requiredAuthPopup}
       <HeaderMenu
         options={[
           { href: "/favorites", Svg: <Heart /> },
@@ -23,7 +22,7 @@ export const HeaderContent = () => {
             onClick: (e) => {
               if (isAuth) return;
               e.preventDefault();
-              openAuthPopup("/chat");
+              handleOpenPopup("/chat");
             },
           },
         ]}

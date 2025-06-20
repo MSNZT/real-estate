@@ -8,7 +8,6 @@ import { AdCardPreview } from "@/entities/ad";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
 import { useSyncLocalFavorites } from "../hooks/useSyncLocalFavorites";
 // import { TOGGLE_FAVORITES } from "@/shared/config/apollo/requests/toggleFavorite";
-// import { useFavorite } from "../hooks/useFavorite";
 import { useFavorites } from "../model/useFavorites";
 import { getPrettyPrice } from "@/shared/utils/getPrettyPrice";
 

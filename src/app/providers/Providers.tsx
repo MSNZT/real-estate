@@ -4,6 +4,7 @@ import { ApolloWrapper } from "./ApolloWrapper";
 import { QueryProvider } from "./QueryProvider";
 import { AuthProvider } from "./AuthProvider";
 import { FavoritesProvider } from "@/features/favorites";
+import { AuthRequiredProvider } from "./AuthRequiredProvider";
 
 export const Providers = ({
   children,
@@ -16,9 +17,11 @@ export const Providers = ({
     <ApolloWrapper>
       <QueryProvider>
         <AuthProvider hasRefresh={hasRefresh}>
-          <Suspense fallback={null}>
-            <FavoritesProvider>{children}</FavoritesProvider>
-          </Suspense>
+          <AuthRequiredProvider>
+            <Suspense fallback={null}>
+              <FavoritesProvider>{children}</FavoritesProvider>
+            </Suspense>
+          </AuthRequiredProvider>
         </AuthProvider>
       </QueryProvider>
     </ApolloWrapper>

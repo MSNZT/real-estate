@@ -17,10 +17,10 @@ export const AdUserMenu = ({ title, id }: { title: string; id: string }) => {
 
   return (
     <ul className="flex items-center gap-2">
-      <li className="bg-[#f2efe9] hover:bg-[#ede8df] transition-colors rounded-lg px-3 py-1">
+      <li>
         {isMounted ? (
           <Button
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 bg-sand px-2 py-1 transition-colors rounded-lg"
             variant="ghost"
             size="clear"
             onClick={() => handleToggleFavorite(id)}
@@ -33,12 +33,12 @@ export const AdUserMenu = ({ title, id }: { title: string; id: string }) => {
             </span>
           </Button>
         ) : (
-          <Skeleton className="rounded-lg w-[180px] h-5" />
+          <Skeleton className="rounded-lg w-[180px] bg-sand h-7" />
         )}
       </li>
-      <li className="lg:hidden bg-[#f2efe9] hover:bg-[#ede8df] transition-colors rounded-lg px-3 py-1">
+      <li className="lg:hidden">
         <Button
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 bg-sand px-2 py-1 transition-colors rounded-lg"
           variant="ghost"
           size="clear"
           onClick={handleClickShareButton}

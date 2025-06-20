@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { Message, MessagesResponse } from "../types/chat-list.types";
 import { ChatMessage } from "./chat-message";
-import { useSocket } from "@/app/providers/SocketProvider";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { $apiWithAuth } from "@/shared/api/lib/axios";
@@ -31,7 +30,7 @@ export const MessageList = ({
       setMessages((prev) => [...prev, ...data.messages]);
       return data;
     },
-
+    refetchOnWindowFocus: false,
     enabled: !!chatId,
     retry: false,
   });
@@ -51,12 +50,8 @@ export const MessageList = ({
   //     }
   //   }, [params.id, data, socket]);
 
-  useEffect(() => {
-    containerRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4 bg-gradient-to-b from-slate-50 via-white to-slate-100 scroll-smooth">
+    <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col-reverse gap-4 bg-gradient-to-b from-slate-50 via-white to-slate-100 scroll-smooth">
       {messages?.length === 0 && (
         <div className="text-gray-400 text-center my-20 content-center h-full">
           У вас пока нет сообщений

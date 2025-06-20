@@ -6,11 +6,9 @@ import { useBookingDates } from "@/features/booking/hooks/useBookingDates";
 import { BookingDatePickerLayout } from "@/features/booking/ui/DatePicker/BookingDatePickerLayout";
 import { BookingFormConfirmPopup } from "@/features/booking/ui/Form/BookingFormConfirmPopup";
 import { useBookingPrice } from "@/features/booking";
-import { usePathname } from "next/navigation";
-import { useAuthRequiredPopup } from "@/shared/lib/useAuthRequiredPopup";
+import { useAuthRequired } from "@/app/providers/AuthRequiredProvider";
 
 export const Booking = ({ adId, price }: { adId: string; price: number }) => {
-  const pathname = usePathname();
   const {
     countDays,
     dates,
@@ -23,9 +21,7 @@ export const Booking = ({ adId, price }: { adId: string; price: number }) => {
     handleCloseConfirm,
   } = useBookingDates();
   const { isAuth } = useAuth();
-  const { requiredAuthPopup, openAuthPopup } = useAuthRequiredPopup({
-    redirect: pathname.slice(1),
-  });
+  const { handleOpenPopup } = useAuthRequired();
 
   const { prepayment, remainder, totalPrice } = useBookingPrice(
     price,
@@ -36,7 +32,7 @@ export const Booking = ({ adId, price }: { adId: string; price: number }) => {
 
   function onOpenConfirm() {
     if (!isAuth) {
-      openAuthPopup();
+      handleOpenPopup();
       return;
     }
     handleOpenConfirm();
@@ -44,7 +40,6 @@ export const Booking = ({ adId, price }: { adId: string; price: number }) => {
 
   return (
     <div className="flex flex-col justify-center relative">
-      {requiredAuthPopup}
       <BookingDatePickerLayout
         adId={adId}
         isOpen={isOpenCalendar}

@@ -5,7 +5,7 @@ import { AvatarButton } from "@/features/avatar-button";
 import { Heart, Home, MessageSquare, PlusCircle, User } from "lucide-react";
 import { Button } from "@/shared/ui";
 import { useAuth } from "@/entities/user";
-import { useAuthRequiredPopup } from "@/shared/lib/useAuthRequiredPopup";
+import { useAuthRequired } from "@/app/providers/AuthRequiredProvider";
 
 const menuOptions = [
   { text: "Главная", href: "/", Icon: <Home /> },
@@ -22,9 +22,7 @@ const menuOptions = [
 
 export const Navbar = () => {
   const { isAuth } = useAuth();
-  const { openAuthPopup, requiredAuthPopup } = useAuthRequiredPopup({
-    redirect: "chat",
-  });
+  const { handleOpenPopup } = useAuthRequired();
   const renderMenu = useMemo(() => {
     return menuOptions.map((option) => {
       if (option.text === "Профиль") {
@@ -57,7 +55,7 @@ export const Navbar = () => {
               onClick={(e) => {
                 if (!isAuth) {
                   e.preventDefault();
-                  openAuthPopup();
+                  handleOpenPopup(option.href);
                 }
               }}
               className="flex flex-col items-center"
@@ -82,7 +80,6 @@ export const Navbar = () => {
   return (
     <nav className="fixed md:hidden inset-x-0 bottom-0 p-3 border-t border-gray-200 bg-white">
       <ul className="flex items-center justify-around text-xs">{renderMenu}</ul>
-      {requiredAuthPopup}
     </nav>
   );
 };
