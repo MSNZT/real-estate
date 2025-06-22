@@ -1,9 +1,19 @@
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { Message, MessagesResponse } from "../types/chat-list.types";
+"use client";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { Message } from "../types/chat-list.types";
 import { ChatMessage } from "./chat-message";
-import { useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { $apiWithAuth } from "@/shared/api/lib/axios";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { measureMessageHeight } from "./measureMessageHeight";
+import { useInView } from "react-intersection-observer";
 
 interface MessageListProps {
   messages: Message[];
@@ -18,53 +28,165 @@ export const MessageList = ({
   chatId,
   setMessages,
 }: MessageListProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { isPending: isPendingMessageList, data: response } = useQuery<
-    any,
-    AxiosError,
-    MessagesResponse
-  >({
-    queryKey: ["messages"],
-    queryFn: async () => {
-      const { data } = await $apiWithAuth.get(`/chat/${chatId}/messages`);
-      setMessages((prev) => [...prev, ...data.messages]);
-      return data;
-    },
-    refetchOnWindowFocus: false,
-    enabled: !!chatId,
-    retry: false,
+  const [triggerRef, inView] = useInView();
+  const { fetchNextPage, hasNextPage, isFetched, isFetching } =
+    useInfiniteQuery({
+      queryKey: ["chat"],
+      queryFn: async ({ pageParam }) => {
+        console.log("pageParams", pageParam);
+
+        const { data } = await $apiWithAuth.get(
+          `/chat/${chatId}/messages?limit=10${pageParam ? `&cursor=${pageParam}` : ""}`
+        );
+        setMessages((prev) => [...data.messages.reverse(), ...prev]);
+        return data;
+      },
+      initialPageParam: undefined,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      enabled: !!chatId,
+      refetchOnWindowFocus: false,
+    });
+  const parentRef = useRef<HTMLDivElement>(null);
+  const prevScrollHeight = useRef<number>(0);
+  const [firstLoaded, setFirstLoaded] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  const loadingMore = useRef(false);
+
+  const getMessageHeight = (index: number) => {
+    const msg = messages[index];
+    return measureMessageHeight(msg.text, {
+      maxWidth: 300,
+      padding: 12,
+      fontSize: 14,
+      lineHeight: 20,
+    });
+  };
+
+  const rowVirtualizer = useVirtualizer({
+    count: messages.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: getMessageHeight,
+    overscan: 10,
   });
-  //   useEffect(() => {
-  //     if (params.id && data?.status === "success") {
-  //       if (socket) {
-  //         socket.emit("join", { channelId: params.id });
 
-  //         socket.on("newMessage", (data: Message) => {
-  //           setMessages((prev) => [...prev, data]);
-  //         });
+  // useLayoutEffect(() => {
+  //   if (rowVirtualizer && messages.length) {
+  //     rowVirtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+  //     setReady(true);
+  //   }
+  // }, [messages.length]);
 
-  //         return () => {
-  //           socket.off("newMessage");
-  //         };
-  //       }
-  //     }
-  //   }, [params.id, data, socket]);
+  // useLayoutEffect(() => {
+  //   if (!parentRef.current) return;
+  //   if (isFirstLoadRef.current) {
+  //     rowVirtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+  //     setReady(true);
+  //     isFirstLoadRef.current = false;
+  //   } else {
+  //     const currHeight = parentRef.current.scrollHeight;
+  //     parentRef.current.scrollTop = currHeight - prevHeightRef.current;
+  //   }
+  // }, [messages.length]);
+
+  // const fetchNextPageWithScroll = async () => {
+  //   if (parentRef.current) {
+  //     prevHeightRef.current = parentRef.current.scrollHeight;
+  //   }
+  //   await fetchNextPage();
+  // };
+
+  // useEffect(() => {
+  //   if (inView && hasNextPage) {
+  //     fetchNextPageWithScroll();
+  //   }
+  // }, [inView, hasNextPage]);
+
+  useLayoutEffect(() => {
+    if (
+      !firstLoaded &&
+      parentRef.current &&
+      messages.length > 0 &&
+      isFetched &&
+      !isFetching
+    ) {
+      rowVirtualizer.scrollToIndex(messages.length - 1, { align: "end" });
+      setFirstLoaded(true);
+    }
+  }, [messages.length, isFetched, isFetching]);
+
+  useLayoutEffect(() => {
+    if (firstLoaded && prevScrollHeight.current && parentRef.current) {
+      const diff = parentRef.current.scrollHeight - prevScrollHeight.current;
+      if (diff > 0) {
+        parentRef.current.scrollTop += diff;
+      }
+    }
+  }, [messages.length]);
+
+  const fetchNextPageWithScroll = async () => {
+    if (loadingMore.current) return; // блокируем если уже грузим
+    loadingMore.current = true;
+    if (parentRef.current) {
+      prevScrollHeight.current = parentRef.current.scrollHeight;
+    }
+    await fetchNextPage();
+    loadingMore.current = false;
+  };
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetching && firstLoaded) {
+      fetchNextPageWithScroll();
+    }
+  }, [inView, hasNextPage, isFetching, firstLoaded]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col-reverse gap-4 bg-gradient-to-b from-slate-50 via-white to-slate-100 scroll-smooth">
-      {messages?.length === 0 && (
-        <div className="text-gray-400 text-center my-20 content-center h-full">
-          У вас пока нет сообщений
-        </div>
-      )}
-      {messages?.map((message) => (
-        <ChatMessage
-          key={message.id}
-          {...message}
-          isRight={message.authorId === userId}
-        />
-      ))}
-      <div ref={containerRef}></div>
+    <div
+      ref={parentRef}
+      className="px-4 pt-4"
+      style={{
+        height: "100%",
+        width: "100%",
+        overflow: "auto",
+        position: "relative",
+        // opacity: ready ? 1 : 0,
+        // transition: "opacity 0.1s",
+      }}
+    >
+      <div
+        style={{
+          height: rowVirtualizer.getTotalSize(),
+          width: "100%",
+          position: "relative",
+        }}
+      >
+        {/* <div ref={triggerRef} style={{ height: 1 }} /> */}
+        {/* {firstLoaded && <div ref={triggerRef} style={{ height: 1 }} />} */}
+        {firstLoaded && !isFetching && !loadingMore.current && (
+          <div ref={triggerRef} style={{ height: 1 }} />
+        )}
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const msg = messages[virtualRow.index];
+          const isRight = msg.authorId === userId;
+          return (
+            <div
+              key={msg.id}
+              ref={rowVirtualizer.measureElement}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${virtualRow.start}px)`,
+                display: "flex",
+                justifyContent: isRight ? "flex-end" : "flex-start",
+              }}
+            >
+              <ChatMessage {...msg} isRight={isRight} />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

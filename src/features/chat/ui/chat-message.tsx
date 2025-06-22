@@ -16,19 +16,25 @@ export const ChatMessage = ({ text, createdAt, isRight }: ChatMessageProps) => {
       })}
     >
       <div
-        className={cn("flex flex-col p-3 max-w-[400px]", {
+        className={cn("flex flex-col p-3 max-w-[300px] w-full", {
           "items-end": isRight,
         })}
+        style={{
+          wordBreak: "break-word",
+          fontSize: 14,
+          lineHeight: "20px",
+          fontFamily: "Inter, Arial, sans-serif",
+        }}
       >
-        <p className="text-sm">{text}</p>
+        <span className="text-sm">{text}</span>
         <div className="flex items-center gap-2">
           {isRight && <CheckCheck size={12} className="stroke-green-600" />}
-          <p className="text-xs text-gray-400">
+          <span className="text-xs text-gray-400">
             {Intl.DateTimeFormat("ru-RU", {
               hour: "numeric",
               minute: "numeric",
             }).format(new Date(createdAt))}
-          </p>
+          </span>
         </div>
       </div>
     </div>

@@ -37,7 +37,7 @@ export const ChatWindow = () => {
   // const isOnline = onlineMap[response?.companion.id ?? ""];
 
   const handleNewMessage = useCallback((msg: any) => {
-    setMessages((prev) => [msg, ...prev]);
+    setMessages((prev) => [...prev, msg]);
   }, []);
 
   const { isConnected, sendMessage } = useConnectToChat(

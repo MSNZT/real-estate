@@ -159,6 +159,10 @@
 }
 
 @layer base {
+  html,
+  body {
+    height: 100%;
+  }
   input[type="number"] {
     appearance: none;
     -moz-appearance: textfield;

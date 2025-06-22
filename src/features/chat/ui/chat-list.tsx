@@ -11,7 +11,7 @@ import { useOnlineStore } from "@/shared/hooks/use-online-store";
 import { useEffect } from "react";
 import { useSocket } from "@/app/providers/SocketProvider";
 
-export const ChatList = () => {
+export const ChatList = ({ query }: { query: string }) => {
   const pathname = usePathname();
   const id = pathname.split("/").at(-1);
   const { isPending, data: chatList } = useQuery({
@@ -26,6 +26,14 @@ export const ChatList = () => {
     if (!socket) return;
     socket?.on("newMessage", (data) => console.log(data));
   }, [socket]);
+
+  const list = chatList
+    ? query
+      ? chatList.filter((chatItem) =>
+          chatItem.companion.name.toLowerCase().includes(query.toLowerCase())
+        )
+      : chatList
+    : [];
 
   return (
     <ul className="flex flex-col gap-3 overflow-y-auto">
@@ -47,10 +55,8 @@ export const ChatList = () => {
             </div>
           </div>
         </div>
-      ) : (
-        chatList &&
-        chatList.length > 0 &&
-        chatList?.map((item) => (
+      ) : list.length > 0 ? (
+        list.map((item) => (
           <li
             key={item.chatId}
             className={cn(
@@ -112,6 +118,8 @@ export const ChatList = () => {
             </Link>
           </li>
         ))
+      ) : (
+        <div className="px-4">У вас пока нет собеседников</div>
       )}
       {/* <li className="flex gap-3 items-center w-full p-2">
         <div className="rounded-full h-9 w-9 bg-black relative after:absolute after:w-2 after:h-2 after:bg-green-400 after:rounded-full after:bottom-1 after:right-0 after:border after:border-white"></div>
