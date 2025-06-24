@@ -1,5 +1,8 @@
 "use client";
-import { ChatListItem } from "@/features/chat/types/chat-list.types";
+import {
+  ChatListItem,
+  MessagesResponse,
+} from "@/features/chat/types/chat-list.types";
 import { $apiWithAuth } from "../api/lib/axios";
 
 class ChatService {
@@ -10,6 +13,21 @@ class ChatService {
     } catch (error) {
       console.log("Ошибка при запросе списка чатов", error);
       return [];
+    }
+  }
+
+  async getMessagesByCursor(
+    chatId: string,
+    pageParam?: string
+  ): Promise<MessagesResponse> {
+    try {
+      const { data } = await $apiWithAuth.get<MessagesResponse>(
+        `/chat/${chatId}/messages?limit=10${pageParam ? `&cursor=${pageParam}` : ""}`
+      );
+      return data;
+    } catch (error) {
+      console.log("Ошибка при списка сообщений", error);
+      throw error;
     }
   }
 }

@@ -28,6 +28,7 @@ export const PhoneInputField = ({ name, label }: PhoneInputFieldProps) => {
                 prefix="+7"
                 maxLength={11}
                 className="border-gray-300"
+                type="tel"
               />
             </FormControl>
           </div>

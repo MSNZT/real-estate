@@ -1,47 +1,69 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Loader } from "@/shared/ui";
 import { useAuth } from "@/entities/user";
 import { $apiWithAuth } from "@/shared/api/lib/axios";
-import { useQuery } from "@tanstack/react-query";
+import { InfiniteData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useOnlineStore } from "@/shared/hooks/use-online-store";
-import { Message } from "../types/chat-list.types";
+import { useChatStore } from "@/shared/hooks/use-chat-store";
+import { Message, MessagesResponse } from "../types/chat-list.types";
 import { cn } from "@/shared/lib/utils";
 import { MessageList } from "./message-list";
 import { MessageInput } from "./message-input";
-import { useConnectToChat } from "../hooks/useConnectToChat";
+import { useConnectToChat } from "../api/useConnectToChat";
+import { useMessagesInfiniteQuery } from "../api/useMessagesInfiniteQuery";
 
 export const ChatWindow = () => {
+  const queryClient = useQueryClient();
   const { user } = useAuth();
-  const [messages, setMessages] = useState<Message[]>([]);
   const router = useRouter();
-  const params = useParams<{ id: string }>();
+  const { id: chatId } = useParams<{ id: string }>();
+  const chat = useChatStore((s) => s.chats[chatId]);
 
   const { isLoading } = useQuery({
-    queryKey: ["chat", params.id],
+    queryKey: ["chat", chatId],
     queryFn: async () => {
-      const { data } = await $apiWithAuth.get(`/chat/${params.id}`);
+      const { data } = await $apiWithAuth.get(`/chat/${chatId}`);
       if (data.status === "error") {
         router.push("/");
       }
       return data;
     },
 
-    enabled: !!params.id,
+    enabled: !!chatId,
   });
 
-  const onlineMap = useOnlineStore((state) => state.onlineMap);
-  // const isOnline = onlineMap[response?.companion.id ?? ""];
+  const { query, messages } = useMessagesInfiniteQuery(chatId);
 
-  const handleNewMessage = useCallback((msg: any) => {
-    setMessages((prev) => [...prev, msg]);
-  }, []);
+  const handleNewMessage = useCallback(
+    (msg: Message) => {
+      queryClient.setQueryData(
+        ["chat-messages", chatId],
+        (old: InfiniteData<MessagesResponse> | undefined) => {
+          if (!old) return old;
+
+          const pages = [...old.pages];
+          console.log("pages", pages);
+
+          pages[0] = {
+            ...pages[0],
+            messages: [...pages[0].messages, msg],
+          };
+
+          return {
+            ...old,
+            pages,
+          };
+        }
+      );
+    },
+    [chatId, queryClient]
+  );
 
   const { isConnected, sendMessage } = useConnectToChat(
-    params.id,
+    chatId,
     handleNewMessage
   );
 
@@ -66,14 +88,22 @@ export const ChatWindow = () => {
           <Link className="md:hidden" href="/chat">
             <ArrowLeft />
           </Link>
-          <div className="flex items-center justify-center rounded-full h-11 w-11 bg-gradient-to-tr from-blue-400 to-indigo-400 shadow">
-            <span className="text-white font-bold text-lg">И</span>
+          <div className="flex items-center justify-center rounded-full h-11 w-11 bg-blue-400  shadow">
+            <span className="text-white font-bold text-lg">
+              {chat?.companion.name[0]}
+            </span>
           </div>
         </div>
         <div className="flex flex-col">
-          <span className="font-semibold text-gray-900">Имя</span>
-          <span className={cn("text-xs text-green-400")}>
-            {/* {isOnline ? "В сети" : "Не в сети"} */}В сети
+          <span className="font-semibold text-gray-900">
+            {chat?.companion.name}
+          </span>
+          <span
+            className={cn("text-xs text-gray-400", {
+              "text-green-400": chat?.onlineStatus,
+            })}
+          >
+            {chat?.onlineStatus ? "В сети" : "Не в сети"}
           </span>
         </div>
       </div>
@@ -81,8 +111,7 @@ export const ChatWindow = () => {
       <MessageList
         messages={messages}
         userId={user?.id}
-        chatId={params.id}
-        setMessages={setMessages}
+        infiniteQuery={query}
       />
       <MessageInput disabled={!isConnected} onSendMessage={handleSendMessage} />
     </section>

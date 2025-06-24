@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/shared/ui";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, HTMLInputTypeAttribute, useRef } from "react";
 
 interface PhoneInputProps {
   placeholder?: string;
@@ -9,6 +9,7 @@ interface PhoneInputProps {
   className?: string;
   value: string;
   onChange: (value: string) => void;
+  type: HTMLInputTypeAttribute;
 }
 
 const STATIC_CHAR_VALUES = ["(", ")", "-", ""];
@@ -20,6 +21,7 @@ export const PhoneInput = ({
   className,
   value: phoneNumber,
   onChange,
+  type,
 }: PhoneInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const lastPhoneLength = useRef<number>(phoneNumber?.length ?? 0);
@@ -94,6 +96,7 @@ export const PhoneInput = ({
       onChange={handleChangeValue}
       placeholder={placeholder}
       className={className}
+      type={type}
     />
   );
 };

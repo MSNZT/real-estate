@@ -1,9 +1,10 @@
 import { useSocket } from "@/app/providers/SocketProvider";
 import { useEffect, useState } from "react";
+import { Message } from "../types/chat-list.types";
 
 export const useConnectToChat = (
   chatId: string,
-  onNewMessage: (msg: any) => void
+  onNewMessage: (msg: Message) => void
 ) => {
   const { socket } = useSocket();
   const [isConnected, setIsConnected] = useState(false);

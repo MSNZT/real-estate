@@ -11,13 +11,15 @@ type ChatListItemCompanion = {
 
 type ChatListItemLastMessage = {
   text: string;
-  createdAt: Date;
+  createdAt: string;
   userId: string;
 };
 
 export type MessagesResponse = {
   companion: ChatListItemCompanion;
   messages: Message[];
+  nextCursor: string | null;
+  hasNext: boolean;
 };
 
 export type Message = {

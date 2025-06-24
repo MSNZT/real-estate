@@ -14,7 +14,7 @@ export const codeSchema = z.object({
 export const passwordSchema = z.object({
   password: z
     .string({ message: "Укажите пароль" })
-    .min(4, { message: "Минимальная длина пароля 6 символов" })
+    .min(6, { message: "Минимальная длина пароля 6 символов" })
     .max(20, { message: "Максимальная длина пароля 20 символов" }),
 });
 
@@ -36,7 +36,7 @@ export const registerSchema = z
     name: z.string({ message: "Укажите имя" }),
     confirmPassword: z
       .string({ message: "Укажите пароль" })
-      .min(4, { message: "Минимальная длина пароля 6 символов" })
+      .min(6, { message: "Минимальная длина пароля 6 символов" })
       .max(20, { message: "Максимальная длина пароля 20 символов" }),
     phone: phoneSchema.shape.phone,
   })
@@ -51,7 +51,7 @@ export const changePasswordSchema = z
   .object({
     confirmPassword: z
       .string({ message: "Укажите пароль" })
-      .min(4, { message: "Минимальная длина пароля 6 символов" })
+      .min(6, { message: "Минимальная длина пароля 6 символов" })
       .max(20, { message: "Максимальная длина пароля 20 символов" }),
   })
   .extend(passwordSchema.shape)

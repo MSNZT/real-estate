@@ -4,28 +4,47 @@ import { useQuery } from "@tanstack/react-query";
 import { chatService } from "@/shared/services/chat.service";
 import Link from "next/link";
 import { Skeleton } from "@/shared/ui";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { cn } from "@/shared/lib/utils";
-import { useOnline } from "@/shared/hooks/use-online";
-import { useOnlineStore } from "@/shared/hooks/use-online-store";
+import { useChatStore } from "@/shared/hooks/use-chat-store";
 import { useEffect } from "react";
 import { useSocket } from "@/app/providers/SocketProvider";
+import { useOnline } from "@/shared/hooks/use-online";
 
 export const ChatList = ({ query }: { query: string }) => {
-  const pathname = usePathname();
-  const id = pathname.split("/").at(-1);
+  const { id: chatId } = useParams<{ id: string }>();
   const { isPending, data: chatList } = useQuery({
     queryKey: ["chat", "list"],
     queryFn: chatService.getChatList,
   });
-  const companiosIds = chatList?.map((chat) => chat.companion.id) || [];
-  useOnline(companiosIds);
-  const onlineMap = useOnlineStore((state) => state.onlineMap);
+  const setChats = useChatStore((s) => s.setChats);
+  const chat = useChatStore((s) => s.chats[chatId!]);
+  useOnline(chatId!);
   const { socket } = useSocket();
   useEffect(() => {
     if (!socket) return;
-    socket?.on("newMessage", (data) => console.log(data));
+    socket?.on("newMessage", (data) => {
+      // setChat(chatId!, {
+      //   chatId: chatId,
+      //   companion: {
+      //     id: data.authorId,
+      //   }
+      //   onlineStatus: false,
+      // });
+      console.log("newMEssage", data);
+    });
   }, [socket]);
+
+  console.log("online", chat?.onlineStatus);
+
+  useEffect(() => {
+    if (socket && chatList?.length) {
+      console.log("tutuurur");
+      setChats(
+        chatList.map((chatItem) => ({ ...chatItem, onlineStatus: false }))
+      );
+    }
+  }, [chatList, socket]);
 
   const list = chatList
     ? query
@@ -61,7 +80,7 @@ export const ChatList = ({ query }: { query: string }) => {
             key={item.chatId}
             className={cn(
               "px-4 hover:bg-blue-100 transition-colors duration-300 ",
-              { "bg-blue-100": item.chatId === id }
+              { "bg-blue-100": item.chatId === chat?.chatId }
             )}
           >
             <Link
@@ -72,7 +91,7 @@ export const ChatList = ({ query }: { query: string }) => {
                 className={cn(
                   "flex items-center justify-center rounded-full h-9 w-9 bg-blue-400 relative after:absolute after:w-2 after:h-2 after:bg-gray-400 after:rounded-full after:bottom-1 after:right-0 after:border after:border-white",
                   {
-                    "after:bg-green-400": onlineMap[item.companion.id],
+                    "after:bg-green-400": chat?.onlineStatus,
                   }
                 )}
               >
@@ -99,8 +118,7 @@ export const ChatList = ({ query }: { query: string }) => {
                       <p className="text-sm text-gray-400 truncate">
                         {item.lastMessage?.text}
                       </p>
-                      {/* Доделать */}
-                      {onlineMap[item.companion.id] ? (
+                      {chat?.onlineStatus ? (
                         <CheckCheck
                           className="stroke-green-600 shrink-0"
                           size={13}
@@ -118,6 +136,8 @@ export const ChatList = ({ query }: { query: string }) => {
             </Link>
           </li>
         ))
+      ) : query.trim() ? (
+        <div className="px-4">По вашему запросу ничего не найдено</div>
       ) : (
         <div className="px-4">У вас пока нет собеседников</div>
       )}
