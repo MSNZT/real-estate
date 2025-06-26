@@ -1,5 +1,5 @@
 import { MapComponent } from "./MapComponent";
-import { CityButton } from "@/features/city-button/ui/CityButton";
+import { CityButton } from "@/features/city-button/ui/CitySelectDialog";
 import { AddressFieldList } from "./AddressFieldList";
 import { useFormContext } from "react-hook-form";
 import { AdFormData } from "../types/types";

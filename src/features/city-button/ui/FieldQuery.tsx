@@ -25,10 +25,7 @@ export const FieldQuery = ({
       <Input
         value={query}
         onChange={handleMutate}
-        className={cn(
-          "border-gray-300 hover:border-black focus:border-black placeholder:text-base",
-          classNameField
-        )}
+        className={cn("placeholder:text-base", classNameField)}
         placeholder={placeholder}
       />
       {query.trim() && (
@@ -38,7 +35,7 @@ export const FieldQuery = ({
           variant="clear"
           size="clear"
         >
-          <X size={14} />
+          <X size={16} />
         </Button>
       )}
     </div>

@@ -14,7 +14,7 @@ class LocationService {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Token 4050077a7049b96f5224fcdfff815e84218026ad`,
+            Authorization: `Token 5f9e2a2b636f34bb0caf2c1a48ec525ccad0de92`,
           },
         }
       );

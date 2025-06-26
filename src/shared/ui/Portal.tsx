@@ -2,9 +2,11 @@
 
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useIsMounted } from "../lib/useIsMounted";
 
 export const Portal = ({ children }: { children: ReactNode }) => {
-  if (window !== undefined) {
+  const isMounted = useIsMounted();
+  if (isMounted) {
     return createPortal(children, document.body);
   }
 

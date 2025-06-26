@@ -7,12 +7,16 @@ import { DataSuggestionType, SuggestionType } from "@/shared/types/location";
 import { useSettlementSearch } from "../hooks/useSettlementSearch";
 import { Loader } from "@/shared/ui";
 import { TOP_CITIES } from "../const/topCities";
+import { CitySelectHeader } from "./CitySelectHeader";
+import { cn } from "@/shared/lib/utils";
 
 interface QuerySelectCityProps {
   setAddress: (item: LocationState["locationData"]) => void;
   query: string;
   setQuery: Dispatch<SetStateAction<string>>;
   city: string;
+  className?: string;
+  handleCloseDialog: () => void;
 }
 
 export const QuerySelectCity = ({
@@ -20,6 +24,8 @@ export const QuerySelectCity = ({
   query,
   setQuery,
   city,
+  className,
+  handleCloseDialog,
 }: QuerySelectCityProps) => {
   const debouncedQuery = useDebounce(query, 400);
   const { data, isFetching } = useSettlementSearch(debouncedQuery);
@@ -51,13 +57,12 @@ export const QuerySelectCity = ({
   );
 
   return (
-    <div className="relative flex flex-col flex-1">
-      <FieldQuery
+    <div className={cn("relative flex flex-col flex-1", className)}>
+      <CitySelectHeader
         query={query}
-        onReset={handleResetQuery}
-        handleMutate={handleChangeCity}
-        placeholder="Укажите название города"
-        classNameWrapper="ml-4 mr-10 lg:mr-4"
+        handleChangeCity={handleChangeCity}
+        handleResetQuery={handleResetQuery}
+        handleCloseDialog={handleCloseDialog}
       />
       {isFetching ? (
         <div className="flex items-center justify-center h-full">

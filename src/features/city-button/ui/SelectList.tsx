@@ -1,7 +1,8 @@
+"use client";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui";
 import { Check } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type SelectItem = {
   value: string;
@@ -21,49 +22,47 @@ export const SelectList = <T extends SelectItem>({
   const [currentSelectIndex, setCurrentSelectIndex] = useState<number | null>(
     null
   );
-  const currentSelectRef = useRef<number | null>(null);
 
-  const handlePressKeydown = useCallback(
+  useEffect(() => {
+    setCurrentSelectIndex(null);
+  }, [data]);
+
+  const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!data?.length) return;
 
-      const selectListData = data || [];
-      const lastIndex = data?.length - 1;
-      const current = currentSelectRef.current;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
 
-      setCurrentSelectIndex((prev) => {
-        if (prev === null) {
-          currentSelectRef.current = 0;
-          return 0;
-        }
-        if (e.key === "ArrowDown") {
-          const index = prev >= lastIndex ? 0 : prev + 1;
-          currentSelectRef.current = index;
-          return index;
-        }
-        if (e.key === "ArrowUp") {
-          const index = prev <= 0 ? lastIndex : prev - 1;
-          currentSelectRef.current = index;
-          return index;
-        }
-        return prev;
-      });
+        setCurrentSelectIndex((prev) => {
+          if (prev === null) {
+            return e.key === "ArrowDown" ? 0 : data.length - 1;
+          }
+          if (e.key === "ArrowDown") {
+            return prev >= data.length - 1 ? 0 : prev + 1;
+          }
+          if (e.key === "ArrowUp") {
+            return prev <= 0 ? data.length - 1 : prev - 1;
+          }
+          return prev;
+        });
+      }
 
-      if (current === null) return;
-      if (e.key === "Enter") {
-        const item = selectListData[current];
-        handleSelected(item);
+      if (
+        e.key === "Enter" &&
+        currentSelectIndex !== null &&
+        data[currentSelectIndex]
+      ) {
+        handleSelected(data[currentSelectIndex]);
       }
     },
-    [data]
+    [data, currentSelectIndex, handleSelected]
   );
 
   useEffect(() => {
-    if (data?.length) {
-      document.addEventListener("keydown", handlePressKeydown);
-      return () => document.removeEventListener("keydown", handlePressKeydown);
-    }
-  }, [data, handlePressKeydown]);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <ul className="flex flex-col gap-2 " role="listbox">

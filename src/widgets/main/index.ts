@@ -1,1 +1,1 @@
-export { Main } from "./ui/Main";
+export { Hero } from "./ui/Main";

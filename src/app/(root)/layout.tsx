@@ -30,22 +30,22 @@ export async function fetchCityName(city: string) {
   } catch {}
 }
 
-export default async function CityLayout({
+export default async function MainLayout({
   children,
   params,
 }: {
   children: ReactNode;
   params: Promise<{ city: string }>;
 }) {
-  const { city: cityParams } = await params;
-  const response = await fetchCityName(cityParams);
+  // const { city: cityParams } = await params;
+  // const response = await fetchCityName(cityParams);
 
-  if (!response.suggestions.length) {
-    redirect("/moscow");
-  }
+  // if (!response.suggestions.length) {
+  //   // redirect("/moscow");
+  // }
 
-  const { data } = response.suggestions[0];
-  const city = data.city ? data.city : data.settlement_with_type;
+  // const { data } = response.suggestions[0];
+  // const city = data.city ? data.city : data.settlement_with_type;
 
   return (
     <>

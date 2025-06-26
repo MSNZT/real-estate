@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const LayoutFilters = () => {
   return (
     <div className="flex flex-col gap-10">

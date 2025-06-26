@@ -26,7 +26,9 @@ export async function getAllAdsPreview(
   return data;
 }
 
-export async function getAdsPreviewData(): Promise<AdsSectionType[]> {
+export async function getAdsPreviewData(
+  city: string
+): Promise<AdsSectionType[]> {
   const [rentShortApartment, rentShortHouse, sellApartment, sellHouse] =
     await Promise.allSettled([
       getAllAdsPreview({
@@ -34,36 +36,36 @@ export async function getAdsPreviewData(): Promise<AdsSectionType[]> {
         limit: 8,
         adType: "rent_short",
         propertyType: "apartment",
-        // location: {
-        //   city,
-        // },
+        location: {
+          city,
+        },
       }),
       getAllAdsPreview({
         page: 1,
         limit: 8,
         adType: "rent_short",
         propertyType: "house",
-        // location: {
-        //   city,
-        // },
+        location: {
+          city,
+        },
       }),
       getAllAdsPreview({
         page: 1,
         limit: 8,
         adType: "sell",
         propertyType: "apartment",
-        // location: {
-        //   city,
-        // },
+        location: {
+          city,
+        },
       }),
       getAllAdsPreview({
         page: 1,
         limit: 8,
         adType: "sell",
         propertyType: "house",
-        // location: {
-        //   city,
-        // },
+        location: {
+          city,
+        },
       }),
     ]);
 

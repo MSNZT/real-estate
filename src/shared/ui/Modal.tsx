@@ -1,27 +1,45 @@
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction, useEffect, useRef } from "react";
 import { Portal } from "./Portal";
 import { cn } from "../lib/utils";
+import { useClickOutSide } from "../lib/useClickOutside";
 
 interface ModalProps {
-  isLayout?: boolean;
   className?: string;
   children: ReactNode;
+  isOpen: boolean;
+  handleClose: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Modal = ({ isLayout = true, className, children }: ModalProps) => {
-  if (isLayout) {
-    return (
-      <Portal>
-        <div className={cn("fixed inset-0 bg-black/10", className)}>
-          {children}
-        </div>
-      </Portal>
-    );
-  }
+export const Modal = ({
+  isOpen,
+  className,
+  children,
+  handleClose,
+}: ModalProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useClickOutSide(containerRef, () => handleClose(false));
+
+  useEffect(() => {
+    document.body.classList.add("no-scroll");
+
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, []);
 
   return (
-    <Portal>
-      <div className={className}>{children}</div>
-    </Portal>
+    isOpen && (
+      <Portal>
+        <div
+          className={cn(
+            "fixed inset-0 z-50 flex items-stretch md:items-center justify-center bg-black/60"
+          )}
+        >
+          <div ref={containerRef} className={cn("", className)}>
+            {children}
+          </div>
+        </div>
+      </Portal>
+    )
   );
 };
