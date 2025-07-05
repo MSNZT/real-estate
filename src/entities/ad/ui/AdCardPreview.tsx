@@ -30,6 +30,7 @@ export const AdCardPreview = ({
       <Link href={`/offer/${item.id}`}>
         <AdCardImage mainPhoto={item.mainPhoto} />
       </Link>
+      <AdCardPrice price={price} period={period} />
       <div>
         <div className="flex items-center justify-between">
           <Link href={`/offer/${item.id}`}>
@@ -55,7 +56,6 @@ export const AdCardPreview = ({
         </div>
         <AdCardLocation location={item.location} />
       </div>
-      <AdCardPrice price={price} period={period} />
     </div>
   );
 };

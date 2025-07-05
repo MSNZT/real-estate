@@ -1,7 +1,6 @@
 "use client";
 import { useInView } from "react-intersection-observer";
 import { AdCardPreview } from "@/entities/ad";
-import { generateAdTitle } from "@/entities/ad/utils/generateAdTitle";
 import { getDealPeriod } from "@/entities/ad/utils/getDealPeriod";
 import { Container } from "@/shared/ui";
 import { useAds } from "../api/useAds";

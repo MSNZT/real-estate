@@ -14,8 +14,6 @@ export type Scalars = {
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
   JSON: { input: any; output: any; }
-  JSONObject: { input: any; output: any; }
-  Price: { input: any; output: any; }
 };
 
 export type Ad = {
@@ -37,6 +35,12 @@ export type Ad = {
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   views?: Maybe<Scalars['Float']['output']>;
+};
+
+export type AdCategoryFilterInput = {
+  adType: Scalars['String']['input'];
+  city: Scalars['String']['input'];
+  propertyType: Scalars['String']['input'];
 };
 
 export type AdContact = {
@@ -63,6 +67,18 @@ export enum AdTypes {
   RentShort = 'rent_short',
   Sell = 'sell'
 }
+
+export type AdsByCategories = {
+  __typename?: 'AdsByCategories';
+  adType: AdTypes;
+  ads: Array<Ad>;
+  propertyType: PropertyTypes;
+};
+
+export type AdsByCategoriesInput = {
+  categories: Array<AdCategoryFilterInput>;
+  limit: Scalars['Int']['input'];
+};
 
 export type AdsResponse = {
   __typename?: 'AdsResponse';
@@ -112,8 +128,8 @@ export type DealFilter = {
 };
 
 export type DealInput = {
-  fields: Scalars['JSONObject']['input'];
-  price: Scalars['Price']['input'];
+  fields: Scalars['JSON']['input'];
+  price: Scalars['Float']['input'];
 };
 
 export type FavoriteAd = {
@@ -198,7 +214,7 @@ export type PropertyDetailsFilter = {
 };
 
 export type PropertyDetailsInput = {
-  fields: Scalars['JSONObject']['input'];
+  fields: Scalars['JSON']['input'];
 };
 
 export enum PropertyTypes {
@@ -209,6 +225,7 @@ export enum PropertyTypes {
 export type Query = {
   __typename?: 'Query';
   getAdById?: Maybe<Ad>;
+  getAdsByCategories: Array<AdsByCategories>;
   getAdsByIds: Array<Ad>;
   getAllAds: AdsResponse;
   getFavoriteAds: Array<FavoriteAd>;
@@ -217,6 +234,11 @@ export type Query = {
 
 export type QueryGetAdByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetAdsByCategoriesArgs = {
+  data: AdsByCategoriesInput;
 };
 
 
@@ -237,6 +259,7 @@ export type SyncFavorites = {
 export type ToggleFavoriteResponse = {
   __typename?: 'ToggleFavoriteResponse';
   id: Scalars['ID']['output'];
+  status: Scalars['String']['output'];
 };
 
 export type UpdateAdInput = {
@@ -251,10 +274,10 @@ export type UpdateAdInput = {
 };
 
 export type UpdateDealInput = {
-  fields?: InputMaybe<Scalars['JSONObject']['input']>;
-  price?: InputMaybe<Scalars['Price']['input']>;
+  fields?: InputMaybe<Scalars['JSON']['input']>;
+  price?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdatePropertyDetailsInput = {
-  fields?: InputMaybe<Scalars['JSONObject']['input']>;
+  fields?: InputMaybe<Scalars['JSON']['input']>;
 };

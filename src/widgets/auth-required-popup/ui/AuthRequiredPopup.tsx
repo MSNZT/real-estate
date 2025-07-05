@@ -33,8 +33,6 @@ export const AuthRequiredPopup = ({
 }: AuthRequiredPopupProps) => {
   const pathname = usePathname();
 
-  console.log("redirect", redirect);
-
   const isDesktop = useClientMediaQuery({
     minWidth: "1024px",
   });

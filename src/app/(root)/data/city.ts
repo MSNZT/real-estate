@@ -1,9 +1,14 @@
 import { $api } from "@/shared/api/lib/axios";
 
-export async function computeCityByIp(ip: string) {
+export async function computeCityByIp(ip: string): Promise<string | boolean> {
   try {
-    return await $api.post<string | boolean>("location/compute-city", { ip });
+    const response = await $api.post<string | boolean>(
+      "location/compute-location",
+      { ip }
+    );
+    return response.data;
   } catch (error) {
     console.log(error);
+    return false;
   }
 }

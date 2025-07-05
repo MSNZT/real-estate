@@ -14,6 +14,10 @@ export function LoginForm() {
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
   const { login } = useAuthMutations();
   const { mutateAsync, isPending, error } = login;

@@ -7,7 +7,7 @@ export const AdCardPrice = ({
 }) => {
   return (
     <div className="flex justify-between items-center">
-      <span className="text-lg font-bold">
+      <span className="text-xl font-extrabold">
         {price} {period}
       </span>
     </div>

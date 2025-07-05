@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+  type AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from "axios";
 import { tokenService } from "../../services/token.service";
 import { authService } from "../../services/auth.service";
 import { API_URL } from "@/shared/config/environment";

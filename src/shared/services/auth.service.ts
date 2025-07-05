@@ -3,7 +3,6 @@ import { AUTH_ENDPOINTS } from "../api/endpoints";
 import { $api, $apiWithAuth } from "../api/lib/axios";
 import { tokenService } from "./token.service";
 import {
-  AuthResponse,
   EmailData,
   ForgetPasswordResponse,
   LoginData,

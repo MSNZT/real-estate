@@ -1,99 +1,107 @@
-import { Query, QueryGetAllAdsArgs } from "@/shared/config/apollo/generated";
-import { GET_ALL_ADS_PREVIEW } from "@/shared/config/apollo/requests/getAllAdsPreview";
+import {
+  AdTypes,
+  PropertyTypes,
+  Query,
+  QueryGetAdsByCategoriesArgs,
+} from "@/shared/config/apollo/generated";
+import { GET_ADS_BY_CATEGORIES } from "@/shared/config/apollo/requests/getAdsByCategories";
 import { getClient } from "@/shared/config/apollo/rsc-client";
 
 export type AdsSectionType = {
   title: string;
-  data: Query["getAllAds"]["ads"] | [];
-  href: string;
+  data: Query["getAllAds"]["ads"];
+  pageLink: string;
 };
 
-export async function getAllAdsPreview(
-  filters: QueryGetAllAdsArgs["filters"]
-): Promise<Query> {
+type CategoryKey = `${AdTypes}_${PropertyTypes}`;
+
+const AD_TYPE_TITLE: Record<AdTypes, string> = {
+  [AdTypes.RentLong]: "Арендовать",
+  [AdTypes.RentShort]: "Арендовать",
+  [AdTypes.Sell]: "Купить",
+} as const;
+
+const PROPERTY_TYPE_TITLE: Record<PropertyTypes, string> = {
+  [PropertyTypes.Apartment]: "квартиру",
+  [PropertyTypes.House]: "дом",
+} as const;
+
+const ADS_CATEGORY_LINK: Record<CategoryKey, string> = {
+  rent_long_apartment: "/rent/apartment",
+  rent_long_house: "/rent/house",
+  rent_short_apartment: "/rent/apartment",
+  rent_short_house: "/rent/house",
+  sell_house: "/sell/house",
+  sell_apartment: "/sell/apartment",
+} as const;
+
+export async function getAdsByCategories(city: string): Promise<Query> {
   const client = getClient();
 
-  const { data } = await client.query<Query, QueryGetAllAdsArgs>({
-    query: GET_ALL_ADS_PREVIEW,
-    variables: {
-      filters,
-    },
-  });
-
-  if (!data) {
-    throw new Error("Ошибка при получении объявлений");
+  try {
+    const { data } = await client.query<Query, QueryGetAdsByCategoriesArgs>({
+      query: GET_ADS_BY_CATEGORIES,
+      variables: {
+        data: {
+          categories: [
+            {
+              adType: "rent_short",
+              propertyType: "apartment",
+              city,
+            },
+            {
+              adType: "rent_long",
+              propertyType: "apartment",
+              city,
+            },
+            {
+              adType: "rent_short",
+              propertyType: "house",
+              city,
+            },
+            {
+              adType: "rent_long",
+              propertyType: "house",
+              city,
+            },
+            {
+              adType: "sell",
+              propertyType: "apartment",
+              city,
+            },
+            {
+              adType: "sell",
+              propertyType: "house",
+              city,
+            },
+          ],
+          limit: 6,
+        },
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
-  return data;
 }
 
 export async function getAdsPreviewData(
   city: string
 ): Promise<AdsSectionType[]> {
-  const [rentShortApartment, rentShortHouse, sellApartment, sellHouse] =
-    await Promise.allSettled([
-      getAllAdsPreview({
-        page: 1,
-        limit: 8,
-        adType: "rent_short",
-        propertyType: "apartment",
-        location: {
-          city,
-        },
-      }),
-      getAllAdsPreview({
-        page: 1,
-        limit: 8,
-        adType: "rent_short",
-        propertyType: "house",
-        location: {
-          city,
-        },
-      }),
-      getAllAdsPreview({
-        page: 1,
-        limit: 8,
-        adType: "sell",
-        propertyType: "apartment",
-        location: {
-          city,
-        },
-      }),
-      getAllAdsPreview({
-        page: 1,
-        limit: 8,
-        adType: "sell",
-        propertyType: "house",
-        location: {
-          city,
-        },
-      }),
-    ]);
+  console.log("cccc", city);
+  const data = await getAdsByCategories(city);
 
-  const getAdsData = (result: PromiseSettledResult<Query>) => {
-    if (result.status !== "fulfilled" || !result.value.getAllAds) return [];
-    return result.value.getAllAds.ads || [];
-  };
+  const categoryAds = data.getAdsByCategories
+    .filter((category) => category.ads.length > 0)
+    .map((category) => {
+      const categoryKey: CategoryKey = `${category.adType}_${category.propertyType}`;
+      return {
+        title: `${AD_TYPE_TITLE[category.adType]} ${PROPERTY_TYPE_TITLE[category.propertyType]}`,
+        pageLink: ADS_CATEGORY_LINK[categoryKey],
+        data: category.ads,
+      };
+    });
 
-  return [
-    {
-      title: "Снять квартиру",
-      data: getAdsData(rentShortApartment),
-      href: "/rent/apartment",
-    },
-    {
-      title: "Снять дом",
-      data: getAdsData(rentShortHouse),
-      href: "/rent/house",
-    },
-    {
-      title: "Купить квартиру",
-      data: getAdsData(sellApartment),
-      href: "/sell/apartment",
-    },
-    {
-      title: "Купить дом",
-      data: getAdsData(sellHouse),
-      href: "/sell/house",
-    },
-  ];
+  return categoryAds;
 }

@@ -15,7 +15,7 @@ interface BookingFormLeftProps {
   prepayment?: string;
   price: number;
   remainder?: string;
-  isLoading: boolean;
+  disabled: boolean;
   dates: DateRangeType;
   children: ReactNode;
 }
@@ -25,7 +25,7 @@ export const BookingFormLeft = ({
   totalPrice,
   prepayment,
   remainder,
-  isLoading,
+  disabled,
   dates,
   price,
   children,
@@ -53,10 +53,10 @@ export const BookingFormLeft = ({
         price={price}
       />
       <Button
-        disabled={isLoading}
+        disabled={disabled}
         className="flex items-center justify-center bg-primary"
       >
-        {isLoading ? (
+        {disabled ? (
           <LoaderCircle className="animate-spin" />
         ) : (
           <span className="text-white">Забронировать</span>

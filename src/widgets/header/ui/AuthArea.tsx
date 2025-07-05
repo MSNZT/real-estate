@@ -1,6 +1,4 @@
 "use client";
-
-import { User } from "@/entities/user";
 import { AvatarButton } from "@/features/avatar-button";
 import { Button, Loader } from "@/shared/ui";
 import { User as UserIcon } from "lucide-react";

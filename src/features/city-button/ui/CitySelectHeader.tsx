@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { FieldQuery } from "./FieldQuery";
+import { FieldQuery } from "../../../shared/ui/components/FieldQuery";
 import { Button } from "@/shared/ui";
 import { X } from "lucide-react";
 

@@ -1,16 +1,15 @@
 import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 import { FormFieldSection } from "../types/types";
-import { useLocationData } from "@/entities/user/store/useLocationData";
 import { useAuth } from "@/entities/user";
+import { useLocation } from "@/shared/hooks/use-location";
 
 export const getDefaultValues = (
   config: FormFieldSection,
   adType: AdTypes,
-  propertyType: PropertyTypes,
-  city: string | null
+  propertyType: PropertyTypes
 ) => {
   const { user } = useAuth();
-  const location = useLocationData((state) => state.locationData);
+  const location = useLocation((state) => state.location);
 
   const defaultValues: Record<string, any> = {
     features: [],

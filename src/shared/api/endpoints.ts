@@ -1,6 +1,7 @@
 const AUTH_BASE = "/auth";
 const OAUTH_BASE = "/oauth";
 const BOOKING_BASE = "/bookings";
+const LOCATION_BASE = "/location";
 
 export const AUTH_ENDPOINTS = {
   login: `${AUTH_BASE}/login`,
@@ -22,4 +23,10 @@ export const OAUTH_ENDPOINTS = {
 
 export const BOOKING_ENDPOINTS = {
   calculatePrice: `${BOOKING_BASE}/calculate`,
+};
+
+export const LOCATION_ENDPOINTS = {
+  addressByQuery: `${LOCATION_BASE}/address-by-query`,
+  settlementByQuery: `${LOCATION_BASE}/settlement-by-query`,
+  addressByCoords: `${LOCATION_BASE}/address-by-coords`,
 };

@@ -5,6 +5,8 @@ import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers/Providers";
 import { Navbar } from "@/widgets/navbar/ui/Navbar";
 import "./globals.css";
+import { LocationState } from "@/shared/hooks/use-location";
+import { cn } from "@/shared/lib/utils";
 
 const nunito = Nunito({
   subsets: ["cyrillic"],
@@ -29,12 +31,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const hasRefresh = !!(await cookies()).get("refreshToken");
+  const locationCookie = (await cookies()).get("location")?.value;
+  const location = JSON.parse(
+    locationCookie || "{}"
+  ) as LocationState["location"];
+  const theme = (await cookies()).get("theme")?.value;
 
   return (
     <html lang="ru">
-      <body className={nunito.className}>
+      <body className={cn(nunito.className, theme)}>
         <Toaster />
-        <Providers hasRefresh={hasRefresh}>
+        <Providers hasRefresh={hasRefresh} location={location}>
           {children}
           <Navbar />
         </Providers>

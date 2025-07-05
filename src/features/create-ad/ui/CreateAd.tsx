@@ -22,7 +22,7 @@ export const CreateAd = () => {
   };
 
   return (
-    <Container className="mt-4 md:mt-6">
+    <Container className="mt-4 md:mt-6 pb-[30px] md:pb-0">
       <div className="md:ml-20 max-w-[900px] mb-10">
         <h2 className="text-2xl font-semibold mb-4">Новое объявление</h2>
         <section className="mb-5">

@@ -1,75 +1,64 @@
-import { FieldQuery } from "@/features/city-button/ui/FieldQuery";
-import { SelectList } from "@/features/city-button/ui/SelectList";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { FieldQuery } from "@/shared/ui/components/FieldQuery";
+import { SelectList } from "@/shared/ui/components/SelectList";
 import { ChangeEvent, useCallback, useRef, useState } from "react";
-import { useDebounce } from "@/shared/lib/useDebounce";
-import { useLocationData } from "@/entities/user/store/useLocationData";
 import { useClickOutSide } from "@/shared/lib/useClickOutside";
-import { locationService } from "@/shared/services/location.service";
-import { Controller, ControllerRenderProps } from "react-hook-form";
+import {
+  Controller,
+  ControllerRenderProps,
+  useFormContext,
+} from "react-hook-form";
 import { formatAddress } from "../utils/formatAddress";
-import { AddressResponseType, SuggestionType } from "@/shared/types/location";
+import { useLocation } from "@/shared/hooks/use-location";
+import { useDebouncedCallback } from "@/shared/lib/useDebouncedCallback";
+import { useSuggestions } from "../api/useSuggenstions";
+import { AdFormData } from "../types/types";
+import { AddressDetails } from "@/shared/types/location";
 
 export const AddressFieldList = ({ errors }: { errors: string[] }) => {
   const [showAddressList, setShowAddressList] = useState(false);
   const addressListRef = useRef<HTMLDivElement | null>(null);
-  const { setData: setLocation, locationData } = useLocationData();
-
-  const { mutateAsync, data } = useMutation<
-    AddressResponseType,
-    AxiosError,
-    string
-  >({
-    mutationFn: (query) => locationService.getAddressByQuery(query),
-  });
-  const hasSuggestions = data?.suggestions && data.suggestions.length > 0;
+  const { setData: setLocation } = useLocation();
+  const { mutateAsync, data, hasSuggestions } = useSuggestions();
+  const { reset } = useFormContext<AdFormData>();
 
   const handleMutate = useCallback((value: string) => mutateAsync(value), []);
-  const handleMutateDebounced = useDebounce(handleMutate, 400);
+  const handleMutateDebounced = useDebouncedCallback(handleMutate, 400);
 
   const handleChangeCity = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      handleMutateDebounced(e.target.value);
-      setLocation({});
+    (e: ChangeEvent<HTMLInputElement>, field: ControllerRenderProps) => {
+      const target = e.target.value;
+      handleMutateDebounced(target);
+      field.onChange(target);
       if (!showAddressList) setShowAddressList(true);
     },
     [handleMutateDebounced]
   );
 
   const handleClickSelected = useCallback(
-    (item: SuggestionType, field: ControllerRenderProps) => {
-      const {
-        city,
-        settlement_with_type,
-        geo_lat,
-        geo_lon,
-        street_with_type,
-        house,
-      } = item.data;
+    (item: AddressDetails, field: ControllerRenderProps) => {
+      const { city, settlement, geo_lat, geo_lon, street, house } = item;
 
-      const settlement = city ? city : settlement_with_type;
-      const address = formatAddress(street_with_type, house);
+      const locality = city ? city : settlement;
+      const address = formatAddress(street, house);
 
       const locationData = {
-        city: settlement,
-        address: address || null,
+        city: settlement || "",
         latitude: Number(geo_lat),
         longitude: Number(geo_lon),
       };
 
-      field.onChange({
-        ...field.value,
-        ...locationData,
-      });
+      reset({ location: locationData });
+      field.onChange(address);
       setLocation(locationData);
       setShowAddressList(false);
     },
     []
   );
 
-  const handleResetQuery = useCallback(() => {
-    setLocation({ address: null });
+  const handleResetQuery = useCallback((field: ControllerRenderProps) => {
+    // setLocation({ address: null });
+    field.onChange("");
+    setShowAddressList(false);
   }, []);
 
   const handleFocusField = () => setShowAddressList(true);
@@ -84,9 +73,9 @@ export const AddressFieldList = ({ errors }: { errors: string[] }) => {
             <div onFocus={handleFocusField}>
               <FieldQuery
                 // query={addressField || ""}
-                query={locationData.address || ""}
-                onReset={handleResetQuery}
-                handleMutate={handleChangeCity}
+                query={field.value || ""}
+                onReset={() => handleResetQuery(field)}
+                handleMutate={(e) => handleChangeCity(e, field)}
                 placeholder="Введите адрес или укажите на карте"
                 classNameWrapper="mb-2"
               />
@@ -101,15 +90,18 @@ export const AddressFieldList = ({ errors }: { errors: string[] }) => {
               <div className="absolute top-10 inset-x-0 z-20 bg-white shadow">
                 <SelectList
                   // query={query}
+                  checked={(item) =>
+                    (item.city || item.settlement) === field.value
+                  }
                   handleSelected={(item) => handleClickSelected(item, field)}
-                  data={data.suggestions}
+                  data={data}
                 />
               </div>
             )}
           </div>
         );
       }}
-      name="location"
+      name="location.address"
     />
   );
 };

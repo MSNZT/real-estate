@@ -1,3 +1,4 @@
+import { cn } from "@/shared/lib/utils";
 import { addDays, startOfDay } from "date-fns";
 import { memo, useState } from "react";
 
@@ -27,9 +28,18 @@ export const BookingDayContent = memo(
           normalizedDate.getTime() < minNightsEndDate.getTime())) &&
       !endDate;
 
+    const isMinNights =
+      !endDate &&
+      normalizedStartDate &&
+      normalizedDate.getTime() > normalizedStartDate.getTime() &&
+      minNightsEndDate &&
+      normalizedDate.getTime() < minNightsEndDate.getTime();
+
     return (
       <div
-        className="day-container"
+        className={cn("day-container", {
+          hint: isMinNights,
+        })}
         onMouseEnter={() => setHoveredDate(date)}
         onMouseLeave={() => setHoveredDate(null)}
       >

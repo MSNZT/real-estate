@@ -1,5 +1,5 @@
 "use client";
-import { type HTMLInputTypeAttribute, useState } from "react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Button, Icon, Input } from "@/shared/ui";
 import {

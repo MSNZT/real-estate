@@ -8,7 +8,6 @@ import { getDefaultValues } from "../utils/getDefaultValues";
 import { generateAdTitle } from "@/entities/ad/utils/generateAdTitle";
 import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 import { AddressBlock } from "./AddressBlock";
-import { useLocationData } from "@/entities/user/store/useLocationData";
 import { useMutation } from "@apollo/client";
 import { CREATE_AD } from "@/shared/config/apollo/requests/createAd";
 import toast from "react-hot-toast";
@@ -25,10 +24,9 @@ export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
       toast.success("Объявление успешно создано");
     },
   });
-  const city = useLocationData((state) => state.locationData.city);
   const methods = useForm<AdFormData>({
     resolver: zodResolver(createDynamicSchema(propertyType, adType)),
-    defaultValues: getDefaultValues(formConfig, adType, propertyType, city),
+    defaultValues: getDefaultValues(formConfig, adType, propertyType),
     mode: "onSubmit",
   });
 

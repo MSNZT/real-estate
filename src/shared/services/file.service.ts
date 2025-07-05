@@ -25,7 +25,7 @@ export class FileService {
         `files/remove/${fileName}`
       );
       return data;
-    } catch (error) {
+    } catch {
       throw new Error("Ошибка при удалении изображения");
     }
   }

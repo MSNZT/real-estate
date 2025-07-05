@@ -27,8 +27,8 @@ export const loginSchema = z
 export const phoneSchema = z.object({
   phone: z
     .string({ message: "Укажите номер телефона" })
-    .min(18, { message: "Неверно указан номер телефона" })
-    .max(18, { message: "Неверно указан номер телефона" }),
+    .min(11, { message: "Неверно указан номер телефона" })
+    .max(11, { message: "Неверно указан номер телефона" }),
 });
 
 export const registerSchema = z

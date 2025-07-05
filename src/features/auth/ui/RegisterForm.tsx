@@ -3,7 +3,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button, FieldInput, FieldInputPassword } from "@/shared/ui";
-import type { RegisterFormValues } from "../types/auth";
+import type { RegisterData } from "../types/auth";
 import { useAuthMutations } from "../api/useAuthMutations";
 import { registerSchema } from "../schema/schema";
 import { PhoneInputField } from "./PhoneInputField";
@@ -14,6 +14,13 @@ export const RegisterForm = () => {
   const methods = useForm({
     resolver: zodResolver(registerSchema),
     mode: "onChange",
+    defaultValues: {
+      email: "",
+      name: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const {
@@ -24,7 +31,7 @@ export const RegisterForm = () => {
   const { isPending, mutateAsync, error } = register;
   const { handleRedirect } = useRedirectTo();
 
-  async function handleRegister(dto: RegisterFormValues) {
+  async function handleRegister(dto: RegisterData) {
     try {
       const { confirmPassword, ...otherDto } = dto;
       const registerData = {

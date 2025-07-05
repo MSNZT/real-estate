@@ -1,6 +1,9 @@
 import { Ad, PropertyTypes } from "@/shared/config/apollo/generated/types";
 
-export function generateAdTitle(propertyType: PropertyTypes, data: Ad): string {
+export function generateAdTitle(
+  propertyType: PropertyTypes,
+  data: Pick<Ad, "propertyDetails">
+): string {
   switch (propertyType) {
     case PropertyTypes.House: {
       const fields = data.propertyDetails.fields;

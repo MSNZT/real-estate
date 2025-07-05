@@ -10,7 +10,7 @@ import {
 import { User } from "@/entities/user";
 
 export type LoginData = z.infer<typeof loginSchema>;
-export type RegisterFormValues = z.infer<typeof registerSchema>;
+export type RegisterData = z.infer<typeof registerSchema>;
 export type PhoneData = z.infer<typeof phoneSchema>;
 export type EmailData = z.infer<typeof emailSchema>;
 export type CodeData = z.infer<typeof codeSchema>;

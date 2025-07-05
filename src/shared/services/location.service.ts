@@ -1,73 +1,52 @@
-import axios from "axios";
+import { LOCATION_ENDPOINTS } from "../api/endpoints";
+import { $api } from "../api/lib/axios";
+import { AddressDetails } from "../types/location";
 
 class LocationService {
-  async getSettlementByQuery(query: string) {
+  async getSettlementByQuery(
+    query: string
+  ): Promise<AddressDetails[] | undefined> {
     try {
-      const { data } = await axios.post(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address`,
-        {
-          query,
-          locations: [{ country: "Россия" }],
-          from_bound: { value: "city" },
-          to_bound: { value: "settlement" },
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token 5f9e2a2b636f34bb0caf2c1a48ec525ccad0de92`,
-          },
-        }
-      );
+      const { data } = await $api.post(LOCATION_ENDPOINTS.settlementByQuery, {
+        query,
+      });
       if (data) return data;
-      throw new Error("По вашему запросу ничего не найдено");
     } catch (e) {
       console.log(e);
+      return [];
     }
   }
 
-  async getAddressByQuery(query: string) {
+  async getAddressByQuery(
+    query: string
+  ): Promise<AddressDetails[] | undefined> {
     try {
-      const { data } = await axios.post(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address`,
+      const { data } = await $api.post<AddressDetails[]>(
+        LOCATION_ENDPOINTS.addressByQuery,
         {
           query,
-          locations: [{ country: "Россия" }],
-          // from_bound: { value: "city" },
-          // to_bound: { value: "settlement" },
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token 4050077a7049b96f5224fcdfff815e84218026ad`,
-          },
         }
       );
       if (data) return data;
-      throw new Error("По вашему запросу ничего не найдено");
     } catch (e) {
       console.log(e);
+      return [];
     }
   }
 
-  async getAddressByCoords(latitude: number, longitude: number) {
+  async getAddressByCoords(
+    latitude: number,
+    longitude: number
+  ): Promise<AddressDetails[] | undefined> {
     try {
-      const { data } = await axios.post(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address`,
-        {
-          lat: latitude,
-          lon: longitude,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token 4050077a7049b96f5224fcdfff815e84218026ad`,
-          },
-        }
-      );
+      const { data } = await $api.post(LOCATION_ENDPOINTS.addressByCoords, {
+        lat: latitude,
+        lon: longitude,
+      });
       if (data) return data;
-      throw new Error("По вашему запросу ничего не найдено");
     } catch (e) {
       console.log(e);
+      return [];
     }
   }
 }

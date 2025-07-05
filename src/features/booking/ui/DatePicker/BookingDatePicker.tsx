@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import DatePicker from "react-datepicker";
 import { ru } from "date-fns/locale";
 import { useDates } from "../../hooks/useDates";
@@ -21,7 +21,15 @@ import { cn } from "@/shared/lib/utils";
 interface BookingDatePickerProps {
   adId: string;
   isMobile: boolean;
-  children: (startDate: Date | null, endDate: Date | null) => ReactNode;
+  children: ({
+    startDate,
+    endDate,
+    minNights,
+  }: {
+    startDate: Date | null;
+    endDate: Date | null;
+    minNights?: number | null;
+  }) => ReactNode;
   datesRange: DateRangeType;
   handleDateChange: (newDates: DateRangeType) => void;
 }
@@ -34,30 +42,25 @@ export const BookingDatePicker = ({
   handleDateChange,
 }: BookingDatePickerProps) => {
   const [startDate, endDate] = datesRange;
-  const { isDateEnabled, disabledDates, visuallyDisabledDates } = useDates(
+  const { isDateEnabled, disabledDates, minNights } = useDates(
     adId,
     startDate,
     endDate
   );
+  const [min, setMin] = useState<number | null>(null);
 
   const handleDateChangeCustom = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     if (start && end) {
-      if (addDays(start, 2) > end) {
+      if (addDays(start, minNights) > end) {
+        setMin(minNights);
         return;
+      } else {
+        setMin(null);
       }
     }
     handleDateChange(dates);
   };
-
-  // const dayClassName = (date: Date) =>
-  //   getDayClassName({
-  //     date,
-  //     startDate,
-  //     endDate,
-  //     hoveredDate,
-  //     minNights: 2,
-  //   });
 
   const getSelectedDays = (date: Date) => {
     if (date.getTime() === startDate?.getTime()) {
@@ -93,24 +96,9 @@ export const BookingDatePicker = ({
         monthEnd,
         outsideMonth
       ),
-      getSelectedDays(date),
-      getHintMinNightsDay(date)
+      getSelectedDays(date)
     );
   };
-
-  function getHintMinNightsDay(date: Date) {
-    const normalizedDate = startOfDay(date);
-    const normalizedStartDate = startDate ? startOfDay(startDate) : null;
-    const minNightsEndDate =
-      normalizedStartDate && addDays(normalizedStartDate, 2);
-    const isInMinNights =
-      !endDate &&
-      normalizedStartDate &&
-      normalizedDate.getTime() > normalizedStartDate.getTime() &&
-      minNightsEndDate &&
-      normalizedDate.getTime() < minNightsEndDate.getTime();
-    return isInMinNights ? "hint" : "";
-  }
 
   function getDisabledDayClassName(
     date: Date,
@@ -187,32 +175,18 @@ export const BookingDatePicker = ({
       onChange={handleDateChangeCustom}
       filterDate={isDateEnabled}
       dayClassName={dayClassName}
-      // dayClassName={(date) => {
-      //   const normalizedDate = startOfDay(date);
-      //   const normalizedStartDate = startDate ? startOfDay(startDate) : null;
-      //   const minNightsEndDate =
-      //     normalizedStartDate && addDays(normalizedStartDate, 2);
-      //   const isInMinNights =
-      //     !endDate &&
-      //     normalizedStartDate &&
-      //     normalizedDate.getTime() > normalizedStartDate.getTime() &&
-      //     minNightsEndDate &&
-      //     normalizedDate.getTime() < minNightsEndDate.getTime();
-      //   return isInMinNights ? "hint" : "";
-      // }}
-      // dayClassName={dayClassName}
       renderDayContents={
-        isMobile
-          ? undefined
-          : (day, date) => (
+        !isMobile
+          ? (day, date) => (
               <BookingDayContent
                 day={day}
                 date={date}
-                minNights={2}
+                minNights={minNights}
                 endDate={endDate}
                 startDate={startDate}
               />
             )
+          : undefined
       }
       renderCustomHeader={
         isMobile
@@ -225,7 +199,7 @@ export const BookingDatePicker = ({
       disabledKeyboardNavigation
       inline
     >
-      {children(startDate, endDate)}
+      {children({ startDate, endDate, minNights: min })}
     </DatePicker>
   );
 };

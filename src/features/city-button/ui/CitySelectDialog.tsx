@@ -8,19 +8,18 @@ import {
   DialogTrigger,
 } from "@/shared/ui/dialog";
 import { useState } from "react";
-import { useLocationData } from "@/entities/user/store/useLocationData";
 import { QuerySelectCity } from "./QuerySelectCity";
 import { ChevronDown } from "lucide-react";
+import { LocationStateType } from "@/shared/hooks/use-location";
 
 interface CitySelectDialog {
-  onSelect: (city: string) => void;
+  onSelect?: (city: LocationStateType) => void;
   city: string;
 }
 
 export const CitySelectDialog = ({ city, onSelect }: CitySelectDialog) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const { locationData, setData } = useLocationData();
 
   const handleCloseDialog = () => {
     setIsOpen(false);
@@ -39,7 +38,7 @@ export const CitySelectDialog = ({ city, onSelect }: CitySelectDialog) => {
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="flex flex-col gap-2 w-full h-full md:top-[40%] md:max-w-[600px] md:max-h-[560px] px-0 bg-white md:rounded-xl"
+        className="flex flex-col gap-2 w-full h-full max-w-full md:top-[40%] md:max-w-[600px] md:max-h-[560px] px-0 bg-white md:rounded-xl"
       >
         <DialogTitle className="visually-hidden">Выбор города</DialogTitle>
         <DialogDescription className="visually-hidden">
@@ -49,12 +48,11 @@ export const CitySelectDialog = ({ city, onSelect }: CitySelectDialog) => {
           query={query}
           handleCloseDialog={handleCloseDialog}
           setQuery={setQuery}
-          setAddress={(data) => {
-            setData(data);
+          setAddress={(location) => {
+            onSelect?.(location);
             setIsOpen(false);
-            onSelect(data.city);
           }}
-          city={locationData.city}
+          city={city}
         />
       </DialogContent>
     </Dialog>

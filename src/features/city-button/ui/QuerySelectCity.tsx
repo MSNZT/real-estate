@@ -1,17 +1,16 @@
 import { ChangeEvent, Dispatch, SetStateAction, useCallback } from "react";
-import { FieldQuery } from "./FieldQuery";
 import { useDebounce } from "@/shared/lib/useDebounce";
-import { LocationState } from "@/entities/user/store/useLocationData";
-import { SelectList } from "./SelectList";
-import { DataSuggestionType, SuggestionType } from "@/shared/types/location";
+import { SelectList } from "../../../shared/ui/components/SelectList";
 import { useSettlementSearch } from "../hooks/useSettlementSearch";
 import { Loader } from "@/shared/ui";
 import { TOP_CITIES } from "../const/topCities";
 import { CitySelectHeader } from "./CitySelectHeader";
 import { cn } from "@/shared/lib/utils";
+import { LocationStateType } from "@/shared/hooks/use-location";
+import { AddressDetails } from "@/shared/types/location";
 
 interface QuerySelectCityProps {
-  setAddress: (item: LocationState["locationData"]) => void;
+  setAddress: (item: LocationStateType) => void;
   query: string;
   setQuery: Dispatch<SetStateAction<string>>;
   city: string;
@@ -29,7 +28,7 @@ export const QuerySelectCity = ({
 }: QuerySelectCityProps) => {
   const debouncedQuery = useDebounce(query, 400);
   const { data, isFetching } = useSettlementSearch(debouncedQuery);
-  const cityList = !debouncedQuery ? TOP_CITIES : data?.suggestions;
+  const cityList = !debouncedQuery ? TOP_CITIES : data;
 
   const handleChangeCity = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -39,22 +38,15 @@ export const QuerySelectCity = ({
     setQuery("");
   }, []);
 
-  const handleClickSelected = useCallback(
-    (
-      item:
-        | SuggestionType
-        | { value: string; data: Partial<DataSuggestionType> }
-    ) => {
-      const { city, settlement_with_type, geo_lat, geo_lon } = item.data;
-      setAddress({
-        city: (city ? city : settlement_with_type) as string,
-        latitude: Number(geo_lat),
-        longitude: Number(geo_lon),
-        address: null,
-      });
-    },
-    []
-  );
+  const handleClickSelected = useCallback((item: AddressDetails) => {
+    const { city, settlement, geo_lat, geo_lon } = item;
+    setAddress({
+      city: (city ? city : settlement) as string,
+      latitude: Number(geo_lat),
+      longitude: Number(geo_lon),
+      address: null,
+    });
+  }, []);
 
   return (
     <div className={cn("relative flex flex-col flex-1", className)}>

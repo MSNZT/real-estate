@@ -1,11 +1,12 @@
 import { gql } from "@apollo/client";
 
-export const GET_ALL_ADS_PREVIEW = gql`
-  query GetAllAds($filters: AdFilterInput) {
-    getAllAds(filters: $filters) {
+export const GET_ADS_BY_CATEGORIES = gql`
+  query GetAdsByCategories($data: AdsByCategoriesInput!) {
+    getAdsByCategories(data: $data) {
+      adType
+      propertyType
       ads {
         id
-        description
         adType
         propertyType
         title
@@ -19,9 +20,6 @@ export const GET_ALL_ADS_PREVIEW = gql`
         owner {
           id
           name
-        }
-        propertyDetails {
-          fields
         }
         deal {
           price

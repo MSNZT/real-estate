@@ -9,7 +9,7 @@ export const OAuthValidateGate = ({ children }: { children: ReactNode }) => {
   const token = params.get("token");
 
   if (!token) {
-    router.push("/");
+    router.push("/auth/login");
     return;
   }
 
@@ -23,7 +23,7 @@ export const OAuthValidateGate = ({ children }: { children: ReactNode }) => {
     } else {
       router.push("/");
     }
-  }, []);
+  }, [token]);
 
   if (isPending) {
     return (

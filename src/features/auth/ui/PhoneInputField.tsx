@@ -9,10 +9,15 @@ import { PhoneInput } from "@/shared/ui";
 
 interface PhoneInputFieldProps {
   name: string;
-  label: string;
+  label?: string;
+  defaultValue?: string;
 }
 
-export const PhoneInputField = ({ name, label }: PhoneInputFieldProps) => {
+export const PhoneInputField = ({
+  name,
+  label,
+  defaultValue,
+}: PhoneInputFieldProps) => {
   return (
     <FormField
       name={name}
@@ -22,13 +27,11 @@ export const PhoneInputField = ({ name, label }: PhoneInputFieldProps) => {
           <div>
             <FormControl>
               <PhoneInput
-                value={field.value || "+79"}
+                value={field.value || defaultValue || ""}
                 onChange={field.onChange}
                 placeholder="+7 (912) 345-67-89"
-                prefix="+7"
-                maxLength={11}
                 className="border-gray-300"
-                type="tel"
+                mask="+{7} (000) 000-00-00"
               />
             </FormControl>
           </div>

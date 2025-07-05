@@ -1,3 +1,4 @@
+"use client";
 import { Ad } from "@/shared/config/apollo/generated";
 import {
   Armchair,
@@ -7,7 +8,7 @@ import {
   Trash,
   Tv,
 } from "lucide-react";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { FaFire, FaWifi } from "react-icons/fa";
 import {
   TbAirConditioning,
@@ -19,6 +20,8 @@ import { GiGate, GiLeadPipe, GiWashingMachine } from "react-icons/gi";
 import { LuWashingMachine } from "react-icons/lu";
 import { RiBilliardsFill } from "react-icons/ri";
 import { MdOutlinePool } from "react-icons/md";
+import { Calendar } from "@/shared/ui/calendar";
+import { DateRange } from "react-day-picker";
 
 const featuresDictionary: Record<
   string,
@@ -59,22 +62,117 @@ const featuresDictionary: Record<
 };
 
 export const FeaturesBlock = ({ features }: { features: Ad["features"] }) => {
+  const [range, setRange] = useState<DateRange | undefined>();
+  const [hoveredDate, setHoveredDate] = useState<Date | undefined>();
+
+  // Определяем диапазон, который нужно показать (с учётом "preview")
+  const isSingleDaySelected =
+    range?.from && range?.to && range.from.getTime() === range.to.getTime();
+
+  // Для подсветки диапазона при наведении
+  const getDisplayRange = (): DateRange | undefined => {
+    if (
+      range?.from &&
+      isSingleDaySelected &&
+      hoveredDate &&
+      hoveredDate.getTime() !== range.from.getTime()
+    ) {
+      return { from: range.from, to: hoveredDate };
+    }
+    return range?.from && range?.to ? range : undefined;
+  };
+
+  // Корректный обработчик выбора диапазона
+  const handleSelect: SelectRangeEventHandler = (selectedRange) => {
+    if (!selectedRange) {
+      setRange(undefined);
+      setHoveredDate(undefined);
+      return;
+    }
+
+    // Если уже выбран диапазон (две разные даты), следующий клик начинает новый диапазон
+    if (
+      range?.from &&
+      range?.to &&
+      range.from.getTime() !== range.to.getTime()
+    ) {
+      setRange({ from: selectedRange.from, to: selectedRange.from });
+      setHoveredDate(undefined);
+      return;
+    }
+    setRange(selectedRange);
+    setHoveredDate(undefined);
+  };
+
+  // Наведение мыши для "preview"
+  const handleDayMouseEnter = (date: Date) => {
+    if (isSingleDaySelected) {
+      setHoveredDate(date);
+    }
+  };
+
+  const handleDayMouseLeave = () => {
+    setHoveredDate(undefined);
+  };
+
+  // Сброс диапазона при клике после выбора (можешь не использовать, если не нужен полный сброс)
+  const handleDayClick = (date: Date, modifiers: any, e: React.MouseEvent) => {
+    if (
+      range?.from &&
+      range?.to &&
+      range.from.getTime() !== range.to.getTime()
+    ) {
+      setRange({ from: date, to: date });
+      setHoveredDate(undefined);
+    }
+  };
   return (
-    <div className="max-w-[744px]">
-      <p className="font-bold text-2xl mb-2">Особенности</p>
-      <ul className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {features.map(
-          (feature) =>
-            featuresDictionary[feature] && (
-              <li key={feature} className="flex items-center gap-2">
-                {featuresDictionary[feature].icon}
-                <span className="text-md">
-                  {featuresDictionary[feature].text}
-                </span>
-              </li>
-            )
-        )}
-      </ul>
-    </div>
+    <>
+      <div className="max-w-[744px]">
+        <p className="font-bold text-2xl mb-2">Особенности</p>
+        <ul className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {features.map(
+            (feature) =>
+              featuresDictionary[feature] && (
+                <li key={feature} className="flex items-center gap-2">
+                  {featuresDictionary[feature].icon}
+                  <span className="text-md">
+                    {featuresDictionary[feature].text}
+                  </span>
+                </li>
+              )
+          )}
+        </ul>
+      </div>
+      {/* <Calendar
+        mode="range"
+        defaultMonth={new Date()}
+        numberOfMonths={2}
+        showOutsideDays={false}
+        className="rounded-lg border shadow-sm"
+        disabled={{ before: new Date(), dayOfWeek: "05-07-2025" }}
+        excludeDisabled
+      /> */}
+      <Calendar
+        mode="range"
+        selected={range}
+        defaultMonth={new Date()}
+        numberOfMonths={2}
+        showOutsideDays={false}
+        className="rounded-lg border shadow-sm"
+        disabled={{ before: new Date() }}
+        excludeDisabled
+        onSelect={handleSelect}
+        modifiers={{
+          range_preview: getDisplayRange(),
+        }}
+        modifiersClassNames={{
+          range_preview: "bg-accent/40", // Твой класс для preview-диапазона (можешь поменять)
+        }}
+        onDayMouseEnter={handleDayMouseEnter}
+        onDayMouseLeave={handleDayMouseLeave}
+        onDayClick={handleDayClick}
+      />
+    </>
   );
 };

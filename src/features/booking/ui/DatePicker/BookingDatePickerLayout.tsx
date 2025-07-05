@@ -78,22 +78,30 @@ export const BookingDatePickerLayout = ({
             datesRange={datesRange}
             handleDateChange={handleDateChange}
           >
-            {(startDate, endDate) =>
-              startDate &&
-              endDate && (
-                <div className="fixed bottom-7 inset-x-4">
-                  <Button
-                    onClick={() => {
-                      handleApply(startDate, endDate);
-                      handleClose();
-                    }}
-                    className="w-full justify-center"
-                  >
-                    <span className="text-white">Применить</span>
-                  </Button>
-                </div>
-              )
-            }
+            {({ startDate, endDate, minNights }) => (
+              <>
+                {startDate && endDate && (
+                  <div className="fixed bottom-7 inset-x-4">
+                    <Button
+                      onClick={() => {
+                        handleApply(startDate, endDate);
+                        handleClose();
+                      }}
+                      className="w-full justify-center"
+                    >
+                      <span className="text-white">Применить</span>
+                    </Button>
+                  </div>
+                )}
+                {minNights && (
+                  <div className="fixed bottom-7 inset-x-4 bg-black h-9 rounded-lg flex items-center">
+                    <p className="w-full justify-center text-center align-middle text-white">
+                      Минимальное количество ночей - <span>{minNights}</span>
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
           </BookingDatePicker>
         </DrawerContent>
       </Drawer>
@@ -109,13 +117,13 @@ export const BookingDatePickerLayout = ({
           datesRange={datesRange}
           handleDateChange={handleDateChange}
         >
-          {(startDate, endDate) => (
+          {({ startDate, endDate }) => (
             <div className="flex items-center gap-2">
               <Button
                 onClick={handleDateReset}
-                className="w-full justify-center bg-black hover:bg-black/80"
+                className="w-full justify-center bg-gray-200 hover:bg-gray-300 rounded-lg"
               >
-                <span className="text-white">Очистить</span>
+                <span className="text-black">Очистить</span>
               </Button>
               {startDate && endDate && (
                 <Button
@@ -123,7 +131,7 @@ export const BookingDatePickerLayout = ({
                     handleApply(startDate, endDate);
                     handleClose();
                   }}
-                  className="w-full justify-center"
+                  className="w-full justify-center rounded-lg"
                 >
                   <span className="text-white">Применить</span>
                 </Button>

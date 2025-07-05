@@ -1,3 +1,4 @@
+"use client";
 import { AdTypes, Deal } from "@/shared/config/apollo/generated";
 import { Fragment, JSX } from "react";
 import { BargainItem } from "./deal-block/BargainItem";
@@ -29,7 +30,6 @@ export const DealBlock = ({ deal, adType }: DealBlockProps) => {
           <Fragment key={key}>{obj[key]({ value })}</Fragment>
         ))}
       </ul>
-
       {adType !== AdTypes.RentShort && (
         <>
           <Separator />
