@@ -26,6 +26,7 @@ export const CheckboxField = ({ dynamicField, error }: CheckboxFieldProps) => {
 
   return (
     <Controller
+      name={dynamicField.name}
       render={({ field }) => (
         <div className="flex flex-col gap-2">
           <FieldLabel label={dynamicField.label} />
@@ -54,7 +55,6 @@ export const CheckboxField = ({ dynamicField, error }: CheckboxFieldProps) => {
           {error && <p className="text-red-500 text-sm">{error.message}</p>}
         </div>
       )}
-      name={dynamicField.name}
     />
   );
 };

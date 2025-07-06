@@ -42,7 +42,7 @@ export const AddressFieldList = ({ errors }: { errors: string[] }) => {
       const address = formatAddress(street, house);
 
       const locationData = {
-        city: settlement || "",
+        city: locality || "",
         latitude: Number(geo_lat),
         longitude: Number(geo_lon),
       };

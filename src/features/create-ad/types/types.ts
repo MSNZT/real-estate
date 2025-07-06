@@ -12,14 +12,14 @@ export type EstateConfigType = {
   };
 };
 
+export type FormFieldSection = {
+  section: FieldSection[];
+};
+
 export type FieldSection = {
   label: string;
   fields: FormField[];
   description?: string;
-};
-
-export type FormFieldSection = {
-  section: FieldSection[];
 };
 
 export type FormItemOption = {

@@ -35,6 +35,7 @@ export const FileUploadForm = ({ dynamicField, error }: FileUploadForm) => {
 
   return (
     <Controller
+      name={dynamicField.name}
       render={({ field }) => {
         const photos = field.value as AdFormData["photos"];
         return (
@@ -77,7 +78,6 @@ export const FileUploadForm = ({ dynamicField, error }: FileUploadForm) => {
           </>
         );
       }}
-      name={dynamicField.name}
     />
   );
 };

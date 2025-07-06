@@ -11,6 +11,7 @@ interface TextAreaFieldProps {
 export const TextAreaField = ({ dynamicField, error }: TextAreaFieldProps) => {
   return (
     <Controller
+      name={dynamicField.name}
       render={({ field }) => (
         <div className="flex items-center">
           <FieldLabel label={dynamicField.label} />
@@ -35,7 +36,6 @@ export const TextAreaField = ({ dynamicField, error }: TextAreaFieldProps) => {
           </div>
         </div>
       )}
-      name={dynamicField.name}
     />
   );
 };

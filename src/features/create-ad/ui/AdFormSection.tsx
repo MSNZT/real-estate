@@ -3,9 +3,10 @@ import { DynamicFormField } from "./DynamicFormField";
 
 interface AdFormSectionProps {
   section: FieldSection;
+  stepAdForm: number;
 }
 
-export const AdFormSection = ({ section }: AdFormSectionProps) => {
+export const AdFormSection = ({ section, stepAdForm }: AdFormSectionProps) => {
   return (
     <section>
       <h3 className="text-xl font-semibold mb-2">{section.label}</h3>

@@ -20,9 +20,10 @@ export const getDefaultValues = (
       ...location,
     },
     contact: {
-      name: user?.name,
-      phone: user?.phone,
-      email: user?.email,
+      name: user?.name ?? "",
+      phone: user?.phone ?? "",
+      email: user?.email ?? "",
+      communication: "",
     },
   };
 

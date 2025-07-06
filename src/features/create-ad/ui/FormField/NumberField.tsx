@@ -1,5 +1,5 @@
-import { Controller, FieldErrors } from "react-hook-form";
-import { AdFormData, FormField } from "../../types/types";
+import { Controller } from "react-hook-form";
+import { FormField } from "../../types/types";
 import { Input } from "@/shared/ui";
 import { FieldLabel } from "./FieldLabel";
 import { FieldError } from "../DynamicFormField";
@@ -13,12 +13,13 @@ interface NumberFieldProps {
 export const NumberField = ({ dynamicField, error }: NumberFieldProps) => {
   return (
     <Controller
+      name={dynamicField.name}
       render={({ field }) => (
         <div className={dynamicField.label ? "flex flex-col sm:flex-row" : ""}>
           <FieldLabel label={dynamicField.label} />
           <div>
             <Input
-              value={field.value}
+              value={field.value ?? ""}
               onChange={(e) => field.onChange(e.target.valueAsNumber)}
               type={dynamicField.type}
               placeholder={dynamicField.placeholder}
@@ -34,7 +35,6 @@ export const NumberField = ({ dynamicField, error }: NumberFieldProps) => {
           </div>
         </div>
       )}
-      name={dynamicField.name}
     />
   );
 };

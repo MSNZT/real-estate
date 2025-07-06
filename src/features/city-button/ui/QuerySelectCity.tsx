@@ -40,6 +40,7 @@ export const QuerySelectCity = ({
 
   const handleClickSelected = useCallback((item: AddressDetails) => {
     const { city, settlement, geo_lat, geo_lon } = item;
+    console.log(item);
     setAddress({
       city: (city ? city : settlement) as string,
       latitude: Number(geo_lat),
@@ -64,9 +65,9 @@ export const QuerySelectCity = ({
         <div className="mt-4">
           <SelectList
             handleSelected={(item) => handleClickSelected(item)}
-            checked={({ data }) =>
-              (data.city || data.settlement_with_type) === city
-            }
+            // checked={(data) =>
+            //   (data.city || d) === city
+            // }
             data={cityList}
           />
         </div>

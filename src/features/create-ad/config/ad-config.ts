@@ -1,6 +1,5 @@
 import { type EstateConfigType } from "../types/types";
 import { apartment } from "./apartment";
-import { contacts } from "./contacts";
 import { getDeal } from "./deal";
 import { house } from "./house";
 import { getFeatures } from "./features";
@@ -15,7 +14,6 @@ export const estateConfig: EstateConfigType = {
         getFeatures(AdTypes.RentShort, PropertyTypes.Apartment),
         file,
         getDeal(AdTypes.RentShort),
-        contacts,
       ],
     },
     house: {
@@ -24,7 +22,6 @@ export const estateConfig: EstateConfigType = {
         getFeatures(AdTypes.RentShort, PropertyTypes.House),
         file,
         getDeal(AdTypes.RentShort),
-        contacts,
       ],
     },
   },
@@ -35,7 +32,6 @@ export const estateConfig: EstateConfigType = {
         getFeatures(AdTypes.RentLong, PropertyTypes.Apartment),
         file,
         getDeal(AdTypes.RentLong),
-        contacts,
       ],
     },
     house: {
@@ -44,7 +40,6 @@ export const estateConfig: EstateConfigType = {
         getFeatures(AdTypes.RentLong, PropertyTypes.House),
         file,
         getDeal(AdTypes.RentLong),
-        contacts,
       ],
     },
   },
@@ -55,7 +50,6 @@ export const estateConfig: EstateConfigType = {
         getFeatures(AdTypes.Sell, PropertyTypes.Apartment),
         file,
         getDeal(AdTypes.Sell),
-        contacts,
       ],
     },
     house: {
@@ -64,7 +58,6 @@ export const estateConfig: EstateConfigType = {
         getFeatures(AdTypes.Sell, PropertyTypes.House),
         file,
         getDeal(AdTypes.Sell),
-        contacts,
       ],
     },
   },

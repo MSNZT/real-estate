@@ -1,20 +1,12 @@
 import { AxiosError } from "axios";
-import { $apiWithAuth } from "../api/lib/axios";
+import { $api, $apiWithAuth } from "../api/lib/axios";
 
 export class FileService {
   async uploadFiles(formData: FormData): Promise<string[]> {
     try {
-      const { data } = await $apiWithAuth.post<string[]>(
-        "files/uploads",
-        formData
-      );
+      const { data } = await $api.post<string[]>("files/uploads", formData);
       return data;
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.status === 401) {
-          throw new Error("Для загрузки изображений необходимо авторизоваться");
-        }
-      }
       throw new Error("Не удалось загрузить изображения");
     }
   }

@@ -6,19 +6,23 @@ import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 import { contactSchema } from "./contactsSchema";
 
 const locationSchema = z.object({
-  city: z.string({ message: "Укажите город" }),
+  city: z
+    .string({ message: "Укажите город" })
+    .nonempty({ message: "Поле город не может быть пустым" }),
   latitude: z.number(),
   longitude: z.number(),
-  address: z.string({ message: "Укажите адрес" }),
+  address: z
+    .string({ message: "Укажите адрес" })
+    .nonempty({ message: "Поле адрес не может быть пустым" }),
 });
 
 export const baseSchema = z.object({
-  adType: z.enum([AdTypes.RentLong, AdTypes.RentShort, AdTypes.Sell], {
-    message: "Укажите тип объявления",
-  }),
-  propertyType: z.enum([PropertyTypes.Apartment, PropertyTypes.House], {
-    message: "Укажите тип недвижимости",
-  }),
+  // adType: z.enum([AdTypes.RentLong, AdTypes.RentShort, AdTypes.Sell], {
+  //   message: "Укажите тип объявления",
+  // }),
+  // propertyType: z.enum([PropertyTypes.Apartment, PropertyTypes.House], {
+  //   message: "Укажите тип недвижимости",
+  // }),
   description: z
     .string({ message: "Обязательно для заполнения" })
     .min(30, { message: "Минимальное количество символов 30" })
@@ -29,14 +33,14 @@ export const baseSchema = z.object({
     .min(1, "Необходимо добавить хотя бы 1 фотографию")
     .max(10),
   location: locationSchema,
-  contact: contactSchema,
 });
 
 export function createDynamicSchema(
   propertyType: PropertyTypes,
-  adType: AdTypes
+  adType: AdTypes,
+  stepAdForm: number
 ) {
-  return baseSchema.merge(
+  let schema = baseSchema.merge(
     z.object({
       propertyDetails: z.object({
         fields: getPropertyTypeSchema(propertyType),
@@ -44,6 +48,12 @@ export function createDynamicSchema(
       deal: getDealSchema(adType),
     })
   );
+
+  if (stepAdForm >= 2) {
+    schema = schema.merge(contactSchema);
+  }
+
+  return schema;
 }
 
 function getPropertyTypeSchema(propertyType: PropertyTypes) {

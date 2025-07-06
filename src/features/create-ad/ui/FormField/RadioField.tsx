@@ -12,6 +12,7 @@ interface RadioFieldProps {
 export const RadioField = ({ dynamicField, error }: RadioFieldProps) => {
   return (
     <Controller
+      name={dynamicField.name}
       render={({ field }) => (
         <div>
           <div className="flex items-center flex-wrap">
@@ -42,7 +43,6 @@ export const RadioField = ({ dynamicField, error }: RadioFieldProps) => {
           {error && <p className="text-red-500 text-sm">{error.message}</p>}
         </div>
       )}
-      name={dynamicField.name}
     />
   );
 };

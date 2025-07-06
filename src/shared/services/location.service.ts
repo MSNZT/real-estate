@@ -45,8 +45,7 @@ class LocationService {
       });
       if (data) return data;
     } catch (e) {
-      console.log(e);
-      return [];
+      throw e;
     }
   }
 }

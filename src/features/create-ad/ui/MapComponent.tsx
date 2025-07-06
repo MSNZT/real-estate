@@ -11,10 +11,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { formatAddress } from "../utils/formatAddress";
 import { API_KEY_MAP } from "@/shared/config/environment";
-import { useLocation } from "@/shared/hooks/use-location";
 import { AdFormData } from "../types/types";
 import { Controller, useFormContext } from "react-hook-form";
 import { AddressDetails } from "@/shared/types/location";
+
+import "./map.css";
 
 type CoordArgsType = {
   latitude: number;
@@ -23,16 +24,13 @@ type CoordArgsType = {
 
 export const MapComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [coords, setCoords] = useState<number[]>([]);
-  const location = useLocation((state) => state.location);
-  const center = [location?.latitude, location?.longitude];
   const mapRef = useRef<ymaps.Map | null>(null);
   const { mutate } = useMutation<any, Error, CoordArgsType>({
     mutationFn: ({ latitude, longitude }) =>
       locationService.getAddressByCoords(latitude, longitude),
     onSuccess: handleSuccess,
   });
-  const { formState } = useFormContext<AdFormData>();
+  const { reset } = useFormContext<AdFormData>();
 
   const handleMapLoad = () => {
     setIsLoading(false);
@@ -41,27 +39,22 @@ export const MapComponent = () => {
   const handleMapClick = (e: ymaps.MapEvent) => {
     const coords = e.get("coords");
     mutate({ latitude: coords[0], longitude: coords[1] });
-    console.log(coords);
   };
 
-  function handleSuccess(addressDetails: AddressDetails[]) {
+  function handleSuccess(addressDetails: AddressDetails) {
+    console.log("проверка связи");
     const { city, settlement, geo_lat, geo_lon, street, house } =
-      addressDetails[0];
-
-    const geoCoords = [Number(geo_lat), Number(geo_lon)];
+      addressDetails;
 
     const locality = city ? city : settlement;
     const address = formatAddress(street, house);
-    // mapRef.current?.setCenter(geoCoords);
-    setCoords(geoCoords);
-    // const locationData = {
-    //   city: settlement,
-    //   address: address || null,
-    //   latitude: Number(geo_lat),
-    //   longitude: Number(geo_lon),
-    // };
-
-    // setData(locationData);
+    const locationData = {
+      city: locality ?? "",
+      address: address || "",
+      latitude: Number(geo_lat),
+      longitude: Number(geo_lon),
+    };
+    reset({ location: locationData });
   }
 
   return (
@@ -80,7 +73,10 @@ export const MapComponent = () => {
                 overflow: "hidden",
                 boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.2)",
               }}
-              state={{ zoom: 14, center }}
+              state={{
+                zoom: 14,
+                center: [field.value.latitude, field.value.longitude],
+              }}
               onLoad={handleMapLoad}
               onClick={handleMapClick}
               instanceRef={(map) => (mapRef.current = map)}

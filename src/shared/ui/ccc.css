@@ -1,0 +1,32 @@
+/* Сброс скругления */
+.rdp-day_button[data-disabled="true"] {
+  border-radius: 0 !important;
+}
+
+/* Одинокий (вся неделя состоит из одного дня) */
+td:only-child > .rdp-day[data-disabled="true"],
+td:first-child:last-child > .rdp-day[data-disabled="true"] {
+  border-radius: 0.375rem !important;
+}
+
+/* Первый в ряду */
+td:first-child > .rdp-day[data-disabled="true"] {
+  border-top-left-radius: 0.375rem !important;
+  border-bottom-left-radius: 0.375rem !important;
+}
+
+/* Последний в ряду */
+td:last-child > .rdp-day[data-disabled="true"] {
+  border-top-right-radius: 0.375rem !important;
+  border-bottom-right-radius: 0.375rem !important;
+}
+
+/* Если подряд идет два и более disabled, убираем скругление между ними */
+.rdp-day[data-disabled="true"] + td > .rdp-day[data-disabled="true"] {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+td > .rdp-day[data-disabled="true"] + .rdp-day[data-disabled="true"] {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}

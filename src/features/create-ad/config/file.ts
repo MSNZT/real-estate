@@ -8,7 +8,7 @@ export const file: FieldSection = {
     {
       type: "file",
       name: "photos",
-      limit: 3,
+      limit: 10,
     },
   ],
 };

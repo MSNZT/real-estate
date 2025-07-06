@@ -49,6 +49,7 @@ export const CitySelectDialog = ({ city, onSelect }: CitySelectDialog) => {
           handleCloseDialog={handleCloseDialog}
           setQuery={setQuery}
           setAddress={(location) => {
+            console.log(location, "vvvv");
             onSelect?.(location);
             setIsOpen(false);
           }}

@@ -9,7 +9,6 @@ export default async function Page() {
   const locationCookie = (await cookies()).get("location")?.value;
   const location = JSON.parse(locationCookie || "{}") as LocationStateType;
 
-  // const response = await getAdsPreviewData(location.city);
-  // return <Hero data={response} city={location.city} />;
-  return null;
+  const response = await getAdsPreviewData(location.city);
+  return <Hero data={response} city={location.city} />;
 }

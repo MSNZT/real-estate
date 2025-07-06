@@ -11,6 +11,10 @@ import { AddressBlock } from "./AddressBlock";
 import { useMutation } from "@apollo/client";
 import { CREATE_AD } from "@/shared/config/apollo/requests/createAd";
 import toast from "react-hot-toast";
+import { useAuth } from "@/entities/user";
+import { useAuthRequired } from "@/app/providers/AuthRequiredProvider";
+import { useMemo, useState } from "react";
+import { contacts } from "../config/contacts";
 
 interface AdFormProps {
   formConfig: FormFieldSection;
@@ -19,53 +23,99 @@ interface AdFormProps {
 }
 
 export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
+  const [stepAdForm, setStepAdForm] = useState(1);
+  const { isAuth, user } = useAuth();
+  const { handleOpenPopup } = useAuthRequired();
   const [createAd] = useMutation(CREATE_AD, {
     onCompleted: () => {
       toast.success("Объявление успешно создано");
     },
   });
+
+  const schema = useMemo(() => {
+    return createDynamicSchema(propertyType, adType, stepAdForm);
+  }, [propertyType, adType, stepAdForm]);
+
+  const resolver = useMemo(() => zodResolver(schema), [schema]);
   const methods = useForm<AdFormData>({
-    resolver: zodResolver(createDynamicSchema(propertyType, adType)),
+    resolver,
     defaultValues: getDefaultValues(formConfig, adType, propertyType),
     mode: "onSubmit",
   });
+
+  console.log(methods.getValues());
 
   console.log("errors", methods.formState.errors);
 
   function onSubmit(data: AdFormData) {
     console.log(data);
 
-    const title = generateAdTitle(propertyType, data);
-    const objData = {
-      ...data,
-      mainPhoto: data.photos[0],
-      title,
-    };
+    if (isAuth) {
+      const title = generateAdTitle(propertyType, data);
+      const objData = {
+        ...data,
+        mainPhoto: data.photos[0],
+        title,
+      };
 
-    createAd({
-      variables: {
-        createAdInput: {
-          ...objData,
+      createAd({
+        variables: {
+          createAdInput: {
+            ...objData,
+            adType,
+            propertyType,
+          },
         },
-      },
-    });
+      });
+    } else {
+      handleOpenPopup();
+    }
+  }
+
+  async function handleNextStep() {
+    const isValid = await methods.trigger();
+    if (isValid) {
+      if (isAuth) {
+        setStepAdForm(2);
+      } else {
+        handleOpenPopup();
+      }
+    }
   }
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="mb-20 md:mb-0">
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
         <AddressBlock />
         <div className="flex flex-col gap-7 mt-5 mb-5">
           {formConfig.section.map((section) => (
-            <AdFormSection key={section.label} section={section} />
+            <AdFormSection
+              key={section.label}
+              section={section}
+              stepAdForm={stepAdForm}
+            />
           ))}
         </div>
-        <Button
-          className="bg-primary hover:bg-chart-2 text-white"
-          type="submit"
-        >
-          Создать объявление
-        </Button>
+        {stepAdForm === 2 && (
+          <AdFormSection section={contacts} stepAdForm={stepAdForm} />
+        )}
+        {stepAdForm === 1 && (
+          <Button
+            className="bg-primary hover:bg-chart-2 text-white"
+            type="button"
+            onClick={handleNextStep}
+          >
+            Продолжить
+          </Button>
+        )}
+        {stepAdForm === 2 && (
+          <Button
+            className="bg-primary hover:bg-chart-2 text-white"
+            type="submit"
+          >
+            Создать объявление {user?.name}
+          </Button>
+        )}
       </form>
     </FormProvider>
   );

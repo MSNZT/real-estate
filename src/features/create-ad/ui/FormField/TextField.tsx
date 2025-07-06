@@ -12,6 +12,7 @@ interface StringFieldProps {
 export const TextField = ({ dynamicField, error }: StringFieldProps) => {
   return (
     <Controller
+      name={dynamicField.name}
       render={({ field }) => (
         <div
           className={dynamicField.label ? "flex items-center flex-wrap" : ""}
@@ -40,7 +41,6 @@ export const TextField = ({ dynamicField, error }: StringFieldProps) => {
           </div>
         </div>
       )}
-      name={dynamicField.name}
     />
   );
 };

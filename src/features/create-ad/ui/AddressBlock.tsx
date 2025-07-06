@@ -19,9 +19,8 @@ const locationKeys: Record<LocationErrorKeys, string> = {
 export const AddressBlock = () => {
   const {
     formState: { errors },
-    setValue,
+    reset,
   } = useFormContext<AdFormData>();
-  const setData = useLocation((state) => state.setData);
 
   const errorArrayMessage = (
     Object.keys(locationKeys) as Array<keyof typeof locationKeys>
@@ -29,13 +28,15 @@ export const AddressBlock = () => {
     .map((key) => errors.location?.[key]?.message)
     .filter((message) => message !== undefined);
 
-  function handleSelectCity(
-    field: ControllerRenderProps,
-    location: LocationStateType
-  ) {
-    field.onChange(location.city);
-    setData(location);
-    setValue("location.address", "");
+  function handleSelectCity(location: LocationStateType) {
+    reset({
+      location: {
+        city: location.city,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        address: "",
+      },
+    });
   }
 
   return (
@@ -46,7 +47,7 @@ export const AddressBlock = () => {
           render={({ field }) => (
             <CityFormButton
               cityName={field.value}
-              onChange={(location) => handleSelectCity(field, location)}
+              onChange={(location) => handleSelectCity(location)}
             />
           )}
           name="location.city"

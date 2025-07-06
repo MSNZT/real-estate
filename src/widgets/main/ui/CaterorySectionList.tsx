@@ -11,5 +11,9 @@ export const CaterorySectionList = ({ data }: { data: AdsSectionType[] }) => {
       </>
     );
   }
-  return <h3>В вашем городе пока нет объявлений</h3>;
+  return (
+    <h3 className="text-center font-medium">
+      В вашем городе пока нет объявлений, самое время их создать
+    </h3>
+  );
 };
