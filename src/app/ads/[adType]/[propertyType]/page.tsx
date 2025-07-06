@@ -14,5 +14,5 @@ export default async function Page({ params }: PageProps) {
     limit: 8,
   });
 
-  return <PropertiesPage adType={adType} propertyType={propertyType} />;
+  return null;
 }
