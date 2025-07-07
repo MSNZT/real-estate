@@ -15,6 +15,7 @@ import { useAuth } from "@/entities/user";
 import { useAuthRequired } from "@/app/providers/AuthRequiredProvider";
 import { useMemo, useState } from "react";
 import { contacts } from "../config/contacts";
+import { useRouter } from "next/navigation";
 
 interface AdFormProps {
   formConfig: FormFieldSection;
@@ -24,21 +25,19 @@ interface AdFormProps {
 
 export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
   const [stepAdForm, setStepAdForm] = useState(1);
-  const { isAuth, user } = useAuth();
+  const { isAuth } = useAuth();
   const { handleOpenPopup } = useAuthRequired();
   const [createAd] = useMutation(CREATE_AD, {
     onCompleted: () => {
       toast.success("Объявление успешно создано");
     },
   });
+  const router = useRouter();
 
-  const schema = useMemo(() => {
-    return createDynamicSchema(propertyType, adType, stepAdForm);
-  }, [propertyType, adType, stepAdForm]);
-
-  const resolver = useMemo(() => zodResolver(schema), [schema]);
   const methods = useForm<AdFormData>({
-    resolver,
+    resolver: zodResolver(
+      createDynamicSchema(propertyType, adType, stepAdForm)
+    ),
     defaultValues: getDefaultValues(formConfig, adType, propertyType),
     mode: "onSubmit",
   });
@@ -47,7 +46,7 @@ export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
 
   console.log("errors", methods.formState.errors);
 
-  function onSubmit(data: AdFormData) {
+  async function onSubmit(data: AdFormData) {
     console.log(data);
 
     if (isAuth) {
@@ -58,15 +57,17 @@ export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
         title,
       };
 
-      createAd({
+      const response = await createAd({
         variables: {
           createAdInput: {
             ...objData,
             adType,
-            propertyType,
+            // propertyType,
           },
         },
       });
+
+      router.push(`/offer/${response.data.createAd.id}`);
     } else {
       handleOpenPopup();
     }
@@ -110,10 +111,10 @@ export const AdForm = ({ formConfig, adType, propertyType }: AdFormProps) => {
         )}
         {stepAdForm === 2 && (
           <Button
-            className="bg-primary hover:bg-chart-2 text-white"
+            className="bg-primary hover:bg-chart-2 text-white mt-4"
             type="submit"
           >
-            Создать объявление {user?.name}
+            Создать объявление
           </Button>
         )}
       </form>

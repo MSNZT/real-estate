@@ -16,8 +16,8 @@ export type AdsSectionType = {
 type CategoryKey = `${AdTypes}_${PropertyTypes}`;
 
 const AD_TYPE_TITLE: Record<AdTypes, string> = {
-  [AdTypes.RentLong]: "Арендовать",
-  [AdTypes.RentShort]: "Арендовать",
+  [AdTypes.RentLong]: "Снять длительно",
+  [AdTypes.RentShort]: "Снять посуточно",
   [AdTypes.Sell]: "Купить",
 } as const;
 
@@ -97,7 +97,7 @@ export async function getAdsPreviewData(
     .map((category) => {
       const categoryKey: CategoryKey = `${category.adType}_${category.propertyType}`;
       return {
-        title: `${AD_TYPE_TITLE[category.adType]} ${PROPERTY_TYPE_TITLE[category.propertyType]}`,
+        title: AD_TYPE_TITLE[category.adType],
         pageLink: ADS_CATEGORY_LINK[categoryKey],
         data: category.ads,
       };

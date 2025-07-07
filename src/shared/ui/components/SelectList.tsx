@@ -80,9 +80,9 @@ export const SelectList = <T extends SelectItem>({
             size="clear"
           >
             <span className="text-base truncate">{item.value}</span>
-            {/* {checked(item) && (
+            {checked?.(item) && (
               <Check size={18} className="text-blue-400 ml-auto mr-2" />
-            )} */}
+            )}
           </Button>
         </li>
       ))}

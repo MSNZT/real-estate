@@ -45,7 +45,6 @@ export function getDealSchema(adType: AdTypes) {
       return deal.extend({
         fields: z.object({
           agentFee,
-          bargain,
           deposit,
           utilitiesFee,
         }),

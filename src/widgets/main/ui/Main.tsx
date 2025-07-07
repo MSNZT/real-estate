@@ -1,4 +1,3 @@
-// "use client";
 import Link from "next/link";
 import { Container, Icon } from "@/shared/ui";
 // import { useAuthFromParams } from "@/entities/user";
@@ -25,7 +24,7 @@ export function Hero({ data, city }: HeroProps) {
           </h1>
         </div>
         <div className="mx-auto">
-          <div className="flex justify-center items-center gap-2 mb-5">
+          <div className="flex justify-center items-center mb-5">
             <p className="text-md">Регион поиска:</p>
             <CityPersistButton cityName={city} />
           </div>

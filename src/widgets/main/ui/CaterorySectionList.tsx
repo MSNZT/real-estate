@@ -1,5 +1,6 @@
 import { AdsSectionType } from "@/app/(root)/data/data";
 import { CategorySection } from "./CategorySection";
+import { Container } from "@/shared/ui";
 
 export const CaterorySectionList = ({ data }: { data: AdsSectionType[] }) => {
   if (data.length > 0) {
@@ -12,8 +13,10 @@ export const CaterorySectionList = ({ data }: { data: AdsSectionType[] }) => {
     );
   }
   return (
-    <h3 className="text-center font-medium">
-      В вашем городе пока нет объявлений, самое время их создать
-    </h3>
+    <Container>
+      <h3 className="text-center font-medium">
+        В вашем городе пока нет объявлений, самое время их создать
+      </h3>
+    </Container>
   );
 };

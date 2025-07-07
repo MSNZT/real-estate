@@ -5,6 +5,15 @@ import { getDealSchema } from "./dealSchema";
 import { AdTypes, PropertyTypes } from "@/shared/config/apollo/generated";
 import { contactSchema } from "./contactsSchema";
 
+const types = z.object({
+  adType: z.enum([AdTypes.RentLong, AdTypes.RentShort, AdTypes.Sell], {
+    message: "Укажите тип объявления",
+  }),
+  propertyType: z.enum([PropertyTypes.Apartment, PropertyTypes.House], {
+    message: "Укажите тип недвижимости",
+  }),
+});
+
 const locationSchema = z.object({
   city: z
     .string({ message: "Укажите город" })
@@ -17,16 +26,10 @@ const locationSchema = z.object({
 });
 
 export const baseSchema = z.object({
-  // adType: z.enum([AdTypes.RentLong, AdTypes.RentShort, AdTypes.Sell], {
-  //   message: "Укажите тип объявления",
-  // }),
-  // propertyType: z.enum([PropertyTypes.Apartment, PropertyTypes.House], {
-  //   message: "Укажите тип недвижимости",
-  // }),
   description: z
     .string({ message: "Обязательно для заполнения" })
     .min(30, { message: "Минимальное количество символов 30" })
-    .max(500, { message: "Максимальное количество символов 500" }),
+    .max(1000, { message: "Максимальное количество символов 1000" }),
   features: z.array(z.string()).min(1, "Необходимо выбрать хотя бы 1 поле"),
   photos: z
     .array(z.string())
@@ -50,7 +53,7 @@ export function createDynamicSchema(
   );
 
   if (stepAdForm >= 2) {
-    schema = schema.merge(contactSchema);
+    schema = schema.extend({ contact: contactSchema, ...types.shape });
   }
 
   return schema;

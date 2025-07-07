@@ -36,13 +36,18 @@ class LocationService {
 
   async getAddressByCoords(
     latitude: number,
-    longitude: number
+    longitude: number,
+    signal: AbortSignal
   ): Promise<AddressDetails[] | undefined> {
     try {
-      const { data } = await $api.post(LOCATION_ENDPOINTS.addressByCoords, {
-        lat: latitude,
-        lon: longitude,
-      });
+      const { data } = await $api.post(
+        LOCATION_ENDPOINTS.addressByCoords,
+        {
+          lat: latitude,
+          lon: longitude,
+        },
+        { signal }
+      );
       if (data) return data;
     } catch (e) {
       throw e;

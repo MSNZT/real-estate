@@ -78,7 +78,7 @@ export const Navbar = () => {
   }, [isAuth, handleOpenPopup]);
 
   return (
-    <nav className="fixed md:hidden inset-x-0 bottom-0 p-3 border-t border-gray-200 bg-white">
+    <nav className="fixed md:hidden inset-x-0 bottom-0 p-3 border-t border-gray-200 bg-white z-10">
       <ul className="flex items-center justify-around text-xs">{renderMenu}</ul>
     </nav>
   );
