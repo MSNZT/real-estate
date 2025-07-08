@@ -77,6 +77,8 @@ export async function middleware(request: NextRequest) {
     try {
       await $api.post("location/apply-location", location);
 
+      console.log("NODE_ENV", process.env.NODE_ENV === "production");
+
       response.cookies.set("location", JSON.stringify(location), {
         path: "/",
         httpOnly: true,
