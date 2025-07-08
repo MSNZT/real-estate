@@ -32,19 +32,13 @@ async function determineLocation(request: NextRequest) {
 
   if (ip) {
     try {
-      const city = await computeCityByIp(ip);
-      locationData = city
-        ? {
-            city,
-            latitude: alternativeLocation.latitude,
-            longitude: alternativeLocation.longitude,
-          }
-        : { ...alternativeLocation };
+      const locationResponse = await computeCityByIp(ip);
+      locationData = locationResponse ? locationResponse : alternativeLocation;
     } catch {
-      locationData = { ...alternativeLocation };
+      locationData = alternativeLocation;
     }
   } else {
-    locationData = { ...alternativeLocation };
+    locationData = alternativeLocation;
   }
 
   return { location: locationData, shouldSetCookie: true };
