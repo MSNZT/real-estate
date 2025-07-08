@@ -74,21 +74,13 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   if (shouldSetCookie) {
-    try {
-      await $api.post("location/apply-location", location);
-
-      console.log("NODE_ENV", process.env.NODE_ENV === "production");
-
-      response.cookies.set("location", JSON.stringify(location), {
-        path: "/",
-        httpOnly: true,
-        sameSite: "none",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 30,
-      });
-    } catch (error) {
-      console.error("Failed to save location:", error);
-    }
+    response.cookies.set("location", JSON.stringify(location), {
+      path: "/",
+      httpOnly: true,
+      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 30,
+    });
   }
 
   const theme = request.cookies.get("theme")?.value;
